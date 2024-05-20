@@ -2,15 +2,32 @@ import librosa
 import matplotlib.pyplot as plt
 import numpy as np
 import math
+import scipy.signal as signal 
+from audioFilter import audioFilter
+from pitchDetection import pitchDetection
 
-song = "nATALIE.mp3"
+song = "sink.mp3"
 y, sr = librosa.load(song)
+# #y = librosa.effects.percussive(y=y)
 
-stream_coeff = 1
-chord_coeff = 0
+# # Band pass filter
+# lowcut = 200.0  # Low cutoff frequency, Hz
+# highcut = 500.0  # High cutoff frequency, Hz
+# order = 4  # Filter order
 
-hop_length = 512
-oenv = librosa.onset.onset_strength(y=y, sr=sr, hop_length=hop_length)
+# # Normalize the frequencies by the Nyquist frequency (sr / 2)
+# nyquist = 0.5 * sr
+# low = lowcut / nyquist
+# high = highcut / nyquist
+
+# # Create the filter coefficients
+# b, a = signal.butter(order, [low, high], btype='band')
+
+# # Apply the filter to the signal
+# y = signal.filtfilt(b, a, y)
+
+# stream_coeff = 1
+# chord_coeff = 0
 
 """
 # Plot the audio signal
@@ -23,8 +40,11 @@ plt.vlines(librosa.onset.onset_detect(onset_envelope=oenv, sr=sr, units='time'),
 
 plt.show()
 """
-
+y_filter = audioFilter(y, sr)
+hop_length = 512
+oenv = librosa.onset.onset_strength(y=y_filter, sr=sr, hop_length=hop_length)
 onset_times = librosa.onset.onset_detect(onset_envelope=oenv, sr=sr, units='time')
+
 #print(onset_times)
 
 #greatest common divisor
@@ -81,6 +101,13 @@ def generate_groups(onset_times):
 
 
 # Generate groups based on onset times
+#beatmap = generate_groups(onset_times)
+
+# Generate groups based on pitch changes
+#y_filter = audioFilter(y, sr)
+#beat_timing = pitchDetection(y_filter, sr)
+
+
 beatmap = generate_groups(onset_times)
 #print(len(beatmap))
 

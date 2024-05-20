@@ -47,7 +47,7 @@ def load(map):
     with open(map + ".txt", 'r') as file:
         for line in file:
             if line.strip():
-                if line.strip() == ",":
+                if "," in line.strip():
                     beatmap.append(beats)
                     beats = []
                 else:
@@ -76,7 +76,7 @@ def load(map):
     return rects
     
 # Loading a certain map
-map_rect = load("nATALIE")
+map_rect = load("sink")
 
 # Main loop
 current_time = 0
