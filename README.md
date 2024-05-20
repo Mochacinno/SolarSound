@@ -1,2 +1,2 @@
 ## MUSIC RECOGNITION
-# Project
+# A rhythm game with generative beatmap songs
