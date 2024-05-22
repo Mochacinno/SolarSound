@@ -56,21 +56,26 @@ def find_interval(numbers):
     gcd = np.gcd.reduce(intervals) / 100
     return gcd
 
-def generate_groups(onset_times, intervals):
+def generate_groups(onset_times, bpm_per_frame):
+
     beatmap = []
-    groups = []
+    beats_per_beat = []
     beats = []
     
     current_time = 0
-    window = intervals[0]
+    window = bpm_per_frame[0] / 60 # because we start at t = 0
+    
+    # dunno if i need to round
+    #onset_times = np.round(onset_times, 2)
 
-    onset_times = np.round(onset_times, 2)
-
+    song_duration = len(bpm_per_frame) * hop_length // sr
     index_onset = 0
-    while index_onset < len(onset_times):
+    while current_time <= song_duration: # instead of basing off onset times, it could be when we have a variable such as current time being greater than length of music?
 
+        # checking whether to add any notes detected by onset detection
         if current_time <= onset_times[index_onset] <  current_time + window:
-            beats.append(round(onset_times[index_onset] % window, 2))  # Round onset time to 2 decimal places
+            #beats.append(round(onset_times[index_onset] % window, 2))  # Round onset time to 2 decimal places
+            beats.append(onset_times[index_onset])
             beats_filled = False
         else:
             beats_filled = True
