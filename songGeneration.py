@@ -40,6 +40,10 @@ plt.vlines(librosa.onset.onset_detect(onset_envelope=oenv, sr=sr, units='time'),
 
 plt.show()
 """
+
+
+# add instead a time delay before spawning the notes instead of just spawning 0s every 0.1 seconds
+
 y_filter = audioFilter(y, sr)
 hop_length = 512
 oenv = librosa.onset.onset_strength(y=y_filter, sr=sr, hop_length=hop_length)
