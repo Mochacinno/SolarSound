@@ -23,7 +23,8 @@ def tempo(
     std_bpm = 1.0,
     ac_size = 8.0,
     max_tempo = 320.0,
-    prior = None
+    prior = None,
+    weight_diff_threshold = 1.15e-2
     ):
     
     if tg is None:
@@ -70,12 +71,11 @@ def tempo(
     best_period = np.zeros(top_3_bpms.shape[1:], dtype=int)
 
     for i in range(top_3_weights.shape[1]):
-        if np.abs(top_3_weights[0, i] - top_3_weights[1, i]) < 1.15e-2:
+        if np.abs(top_3_weights[0, i] - top_3_weights[1, i]) < weight_diff_threshold:
             best_period[i] = top_3_periods[1, i]
             print("yes")
         else:
             best_period[i] = top_3_periods[0, i]
 
     tempo_est = np.take(bpms, best_period)
-
     return tempo_est

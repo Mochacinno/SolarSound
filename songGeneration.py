@@ -11,7 +11,7 @@ y, sr = librosa.load(song)
 #y_filter = audioFilter(y, sr)
 hop_length = 512
 oenv = librosa.onset.onset_strength(y=y, sr=sr, hop_length=hop_length)
-onset_times = librosa.onset.onset_detect(onset_envelope=oenv, sr=sr, units='time')
+onset_times = np.round(librosa.onset.onset_detect(onset_envelope=oenv, sr=sr, units='time'),2)
 
 def bpm_to_intervals(bpm_array):
     # the bpm-array is the bpm at each frame, so these are the intervals for that given moment to the frame
@@ -36,15 +36,25 @@ def bpm_per_second(bpm_per_frame, sr, hop_length):
     
     return np.array(bpm_per_second)
 
-
-def time_to_frame(time, sr=22050, hop_length=512):
-    """Convert time in seconds to the corresponding frame index."""
-    return int(np.floor(time * sr / hop_length))
-
-def bpm_for_time(bpm_array, time, sr=22050, hop_length=512):
-    """Get the BPM value at a specific time."""
-    frame_index = time_to_frame(time, sr, hop_length)
-    return bpm_array[frame_index]
+def bpm_for_time(bpm_array, time):
+    """
+    Get the BPM value at a specific time.
+    
+    Parameters:
+    bpm_array (list of tuples): List of tuples (bpm, time_when_change_occurs).
+    time (float): The specific time at which to find the BPM.
+    
+    Returns:
+    float: The BPM value at the specified time.
+    """
+    bpm = bpm_array[0][0]  # Start with the first BPM value
+    
+    for bpm_change, change_time in bpm_array:
+        if time < change_time:
+            break
+        bpm = bpm_change
+    
+    return bpm
 
 
 #greatest common divisor
@@ -53,70 +63,114 @@ def find_interval(numbers):
         numbers.append(0.10)
     #print(numbers)
     intervals = [int(number * 100) for number in numbers]
-    gcd = np.gcd.reduce(intervals) / 100
+    gcd = round(np.gcd.reduce(intervals) / 100, 2)
     return gcd
 
-def generate_groups(onset_times, bpm_per_frame):
+def find_best_subdivision_level(measure_time, min_interval):
+    # Consider common musical subdivisions: 1, 2, 4, 8, 16, 32, etc.
+    common_subdivisions = [2**i for i in range(4)]  # Up to 1/32th subdivision
+    for subdivision in common_subdivisions:
+        interval = measure_time / subdivision
+        if interval <= min_interval:
+            return subdivision
+    return max(common_subdivisions)
 
-    beatmap = []
-    beats_per_beat = []
-    beats = []
+def quantize_onsets(onsets, measure_time, subdivision_level):
+    onset_start = min(onsets)
+    onset_end = max(onsets)
+    subdivision_interval = measure_time / subdivision_level
     
-    current_time = 0
-    window = bpm_per_frame[0] / 60 # because we start at t = 0
+    # Calculate the grid points within the range of onset_start to onset_end
+    grid_points = np.arange(onset_start, onset_end + subdivision_interval, subdivision_interval)
+    
+    # Quantize the onsets to the nearest grid point
+    quantized_onsets = [min(grid_points, key=lambda x: abs(x - onset)) for onset in onsets]
+    
+    return quantized_onsets
+
+
+def generate_groups(onset_times, bpms):
+    # onset times and bpm should just be rounded to 2 decimal places from the start. its not like we can perceive that difference
+    beatmap = []
+    beats_per_measure = [] # we just suppose its 4 measures per bar so 4/4 all the time. (which will fuck up if the music is in 3/4 or becomes that midway)
+    onsets_in_measure = []
+    
+    start_measure_time = 0
+    measure_time = 240 / bpms[0][0] # because we start at t = 0. and so 60/bpm  * 4
+    print(f"measure_time: {measure_time}")
     
     # dunno if i need to round
     #onset_times = np.round(onset_times, 2)
+    #print(bpms)
+    song_duration = librosa.get_duration(y=y, sr=sr)
 
-    song_duration = len(bpm_per_frame) * hop_length // sr
     index_onset = 0
-    while current_time <= song_duration: # instead of basing off onset times, it could be when we have a variable such as current time being greater than length of music?
+    while start_measure_time <= song_duration:
 
+        # basing off bpm at time t, we get the bpm, and thus in 4 beats, we know how much time has passed (this is the variable window)
+        
         # checking whether to add any notes detected by onset detection
-        if current_time <= onset_times[index_onset] <  current_time + window:
-            #beats.append(round(onset_times[index_onset] % window, 2))  # Round onset time to 2 decimal places
-            beats.append(onset_times[index_onset])
+        end_measure_time = start_measure_time + measure_time
+        if start_measure_time <= onset_times[index_onset] <  end_measure_time:
+            onsets_in_measure.append(onset_times[index_onset])
             beats_filled = False
         else:
+            # once theres no more onset times that are within start of measure and end of measure
             beats_filled = True
-            index_onset -= 1
+            index_onset -= 1 # to go back to the previous onset because it we want to start with the one that couldnt be put into the measure the next time
         
-        if beats_filled or index_onset == len(onset_times) - 1:
-            if len(beats) != 0:
-                interval = find_interval(beats)
-                interval = round(interval, 2)  # Round interval to 2 decimal places
+        if beats_filled or index_onset == len(onset_times) - 1: # if index onset is already at the last element of onset time, it should still process it.
+            print(f"onsets not quantised: {onsets_in_measure}")
+            if len(onsets_in_measure) == 0: 
+                 # if there is no beats within this measure window, just output a 0.
+                pass
             else:
-                interval = window / 4
-            slot = 0
-            while slot <= window:
-                if slot in beats:
+                # quantise onset_times first
+                #interval = measure_time / 4
+                #interval = find_interval(onsets_in_measure) # find the interval that will allow our beats to all fit with as minimal as '0000' as possible
+                #print(f"interval: {interval}")
+                ideal_subdivision = find_best_subdivision_level(measure_time, min(np.diff(onsets_in_measure)))
+                print(f"ideal_subdivision: {ideal_subdivision}")
+                onsets_in_measure = quantize_onsets(onsets_in_measure, measure_time, ideal_subdivision)
+                print(f"onsets quantised: {onsets_in_measure}")
+            
+            # for the 4 beats per measure of a certain bpm, create the array of 'abcd' of 0 and 1.
+            beat = onsets_in_measure[0]
+            while beat <= start_measure_time + measure_time:
+                print(f"for beat: {beat}")
+                print(f"is beat in onset? {beat in onsets_in_measure}")
+                if beat in onsets_in_measure:
+                    # generate a 1 somewhere within the 4 zeros
                     group = np.zeros(4, dtype=int)
                     idx = np.random.randint(0, 4)
                     group[idx] = 1
-                    groups.append(group)
+                    beats_per_measure.append(group)
                 else:
+                    # generate 0000
                     group = np.zeros(4, dtype=int)
-                    groups.append(group)
-                slot = round(slot + interval, 2)
-            beats = []
-            beatmap.append(groups)
-            groups = []
-            current_time += window
-            if index_onset < len(intervals):
-                bpm = bpm_for_time(bpm_array, current_time)
-                window = bpm / 60  # Update window based on the next BPM interval
+                    beats_per_measure.append(group)
+                beat += measure_time / ideal_subdivision  # Increment beat by subdivision interval
+            onsets_in_measure = [] # reset onsets in measure for next measure
+            beatmap.append(beats_per_measure)
+            beats_per_measure = [] # reset the beats per mesure
+            start_measure_time += measure_time # update the start_measure_time for next measure
+            print(f"start measure time {start_measure_time}")
 
+            # grab the new bpm if it changed
+            bpm = bpm_for_time(bpms, start_measure_time)
+            measure_time = 240 / bpm  # Update window based on the next BPM interval
+            print(f"measure_time: {bpm}")
+        # continue for next index_onset
         index_onset += 1
-
     return beatmap
 
 # main code
 bpm_array = tempoEstimator.tempoEstimate((y, sr))
 
-intervals_from_bpm = bpm_per_second(bpm_array, sr, 512)
-#print(intervals_from_bpm)
-beatmap = generate_groups(onset_times, intervals_from_bpm)
+bpms = tempoEstimator.bpm_changes(bpm_array)
+#print(bpms)
 
+beatmap = generate_groups(onset_times, bpms)
 
 # Format groups into text content
 text_content = ""
@@ -126,7 +180,6 @@ for groups in beatmap:
         text_content += ''.join(map(str, group))  # Convert group to string and append to text content
         text_content += "\n"
     text_content += ",\n"
-
 
 # Write text content to a file
 output_file = "onset_times.txt"
