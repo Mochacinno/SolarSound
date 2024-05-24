@@ -73,7 +73,7 @@ def tempo(
     for i in range(top_3_weights.shape[1]):
         if np.abs(top_3_weights[0, i] - top_3_weights[1, i]) < weight_diff_threshold:
             best_period[i] = top_3_periods[1, i]
-            print("yes")
+            #print("yes")
         else:
             best_period[i] = top_3_periods[0, i]
 
