@@ -1,7 +1,6 @@
 import pygame
-
-#lets get sound 
 from pygame import mixer
+from utils import bpm_for_time
 
 mixer.init()
 
@@ -34,13 +33,8 @@ keys = [
 ]
 
 # FUNCTIONS
-clock = pygame.time.Clock()
 
-def bpm_for_time(bpms, current_time):
-    for i in range(1, len(bpms)):
-        if current_time < bpms[i][1]:
-            return bpms[i - 1][0]
-    return bpms[-1][0]  # Return the last BPM if current_time is beyond the last BPM change start time
+clock = pygame.time.Clock()
 
 def load(map):
 
@@ -82,7 +76,7 @@ def load(map):
         measure_time = int(240000 / bpm)
         res.append(beats_per_mesure)
     
-    #print(beatmap)
+    # print(beatmap)
     # [[([1, 0, 0, 0], 250.0), ([0, 0, 0, 0], 500.0), ([0, 0, 0, 0], 750.0), ([0, 0, 0, 0], 1000.0)], [([0, 1, 0, 0], 1333.3333333333333), ([0, 0, 0, 1], 1666.6666666666665), ([1, 0, 0, 0], 1999.9999999999998)], [([0, 0, 0, 0], 2250.0), ([1, 0, 0, 0], 2500.0), ([0, 0, 0, 0], 2750.0), ([0, 0, 0, 0], 3000.0)]]
     notes = []
     for beats in res:
@@ -105,6 +99,7 @@ speed = 500
 
 start_time = pygame.time.get_ticks()
 music_started = False  # Flag to track whether music has started
+
 while True:
     screen.fill((0, 0, 0))
     

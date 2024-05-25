@@ -2,9 +2,8 @@ import librosa
 import matplotlib.pyplot as plt
 import numpy as np
 import tempoEstimator
-from audioFilter import audioFilter
-import sounddevice as sd
-import soundfile as sf
+from utils import bpm_for_time
+from utils import audioFilter
 
 def generate_chart(onset_times, bpms, song_duration):
 
@@ -15,7 +14,8 @@ def generate_chart(onset_times, bpms, song_duration):
     #print(f"measure_time: {measure_time}")
     
     index_onset = 0
-    start_measure_time = onset_times[0]
+    start_time = onset_times[0]
+    start_measure_time = start_time
     while start_measure_time <= song_duration:
         print(f"start_measure_time: {start_measure_time}")
         print(f"measure_time: {measure_time}")
@@ -33,18 +33,11 @@ def generate_chart(onset_times, bpms, song_duration):
         bpm = bpm_for_time(bpms, start_measure_time)
         measure_time = calculate_measure_time(bpm)
 
-    return beatmap
+    return beatmap, start_time
 
 def calculate_measure_time(bpm):
     # calculates ( 60 / bpm ) * 4
     return int(240000 / bpm)
-
-def bpm_for_time(bpms, current_time):
-    for i in range(1, len(bpms)):
-        if current_time < bpms[i][1]:
-            return bpms[i - 1][0]
-    return bpms[-1][0]  # Return the last BPM if current_time is beyond the last BPM change start time
-
 
 def collect_onsets_in_measure(onset_times, start_measure_time, measure_time, index_onset):
     end_measure_time = start_measure_time + measure_time
@@ -94,9 +87,31 @@ def quantize_onsets(onsets, measure_time, subdivisions, start_measure_time, inde
         index_onset -= 1
     return quantized_onsets, index_onset
 
+def chartFileCreation(beatmap, bpms, start_time):
+    # Format BPMS into text content
+    text_content = "BPMS:\n"
+    for bpm, start_time in bpms:
+        text_content += f"{start_time}:{bpm},\n"
+    # Format note start time
+    text_content += "START_TIME:\n"
+    text_content += str(start_time)+"\n"
+    # Format beatmap notes into text content
+    text_content += "NOTES:\n"
+    for groups in beatmap:
+        for group in groups:
+            text_content += ''.join(map(str, group))  # Convert group to string and append to text content
+            text_content += "\n"
+        text_content += ",\n"  # Add comma and newline after every measure
+    
+    # Write text content to a file
+    output_file = "onset_times.txt"
+    with open(output_file, 'w') as file:
+        file.write(text_content)
+    
+    print(f"Text file '{output_file}' generated successfully.")
 
 # main code
-song = "sink.mp3"
+song = "Music+Beatmaps/nATALIECUT2.mp3"
 y, sr = librosa.load(song)
 y_filter = audioFilter(y, sr)
 #y_filter = librosa.effects.percussive(y=y, margin=5)
@@ -104,39 +119,16 @@ hop_length = 512
 oenv = librosa.onset.onset_strength(y=y_filter, sr=sr, hop_length=hop_length)
 onset_times = librosa.onset.onset_detect(onset_envelope=oenv, sr=sr, units='time')
 
-click_dynamic = librosa.clicks(times=onset_times, sr=sr, click_freq=660,
-                               click_duration=0.25, length=len(y))
-
 onset_times = onset_times * 1000
 onset_times = onset_times.astype(np.int64)
 bpms = tempoEstimator.bpm_changes(tempoEstimator.tempoEstimate((y, sr)))
 print(bpms)
 song_duration = librosa.get_duration(y=y, sr=sr) * 1000
 
-
-# Combine the original audio with the clicks
-y_with_clicks = y + click_dynamic
-# Play the combined audio
-sf.write("sinkclick.mp3", y_with_clicks, sr)
-
 ## For testing purposes
 #onset_times = [1000, 2100, 3994, 5120, 6000, 8790, 17100, 17520, 18003, 18420, 18800]
 #bpms = [(60,0),(120,12500)]
 #beatmap = generate_chart(onset_times, bpms, 20000)
-beatmap = generate_chart(onset_times, bpms, song_duration)
 
-# Format groups into text content
-text_content = ""
-for groups in beatmap:
-    #text_content += ",\n"  # Add comma and newline after every 4 groups
-    for group in groups:
-        text_content += ''.join(map(str, group))  # Convert group to string and append to text content
-        text_content += "\n"
-    text_content += ",\n"
-
-# Write text content to a file
-output_file = "onset_times.txt"
-with open(output_file, 'w') as file:
-    file.write(text_content)
-
-print(f"Text file '{output_file}' generated successfully.")
+beatmap, start_time = generate_chart(onset_times, bpms, song_duration)
+chartFileCreation(beatmap, bpms, start_time)

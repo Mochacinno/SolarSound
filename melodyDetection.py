@@ -2,26 +2,12 @@ import librosa
 import numpy as np
 import sounddevice as sd
 import matplotlib.pyplot as plt
-from audioFilter import audioFilter
+from utils import audioFilter
 import scipy.signal as signal
 from scipy import interpolate
 
 # Load the audio file
 y, sr = librosa.load("music.mp3", duration=100)
-
-# Define start and end times in seconds
-start_time = 76  # Start at 60 seconds
-end_time = 96   # End at 100 seconds
-
-# Convert start and end times to sample indices
-start_sample = int(start_time * sr)
-end_sample = int(end_time * sr)
-
-# Slice the y array
-y = y[start_sample:end_sample]
-
-# Apply Harmonic-Percussive Source Separation (HPSS)
-#y_harmonic = librosa.effects.harmonic(y=y, margin=1)
 
 #Band pass filter
 lowcut = 20.0  # Low cutoff frequency, Hz
