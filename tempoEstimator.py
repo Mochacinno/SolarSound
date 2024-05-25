@@ -52,7 +52,7 @@ def tempoEstimate(song):
     #                                           bpm=tempo_dynamic, trim=False)
 
     # round values
-    tempo_dynamic = np.round(tempo_dynamic)
+    #tempo_dynamic = np.round(tempo_dynamic)
     return tempo_dynamic
 
 #res = tempoEstimate((y,sr))
@@ -103,8 +103,8 @@ def bpm_changes(bpm_array, sr=22050, hop_length=512):
     
     for i, bpm in enumerate(bpm_array):
         if bpm != previous_bpm:
-            time = round(i * hop_length / sr, 2) # round it i guess?
-            changes.append((bpm, time))
+            time = int((i * hop_length / sr) * 1000) # turn into miliseconds and get rid of floating point issue in calculations later on
+            changes.append((int(bpm), time))
             previous_bpm = bpm
     
     return changes
