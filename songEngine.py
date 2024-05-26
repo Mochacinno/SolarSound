@@ -38,7 +38,7 @@ clock = pygame.time.Clock()
 
 def load(map):
 
-    mixer.music.load(map + ".mp3")
+    mixer.music.load(map + "click.mp3")
 
     with open(map+'.txt', 'r') as file:
         lines = file.readlines()
@@ -86,26 +86,29 @@ def load(map):
     
     #print(start_time)
     #print(bpms)
-    print(beatmap)
+    #print(beatmap)
     #print(len(beatmap))
     bpm = bpm_for_time(bpms, start_time)
     measure_time = int(240000 / bpm)
+    print(f"measure_time: {measure_time}")
     current_time = start_time
 
     res = []
     for beats_per_mesure in beatmap:
-        #print(measure_time)
+        print(f"measure_time: {measure_time}")
         for i in range(len(beats_per_mesure)):
             # Calculate the time for the current beat by adding the time for the previous beat
             beats_per_mesure[i] = (beats_per_mesure[i], (current_time + ((measure_time // (len(beats_per_mesure))) * (i))))
             # Update the previous time for the next iteration
         current_time += measure_time
-        print(current_time)
+        #print(current_time)
         bpm = bpm_for_time(bpms, current_time)
+        print(f"for bpm: {bpm}")
         measure_time = int(240000 / bpm)
         res.append(beats_per_mesure)
-    
-    # print(beatmap)
+
+    print(res)
+    # print(res)
     # [[([1, 0, 0, 0], 250.0), ([0, 0, 0, 0], 500.0), ([0, 0, 0, 0], 750.0), ([0, 0, 0, 0], 1000.0)], [([0, 1, 0, 0], 1333.3333333333333), ([0, 0, 0, 1], 1666.6666666666665), ([1, 0, 0, 0], 1999.9999999999998)], [([0, 0, 0, 0], 2250.0), ([1, 0, 0, 0], 2500.0), ([0, 0, 0, 0], 2750.0), ([0, 0, 0, 0], 3000.0)]]
     notes = []
     for beats in res:
@@ -116,7 +119,8 @@ def load(map):
     return notes
     
 # Loading a certain map
-map_rect = load("Music+Beatmaps/tabiji")
+song_name = "chopin"
+map_rect = load("Music+Beatmaps/"+song_name)
 
 # Main loop
 current_time = 0

@@ -4,6 +4,8 @@ import numpy as np
 import tempoEstimator
 from utils import bpm_for_time
 from utils import audioFilter
+from utils import onset_detection
+from utils import createClickTrack
 
 def generate_chart(onset_times, bpms, song_duration):
 
@@ -15,12 +17,13 @@ def generate_chart(onset_times, bpms, song_duration):
     
     index_onset = 0
     start_time = onset_times[0]
+    bpms = bpms
     start_measure_time = start_time
     while start_measure_time <= song_duration:
         print(f"start_measure_time: {start_measure_time}")
         print(f"measure_time: {measure_time}")
         onsets_in_measure, index_onset = collect_onsets_in_measure(onset_times, start_measure_time, measure_time, index_onset)
-        print(f"raw: {onsets_in_measure}")
+        #print(f"raw: {onsets_in_measure}")
         if len(onsets_in_measure) == 0:
             beats_per_measure = generate_empty_measure()
         else:
@@ -31,8 +34,8 @@ def generate_chart(onset_times, bpms, song_duration):
         
         # Update measure time based on BPM changes
         bpm = bpm_for_time(bpms, start_measure_time)
+        print(f"for bpm: {bpm}")
         measure_time = calculate_measure_time(bpm)
-
     return beatmap, start_time
 
 def calculate_measure_time(bpm):
@@ -41,7 +44,7 @@ def calculate_measure_time(bpm):
 
 def collect_onsets_in_measure(onset_times, start_measure_time, measure_time, index_onset):
     end_measure_time = start_measure_time + measure_time
-    print(f"end_measure_time: {end_measure_time}")
+    #print(f"end_measure_time: {end_measure_time}")
     onsets_in_measure = []
 
     #print("ONSET WINDOW")
@@ -56,7 +59,7 @@ def generate_empty_measure():
     return [np.zeros(4, dtype=int) for _ in range(4)]
 
 def generate_beats(onsets_in_measure, measure_time, start_measure_time, index_onset):
-    ideal_subdivision = 16 # to change
+    ideal_subdivision = 32 # to change
     onsets_in_measure, index_onset = quantize_onsets(onsets_in_measure, measure_time, ideal_subdivision, start_measure_time, index_onset)
     print(f"quantised: {onsets_in_measure}")
     beats_per_measure = []
@@ -82,12 +85,12 @@ def quantize_onsets(onsets, measure_time, subdivisions, start_measure_time, inde
     quantized_onsets = [min(grid_points, key=lambda x: abs(x - onset)) for onset in onsets]
     
     if end_measure_time == max(quantized_onsets):
-        print(f"{onset_times[index_onset - 1]} was replaced")
+        #print(f"{onset_times[index_onset - 1]} was replaced")
         onset_times[index_onset - 1] = max(quantized_onsets)
         index_onset -= 1
     return quantized_onsets, index_onset
 
-def chartFileCreation(beatmap, bpms, start_time):
+def chartFileCreation(beatmap, bpms, start_time, song):
     # Format note start time
     text_content = "START_TIME:\n"
     text_content += str(start_time)+"\n"
@@ -104,25 +107,37 @@ def chartFileCreation(beatmap, bpms, start_time):
         text_content += ",\n"  # Add comma and newline after every measure
     
     # Write text content to a file
-    output_file = "onset_times.txt"
+    output_file = "Music+Beatmaps/"+song+".txt"
     with open(output_file, 'w') as file:
         file.write(text_content)
     
     print(f"Text file '{output_file}' generated successfully.")
 
 # main code
-song = "Music+Beatmaps/tabiji.mp3"
-y, sr = librosa.load(song)
-y_filter = audioFilter(y, sr)
-#y_filter = librosa.effects.percussive(y=y, margin=5)
-hop_length = 512
-oenv = librosa.onset.onset_strength(y=y, sr=sr, hop_length=hop_length)
-onset_times = librosa.onset.onset_detect(onset_envelope=oenv, sr=sr, units='time')
+song_name = "chopin"
+y, sr = librosa.load("Music+Beatmaps/"+song_name+".mp3")
+## SLICE THE MUSIC
+# Define start and end times in seconds
+start_time = 76  # Start at 5 seconds
+end_time = 120   # End at 10 seconds
 
+# Convert start and end times to sample indices
+start_sample = int(start_time * sr)
+end_sample = int(end_time * sr)
+
+# Slice the y array
+#y = y[start_sample:end_sample]
+y_old = y
+y = audioFilter(y, sr)
+
+onset_times = onset_detection(y, sr)
 onset_times = onset_times * 1000
 onset_times = onset_times.astype(np.int64)
-bpms = tempoEstimator.bpm_changes(tempoEstimator.tempoEstimate((y, sr)))
-print(bpms)
+createClickTrack(y_old, sr, onset_times / 1000, song_name+"click")
+
+start_time = onset_times[0]
+bpms = tempoEstimator.bpm_changes(tempoEstimator.tempoEstimate((y, sr)), start_time)
+#print(bpms)
 song_duration = librosa.get_duration(y=y, sr=sr) * 1000
 
 ## For testing purposes
@@ -131,4 +146,4 @@ song_duration = librosa.get_duration(y=y, sr=sr) * 1000
 #beatmap = generate_chart(onset_times, bpms, 20000)
 
 beatmap, start_time = generate_chart(onset_times, bpms, song_duration)
-chartFileCreation(beatmap, bpms, start_time)
+chartFileCreation(beatmap, bpms, start_time, song_name)

@@ -1,6 +1,6 @@
 import librosa
 import numpy as np
-from librosaModified import tempo
+from utils import tempo
 
 def tempoEstimate(song):
     """
@@ -40,7 +40,9 @@ def intervals_to_times(intervals, sr, hop_length):
     return np.array(times)
 
 
-def bpm_changes(bpm_array, sr=22050, hop_length=512):
+def bpm_changes(bpm_array, start_time):
+    sr=22050
+    hop_length=512
     """
     Convert an array of BPM values per frame into an array of tuples representing changes in BPM.
     
@@ -57,7 +59,7 @@ def bpm_changes(bpm_array, sr=22050, hop_length=512):
     
     for i, bpm in enumerate(bpm_array):
         if bpm != previous_bpm:
-            time = int((i * hop_length / sr) * 1000) # turn into miliseconds and get rid of floating point issue in calculations later on
+            time = int((i * hop_length / sr) * 1000) + start_time # turn into miliseconds and get rid of floating point issue in calculations later on
             changes.append((int(bpm), time))
             previous_bpm = bpm
     
