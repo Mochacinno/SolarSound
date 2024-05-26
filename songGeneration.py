@@ -88,13 +88,13 @@ def quantize_onsets(onsets, measure_time, subdivisions, start_measure_time, inde
     return quantized_onsets, index_onset
 
 def chartFileCreation(beatmap, bpms, start_time):
+    # Format note start time
+    text_content = "START_TIME:\n"
+    text_content += str(start_time)+"\n"
     # Format BPMS into text content
-    text_content = "BPMS:\n"
+    text_content += "BPMS:\n"
     for bpm, start_time in bpms:
         text_content += f"{start_time}:{bpm},\n"
-    # Format note start time
-    text_content += "START_TIME:\n"
-    text_content += str(start_time)+"\n"
     # Format beatmap notes into text content
     text_content += "NOTES:\n"
     for groups in beatmap:
@@ -111,12 +111,12 @@ def chartFileCreation(beatmap, bpms, start_time):
     print(f"Text file '{output_file}' generated successfully.")
 
 # main code
-song = "Music+Beatmaps/nATALIECUT2.mp3"
+song = "Music+Beatmaps/tabiji.mp3"
 y, sr = librosa.load(song)
 y_filter = audioFilter(y, sr)
 #y_filter = librosa.effects.percussive(y=y, margin=5)
 hop_length = 512
-oenv = librosa.onset.onset_strength(y=y_filter, sr=sr, hop_length=hop_length)
+oenv = librosa.onset.onset_strength(y=y, sr=sr, hop_length=hop_length)
 onset_times = librosa.onset.onset_detect(onset_envelope=oenv, sr=sr, units='time')
 
 onset_times = onset_times * 1000

@@ -38,32 +38,61 @@ clock = pygame.time.Clock()
 
 def load(map):
 
-    mixer.music.load(map + "click.mp3")
+    mixer.music.load(map + ".mp3")
 
-    bpms = [(92, 0), (184, 4156), (61, 7662), (184, 22244), (92, 30534), (184, 33367), (61, 33970), (184, 43235), (92, 50642), (123, 56842), (92, 61811), (184, 64574), (61, 72608), (92, 72864), (184, 73235), (172, 74373), (61, 74489), (172, 74652), (161, 74768), (123, 74861), (161, 75511), (151, 75604), (161, 77206), (151, 78181), (172, 78320), (151, 78413), (92, 78576), (123, 78901), (92, 86401), (123, 88885), (92, 97338), (184, 105999), (92, 107787), (184, 108019), (92, 111757), (258, 116633), (184, 116680), (123, 117725), (184, 119513), (258, 121138), (61, 121254), (92, 121393), (184, 121719), (258, 127129), (92, 127361), (151, 129311), (80, 130472), (92, 131099), (258, 131935), (184, 131959), (92, 137740), (151, 139041), (123, 141479), (129, 141943), (184, 142106), (123, 142895), (129, 143801), (184, 144520), (129, 144822), (92, 145333), (129, 147330), (184, 148282), (258, 148514), (129, 148747), (123, 149443), (129, 150140), (258, 150418), (95, 150651), (123, 151347), (184, 151695), (123, 152601), (95, 152717), (184, 152833), (123, 152996), (78, 154435), (184, 154946), (129, 155132), (92, 155620), (184, 163189), (92, 168785), (151, 170620), (92, 171618), (184, 173406), (92, 178282), (107, 179397), (184, 179745), (107, 183832), (151, 183948), (92, 184203), (184, 184273), (92, 184366), (184, 185016), (92, 185620), (123, 187477), (92, 195929), (123, 196835), (92, 206564), (184, 215388), (92, 219962), (107, 225187), (184, 225256), (123, 225883), (107, 227369), (123, 227532), (92, 227601), (234, 240303), (123, 240558), (143, 240767), (184, 241185)]
+    with open(map+'.txt', 'r') as file:
+        lines = file.readlines()
     
-    start_time = 3668
+    start_time = None
+    bpms = []
     beatmap = []
-    beats = []
     beats_in_measure = []
-    res = []
-    with open(map + "2.txt", 'r') as file:
-            for line in file:
-                if line.strip():
-                    if "," in line.strip():
-                        beatmap.append(beats_in_measure)
-                        beats_in_measure = []
-                    else:
-                        beat = []
-                        blocks = line.strip()
-                        for block in blocks:
-                            beat.append(int(block))
-                        beats_in_measure.append(beat)
+
+    # Parse START_TIME
+    index = 0
+    while index < len(lines) and lines[index].strip() != "START_TIME:":
+        index += 1
+    index += 1  # Move to the value line
+    if index < len(lines):
+        start_time = int(lines[index].strip())
+    
+    # Parse BPMS
+    index += 1  # Move past START_TIME value line
+    while index < len(lines) and lines[index].strip() != "BPMS:":
+        index += 1
+    index += 1  # Move to the first BPM line
+    while index < len(lines) and lines[index].strip() and lines[index].strip() != "NOTES:":
+        line = lines[index].strip().rstrip(',')
+        time, bpm = line.split(':')
+        bpms.append([int(bpm), int(time)])
+        index += 1
+    
+    # Parse NOTES
+    index += 1  # Move past the BPMS section header
+    while index < len(lines):
+        stripped_line = lines[index].strip()
+        if stripped_line:
+            if "," in stripped_line:
+                if beats_in_measure:
+                    beatmap.append(beats_in_measure)
+                    beats_in_measure = []
+            else:
+                beat = [int(block) for block in stripped_line]
+                beats_in_measure.append(beat)
+        index += 1
+    
+    if beats_in_measure:
+        beatmap.append(beats_in_measure)
+    
+    #print(start_time)
+    #print(bpms)
+    print(beatmap)
     #print(len(beatmap))
     bpm = bpm_for_time(bpms, start_time)
     measure_time = int(240000 / bpm)
     current_time = start_time
 
+    res = []
     for beats_per_mesure in beatmap:
         #print(measure_time)
         for i in range(len(beats_per_mesure)):
@@ -87,7 +116,7 @@ def load(map):
     return notes
     
 # Loading a certain map
-map_rect = load("sink")
+map_rect = load("Music+Beatmaps/tabiji")
 
 # Main loop
 current_time = 0
