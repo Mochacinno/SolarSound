@@ -12,6 +12,31 @@ clock = pygame.time.Clock()
 screen = pygame.display.set_mode((800, 600))
 
 # CLASSES
+class Note():
+    def __init__(self, key_index):
+        self.key_index = key_index
+        self.x = keys[key_index].rect.centerx - 45
+        self.y = 0
+        self.rect = pygame.Rect(self.x, self.y, 90, 20)
+        self.surface = pygame.Surface((90, 20), pygame.SRCALPHA)
+        self.surface.fill((255, 0 , 0))
+        self.alpha = 255  # Initial alpha value
+        self.dissolving = False
+    
+    def update(self, speed):
+        self.y += speed
+        self.rect.y = self.y
+
+    def dissolve(self):
+        if self.alpha > 0:
+            self.alpha -= 20  # Adjust the decrement to control dissolve speed
+            if self.alpha < 0:
+                self.alpha = 0
+            self.surface.set_alpha(self.alpha)
+
+    def draw(self, screen):
+        screen.blit(self.surface, self.rect.topleft)
+        
 
 class Key():
     def __init__(self,x,y,coloridle,coloractive,key):
@@ -20,7 +45,7 @@ class Key():
         self.coloridle = coloridle
         self.coloractive = coloractive
         self.key = key
-        self.rect = pygame.Rect(self.x,self.y,100,40)
+        self.rect = pygame.Rect(self.x,self.y,90,40)
         self.handled = False
 
 # initialising keys
@@ -107,7 +132,6 @@ def load(map):
         measure_time = int(240000 / bpm)
         res.append(beats_per_mesure)
 
-    print(res)
     # print(res)
     # [[([1, 0, 0, 0], 250.0), ([0, 0, 0, 0], 500.0), ([0, 0, 0, 0], 750.0), ([0, 0, 0, 0], 1000.0)], [([0, 1, 0, 0], 1333.3333333333333), ([0, 0, 0, 1], 1666.6666666666665), ([1, 0, 0, 0], 1999.9999999999998)], [([0, 0, 0, 0], 2250.0), ([1, 0, 0, 0], 2500.0), ([0, 0, 0, 0], 2750.0), ([0, 0, 0, 0], 3000.0)]]
     notes = []
@@ -115,11 +139,12 @@ def load(map):
         for beat, time in beats:
             for key_index in range(len(beat)):
                 if beat[key_index] == 1:
-                    notes.append((pygame.Rect(keys[key_index].rect.centerx - 25,0,50,25), time))
+                    #notes.append((pygame.Rect(keys[key_index].rect.centerx - 25,0,50,25), time))
+                    notes.append((Note(key_index), time))
     return notes
     
 # Loading a certain map
-song_name = "chopin"
+song_name = "lamp"
 map_rect = load("Music+Beatmaps/"+song_name)
 
 # Main loop
@@ -133,6 +158,9 @@ speed = 500
 start_time = pygame.time.get_ticks()
 music_started = False  # Flag to track whether music has started
 
+# Initialize a dictionary to store key press times
+key_press_times = {key.key: [] for key in keys}
+
 while True:
     screen.fill((0, 0, 0))
     
@@ -141,6 +169,9 @@ while True:
         if event.type == pygame.QUIT:
             pygame.quit()
             quit()
+        elif event.type == pygame.KEYDOWN:
+            if event.key in key_press_times:
+                key_press_times[event.key].append(current_time-1000)
 
      # Update the current time
     dt = clock.tick(60)  # Get the time passed since the last frame in milliseconds
@@ -164,21 +195,27 @@ while True:
             key.handled = True
 
     # Spawn and move notes
-    for rect, time_frame in map_rect:
-        # Check if it's time to spawn the note
-        #print(current_time)
+    for note, time_frame in map_rect[:]:
         if current_time >= time_frame:
-            pygame.draw.rect(screen, (200, 0, 0), rect)
-            rect.y += (speed/1000) * dt # Move the note down
+            if not note.dissolving:
+                note.update((speed / 1000) * dt)  # Move the note down
+            else:
+                note.dissolve()
+                if note.alpha == 0:
+                    map_rect.remove((note, time_frame))
             
-        # Check collision with keys and handle accordingly
-        for key in keys:
-            if key.rect.colliderect(rect) and not key.handled:
-                map_rect.remove((rect, time_frame))  # Remove the rectangle from map_rect
-                key.handled = True
-                # Increment the score when a note is hit
-                score += 1
-                #break
+            note.draw(screen)
+
+        # Check if the note should be hit based on the key press times
+        if not note.dissolving:
+            for key in keys:
+                if note.key_index == keys.index(key):
+                    for press_time in key_press_times[key.key]:
+                        if abs(press_time - time_frame) < 60:  # SCORING SYSTEM
+                            note.dissolving = True  # Start the dissolve effect
+                            key_press_times[key.key].remove(press_time)  # Remove the handled key press time
+                            score += 1  # Increment the score when a note is hit
+                            break
 
     # Display the score on the screen
     font = pygame.font.Font(None, 36)

@@ -114,7 +114,7 @@ def chartFileCreation(beatmap, bpms, start_time, song):
     print(f"Text file '{output_file}' generated successfully.")
 
 # main code
-song_name = "chopin"
+song_name = "lamp"
 y, sr = librosa.load("Music+Beatmaps/"+song_name+".mp3")
 ## SLICE THE MUSIC
 # Define start and end times in seconds
