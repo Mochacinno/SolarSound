@@ -12,14 +12,19 @@ def calculate_intervals(onsets):
 def find_minimum_interval(intervals):
     return min(intervals)
 
+# TO review
 def find_best_subdivision_level(measure_time, min_interval):
+    print(f"measure_time: {measure_time} with min_interval {min_interval}")
     # Consider common musical subdivisions: 1, 2, 4, 8, 16, 32, etc.
-    common_subdivisions = [2**i for i in range(4)]  # Up to 32th note
+    common_subdivisions = [2**i for i in range(6)]  # Up to 64th note
     for subdivision in common_subdivisions:
         interval = measure_time / subdivision
-        if interval <= min_interval:
+        print(abs(interval - min_interval))
+        if abs(interval - min_interval) < 50:
             return subdivision
     return max(common_subdivisions)
+
+
 
 def quantize_onsets(onsets, measure_time, subdivision_level):
     subdivision_interval = measure_time / subdivision_level

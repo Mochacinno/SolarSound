@@ -7,6 +7,18 @@ from utils import audioFilter
 from utils import onset_detection
 from utils import createClickTrack
 
+# TO review
+def find_best_subdivision_level(measure_time, min_interval):
+    print(f"measure_time: {measure_time} with min_interval {min_interval}")
+    # Consider common musical subdivisions: 1, 2, 4, 8, 16, 32, etc.
+    common_subdivisions = [2**i for i in range(6)]  # Up to 32th note
+    for subdivision in common_subdivisions:
+        interval = measure_time / subdivision
+        print(abs(interval - min_interval))
+        if abs(interval - min_interval) < 50:
+            return subdivision
+    return max(common_subdivisions)
+
 def generate_chart(onset_times, bpms, song_duration):
 
     beatmap = []
@@ -21,7 +33,7 @@ def generate_chart(onset_times, bpms, song_duration):
     start_measure_time = start_time
     while start_measure_time <= song_duration:
         print(f"start_measure_time: {start_measure_time}")
-        print(f"measure_time: {measure_time}")
+        #print(f"measure_time: {measure_time}")
         onsets_in_measure, index_onset = collect_onsets_in_measure(onset_times, start_measure_time, measure_time, index_onset)
         #print(f"raw: {onsets_in_measure}")
         if len(onsets_in_measure) == 0:
@@ -59,17 +71,19 @@ def generate_empty_measure():
     return [np.zeros(4, dtype=int) for _ in range(4)]
 
 def generate_beats(onsets_in_measure, measure_time, start_measure_time, index_onset):
-    ideal_subdivision = 32 # to change
+    print(f"onsets in measure: {onsets_in_measure}")
+    ideal_subdivision = 16 # to change
+    print(ideal_subdivision)
     onsets_in_measure, index_onset = quantize_onsets(onsets_in_measure, measure_time, ideal_subdivision, start_measure_time, index_onset)
-    print(f"quantised: {onsets_in_measure}")
+    #print(f"quantised: {onsets_in_measure}")
     beats_per_measure = []
 
     beat = start_measure_time
     for i in range(ideal_subdivision):
         group = np.zeros(4, dtype=int)
-        if beat in onsets_in_measure:
-            idx = np.random.randint(0, 4)
-            group[idx] = 1
+        if beat in onsets_in_measure or len(onsets_in_measure) > ideal_subdivision / 2:
+            # If the measure has a lot of onsets detected, generate notes in every subdivision
+            group[np.random.randint(0, 4)] = 1
         beats_per_measure.append(group)
         beat += measure_time // ideal_subdivision
         #print(beat) 
@@ -114,8 +128,8 @@ def chartFileCreation(beatmap, bpms, start_time, song):
     print(f"Text file '{output_file}' generated successfully.")
 
 # main code
-song_name = "lamp"
-y, sr = librosa.load("Music+Beatmaps/"+song_name+".mp3")
+song_name = "universe"
+y, sr = librosa.load("Music+Beatmaps/"+song_name+".ogg")
 ## SLICE THE MUSIC
 # Define start and end times in seconds
 start_time = 76  # Start at 5 seconds
@@ -133,7 +147,7 @@ y = audioFilter(y, sr)
 onset_times = onset_detection(y, sr)
 onset_times = onset_times * 1000
 onset_times = onset_times.astype(np.int64)
-createClickTrack(y_old, sr, onset_times / 1000, song_name+"click")
+createClickTrack(y, sr, onset_times / 1000, song_name+"click2")
 
 start_time = onset_times[0]
 bpms = tempoEstimator.bpm_changes(tempoEstimator.tempoEstimate((y, sr)), start_time)

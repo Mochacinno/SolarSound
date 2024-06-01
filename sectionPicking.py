@@ -1,46 +1,46 @@
 import numpy as np
 
-# Given arrays
-array1 = [4, 3, 9, 0, 9, 3, 9, 0, 5, 3, 9, 7, 8, 1, 5, 3, 8, 2, 0, 8, 6, 0, 7, 8, 1, 4]
-array3 = np.array([0.60371882, 6.6176870, 21.84997732, 22.36081633, 32.25251701, 32.74013605, 
-                   42.46929705, 42.9569161, 53.15047619, 63.87809524, 75.99891156, 77.81006803, 
-                   98.4061678, 98.89378685, 119.1415873, 124.83047619, 139.50548753, 140.41106576, 
-                   160.03192744, 177.53977324, 180.92988662, 186.61877551, 187.10639456, 207.0523356, 
-                   208.0275737, 228.11283447, 241.20888889])
+# Input data
+times = np.array([
+    0.60371882, 6.61768707, 21.38557823, 21.84997732, 32.25251701,
+    32.74013605, 42.46929705, 42.9569161, 53.15047619, 63.87809524,
+    75.99891156, 77.81006803, 98.4061678, 98.89378685, 119.1415873,
+    124.83047619, 129.52090703, 139.50548753, 140.41106576, 160.03192744,
+    177.53977324, 180.92988662, 186.61877551, 187.10639456, 207.0523356,
+    208.0275737, 228.11283447, 241.20888889
+])
+labels = np.array([4, 8, 1, 2, 1, 8, 1, 2, 5, 8, 2, 7, 9, 3, 5, 8, 1, 9, 0, 2, 9, 6, 2, 7, 9, 3, 4])
 
-array2 = np.diff(array3)
-print(array2)
+def segmentPicking(labels, times): 
+    # needs to both be form of a numpy array
+    # Define error window and minimum duration
+    error_window = 1
+    min_duration = 1.0
 
-# [ 6.01396818 15.23229032  0.51083901  9.89170068  0.48761904  9.729161
-#   0.48761905 10.19356009 10.72761905 12.12081632  1.81115647 20.59609977
-#   0.48761905 20.24780045  5.68888889 14.67501134  0.90557823 19.62086168
-#  17.5078458   3.39011338  5.68888889  0.48761905 19.94594104  0.9752381
-#  20.08526077 13.09605442]
+    # Calculate segment durations
+    durations = np.diff(times)
 
-res = []
-for k in range(len(array1)):
-    res.append("None")
+    # Store segments with their labels and time windows, filtering out short segments
+    segments = [(labels[i], times[i], times[i+1], durations[i]) for i in range(len(labels)) if durations[i] >= min_duration]
 
-for i in range(len(array1)):
-    match = False
-    for j in range(i+1, len(array1)):
-        if array1[i] == array1[j]:
-            if array2[i] > 3:
-                if abs(array2[i] - array2[j]) < 1:
-                    res[i] = array1[i]
-                    res[j] = array1[j]
-                    match = True
-print(res)
-res2 = []
-for l in range(len(res)):
-    if res[l] != "None":
-        value = array3[l]+array2[l]
-        res2.append([array3[l], array3[l]+array2[l]])
-        
-print(res2)
+    # Find matching durations within each label group
+    unique_labels = np.unique(labels)
+    matching_segments = []
 
-filtered_res = [x for x in res if x != 'None']
-print(filtered_res)
+    for label in unique_labels:
+        label_segments = [seg for seg in segments if seg[0] == label]
+        for i in range(len(label_segments)):
+            for j in range(i + 1, len(label_segments)):
+                _, start_time_i, end_time_i, duration_i = label_segments[i]
+                _, start_time_j, end_time_j, duration_j = label_segments[j]
+                if abs(duration_i - duration_j) <= error_window:
+                    matching_segments.append((label, start_time_i, end_time_i))
+                    matching_segments.append((label, start_time_j, end_time_j))
 
+    # Remove duplicates
+    matching_segments = list(set(matching_segments))
 
-
+    # # Print results
+    # for seg in matching_segments:
+    #     print(seg)
+    return matching_segments

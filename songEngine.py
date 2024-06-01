@@ -63,7 +63,8 @@ clock = pygame.time.Clock()
 
 def load(map):
 
-    mixer.music.load(map + "click.mp3")
+    #mixer.music.load(map + "click.mp3")
+    mixer.music.load(map+".mp3")
 
     with open(map+'.txt', 'r') as file:
         lines = file.readlines()
@@ -139,12 +140,12 @@ def load(map):
         for beat, time in beats:
             for key_index in range(len(beat)):
                 if beat[key_index] == 1:
-                    #notes.append((pygame.Rect(keys[key_index].rect.centerx - 25,0,50,25), time))
+                    #notes.append((pygame.Rect(keys[key_index].rect.centerx - 25,0,50,25), time))m,
                     notes.append((Note(key_index), time))
     return notes
     
 # Loading a certain map
-song_name = "lamp"
+song_name = "nhelv"
 map_rect = load("Music+Beatmaps/"+song_name)
 
 # Main loop
@@ -161,67 +162,130 @@ music_started = False  # Flag to track whether music has started
 # Initialize a dictionary to store key press times
 key_press_times = {key.key: [] for key in keys}
 
-while True:
-    screen.fill((0, 0, 0))
-    
-    # Handle events
-    for event in pygame.event.get():
-        if event.type == pygame.QUIT:
-            pygame.quit()
-            quit()
-        elif event.type == pygame.KEYDOWN:
-            if event.key in key_press_times:
-                key_press_times[event.key].append(current_time-1000)
+# Constants
+WIDTH, HEIGHT = 800, 600
+BG_COLOR = (30, 30, 30)
+BUTTON_COLOR = (100, 200, 100)
+TEXT_COLOR = (255, 255, 255)
+FONT_SIZE = 24
+BUTTON_WIDTH, BUTTON_HEIGHT = 200, 50
+font = pygame.font.Font(None, 36)
 
-     # Update the current time
-    dt = clock.tick(60)  # Get the time passed since the last frame in milliseconds
-    current_time += dt  # Update current time
-    elapsed_time = current_time - start_time
+# Define a button class
+class Button:
+    def __init__(self, x, y, width, height, text, callback):
+        self.rect = pygame.Rect(x, y, width, height)
+        self.text = text
+        self.callback = callback
 
-    # Check if the music hasn't started yet and the elapsed time is greater than or equal to 1000 milliseconds (1 second)
-    if not music_started and current_time - start_time >= 1000 + 69 - 175:
-        # Start playing the music
-        pygame.mixer.music.play()
-        music_started = True
+    def draw(self, screen):
+        pygame.draw.rect(screen, BUTTON_COLOR, self.rect)
+        text_surface = font.render(self.text, True, TEXT_COLOR)
+        text_rect = text_surface.get_rect(center=self.rect.center)
+        screen.blit(text_surface, text_rect)
 
-    # Check key presses
-    k = pygame.key.get_pressed()
-    for key in keys:
-        if k[key.key]:
-            pygame.draw.rect(screen, key.coloridle, key.rect)
-            key.handled = False
-        if not k[key.key]:
-            pygame.draw.rect(screen, key.coloractive, key.rect)
-            key.handled = True
+    def check_click(self, pos):
+        if self.rect.collidepoint(pos):
+            self.callback()
 
-    # Spawn and move notes
-    for note, time_frame in map_rect[:]:
-        if current_time >= time_frame:
+# Define the main menu function
+def main_menu():
+    menu_running = True
+
+    # Define the start button
+    start_button = Button(WIDTH // 2 - BUTTON_WIDTH // 2, HEIGHT // 2 - BUTTON_HEIGHT // 2, BUTTON_WIDTH, BUTTON_HEIGHT, "Start Game", start_game)
+
+    while menu_running:
+        screen.fill(BG_COLOR)
+
+        for event in pygame.event.get():
+            if event.type == pygame.QUIT:
+                pygame.quit()
+                quit()
+            elif event.type == pygame.MOUSEBUTTONDOWN:
+                if event.button == 1:  # Left mouse button
+                    start_button.check_click(event.pos)
+
+        # Draw the start button
+        start_button.draw(screen)
+
+        # Update the display
+        pygame.display.update()
+
+# Define the game function
+def start_game():
+    global start_time, current_time, score, music_started
+
+    # Reset game variables
+    start_time = pygame.time.get_ticks()
+    current_time = start_time
+    score = 0
+    music_started = False
+    clock = pygame.time.Clock()
+
+    # Game loop
+    while True:
+        screen.fill((0, 0, 0))
+
+        # Handle events
+        for event in pygame.event.get():
+            if event.type == pygame.QUIT:
+                pygame.quit()
+                quit()
+            elif event.type == pygame.KEYDOWN:
+                if event.key in key_press_times:
+                    key_press_times[event.key].append(current_time - start_time - 1000)
+
+        # Update the current time
+        dt = clock.tick(60)  # Get the time passed since the last frame in milliseconds
+        current_time += dt  # Update current time
+
+        # Check if the music hasn't started yet and the elapsed time is greater than or equal to 1000 milliseconds (1 second)
+        if not music_started and current_time - start_time >= 1000 + 69 - 175:
+            # Start playing the music
+            pygame.mixer.music.play()
+            music_started = True
+
+        # Check key presses
+        k = pygame.key.get_pressed()
+        for key in keys:
+            if k[key.key]:
+                pygame.draw.rect(screen, key.coloridle, key.rect)
+                key.handled = False
+            if not k[key.key]:
+                pygame.draw.rect(screen, key.coloractive, key.rect)
+                key.handled = True
+
+        # Spawn and move notes
+        for note, time_frame in map_rect[:]:
+            if current_time - start_time >= time_frame:
+                if not note.dissolving:
+                    note.update((speed / 1000) * dt)  # Move the note down
+                else:
+                    note.dissolve()
+                    if note.alpha == 0:
+                        map_rect.remove((note, time_frame))
+
+                note.draw(screen)
+
+            # Check if the note should be hit based on the key press times
             if not note.dissolving:
-                note.update((speed / 1000) * dt)  # Move the note down
-            else:
-                note.dissolve()
-                if note.alpha == 0:
-                    map_rect.remove((note, time_frame))
-            
-            note.draw(screen)
+                for key in keys:
+                    if note.key_index == keys.index(key):
+                        for press_time in key_press_times[key.key]:
+                            if abs(press_time - time_frame) < 60:  # SCORING SYSTEM
+                                note.dissolving = True  # Start the dissolve effect
+                                key_press_times[key.key].remove(press_time)  # Remove the handled key press time
+                                score += 1  # Increment the score when a note is hit
+                                break
 
-        # Check if the note should be hit based on the key press times
-        if not note.dissolving:
-            for key in keys:
-                if note.key_index == keys.index(key):
-                    for press_time in key_press_times[key.key]:
-                        if abs(press_time - time_frame) < 60:  # SCORING SYSTEM
-                            note.dissolving = True  # Start the dissolve effect
-                            key_press_times[key.key].remove(press_time)  # Remove the handled key press time
-                            score += 1  # Increment the score when a note is hit
-                            break
+        # Display the score on the screen
+        score_text = font.render(f"Score: {score}", True, (255, 255, 255))
+        screen.blit(score_text, (10, 10))
 
-    # Display the score on the screen
-    font = pygame.font.Font(None, 36)
-    score_text = font.render(f"Score: {score}", True, (255, 255, 255))
-    screen.blit(score_text, (10, 10))
+        # Update the display
+        pygame.display.update()
 
-    # Update the display
-    pygame.display.update()
+# Main loop to start the menu
+main_menu()
 

@@ -4,7 +4,7 @@ import numpy as np
 measure_time = 3.2272496629488905
 
 # Onset times in seconds within the measure
-onsets = [3.23, 3.48, 3.65, 4.11, 4.41, 4.74, 5.04, 5.34, 5.5, 5.64]
+onsets = [3230, 3480, 3650, 4110, 4410, 4074, 5004, 5034, 5005, 5064]
 
 def quantize_onsets(onsets, measure_time, max_subdivision):
     # Calculate the time interval for each subdivision
@@ -21,10 +21,10 @@ def quantize_onsets(onsets, measure_time, max_subdivision):
 
 def calculate_total_error(onsets, quantized_onsets):
     # Calculate the total quantization error
-    return sum(abs(o - q) for o, q in zip(onsets, quantized_onsets))
+    return [abs(o - q) for o, q in zip(onsets, quantized_onsets)]
 
 # Define possible subdivisions to test (e.g., 1/4th, 1/8th, 1/16th notes)
-subdivision_levels = [4, 8, 16, 32, 64]  # Corresponds to 1/4, 1/8, 1/16, 1/32 notes
+subdivision_levels = [2, 3, 4, 6, 8, 12, 16, 24, 32, 48, 64]  # Corresponds to 1/4, 1/8, 1/16, 1/32 notes
 
 best_subdivision = None
 min_error = float('inf')
@@ -35,12 +35,12 @@ for subdivision in subdivision_levels:
     error = calculate_total_error(onsets, quantized_onsets)
     print(f"Subdivision: {subdivision}, Error: {error}, Quantized Onsets: {quantized_onsets}")
 
-    if error < min_error:
-        min_error = error
-        best_subdivision = subdivision
-        best_quantized_onsets = quantized_onsets
+    # if error < min_error:
+    #     min_error = error
+    #     best_subdivision = subdivision
+    #     best_quantized_onsets = quantized_onsets
 
 
 
-print(f"Best Subdivision: {best_subdivision}, Minimum Error: {min_error}")
-print(f"Best Quantized Onsets: {best_quantized_onsets}")
+#print(f"Best Subdivision: {best_subdivision}, Minimum Error: {min_error}")
+#print(f"Best Quantized Onsets: {best_quantized_onsets}")
