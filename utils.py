@@ -438,7 +438,7 @@ def audioFilter(y, sr):
     S_foreground = mask_v * S_full
     S_background = mask_i * S_full
 
-    y_foreground = librosa.istft(S_background* phase)
+    y_foreground = librosa.istft(S_foreground* phase)
     y = y_foreground
     return y
 

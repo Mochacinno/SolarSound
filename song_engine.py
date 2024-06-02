@@ -145,7 +145,7 @@ def load(map):
     return notes
     
 # Loading a certain map
-song_name = "nhelv"
+song_name = "sink"
 map_rect = load("Music+Beatmaps/"+song_name)
 
 # Main loop
@@ -158,7 +158,7 @@ speed = 500
 
 start_time = pygame.time.get_ticks()
 music_started = False  # Flag to track whether music has started
-
+    
 # Initialize a dictionary to store key press times
 key_press_times = {key.key: [] for key in keys}
 
