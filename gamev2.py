@@ -81,22 +81,27 @@ class MusicLibrary:
         file_list = load_song_list()
         selected_file = None
         while not selected_file:
+            # Event handling inside the main loop
+            for event in pygame.event.get():
+                if event.typew == pygame.QUIT:
+                    pygame.quit()
+                    sys.exit()
+                elif event.type == pygame.MOUSEBUTTONDOWN:
+                    if file_rect.collidepoint(event.pos):
+                        print("yes")
+                        selected_file = file
+                    if return_button.collidepoint(event.pos):
+                        selected_file = "home"
+
             screen.fill(BG_COLOR)
             draw_text(screen, "Select a music file", pygame.Rect(0, 50, screen_width, 50), font, WHITE)
             y_offset = 150
+            return_button = pygame.Rect(50, 50, 200, 50)
+            draw_text(screen, "return", return_button, font, TEXT_COLOR)
             for idx, file in enumerate(file_list):
                 file_rect = pygame.Rect(50, y_offset + idx * 50, screen_width - 100, 50)
                 pygame.draw.rect(screen, GRAY, file_rect)
                 draw_text(screen, file, file_rect, font, BLACK)
-                
-                # Event handling inside the main loop
-                for event in pygame.event.get():
-                    if event.type == pygame.QUIT:
-                        pygame.quit()
-                        sys.exit()
-                    elif event.type == pygame.MOUSEBUTTONDOWN:
-                        if file_rect.collidepoint(event.pos):
-                            selected_file = file
 
             pygame.display.flip()
         return selected_file
