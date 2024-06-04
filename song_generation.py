@@ -1,6 +1,5 @@
 import librosa
 import numpy as np
-import tempoEstimator
 import utils
 
 def find_section_label(start_measure_time, musical_sections):
@@ -21,7 +20,10 @@ def find_best_subdivision_level(measure_time, min_interval):
             return subdivision
     return max(common_subdivisions)
 
-def generate_chart(onset_times, bpms, song_duration, smooth_rms, rms_threshold, musical_sections):
+def generate_chart(y ,sr):
+    onset_times, bpms, rms, musical_sections = init_generate_chart(y, sr)
+    rms_threshold = utils.find_rms_threshold(rms, sr)
+    song_duration = librosa.get_duration(y=y, sr=sr) * 1000
     beatmap = []
     
     start_bpm = bpms[0][0]
@@ -43,8 +45,8 @@ def generate_chart(onset_times, bpms, song_duration, smooth_rms, rms_threshold, 
         #if len(onsets_in_measure) == 0:
         #    beats_per_measure = generate_empty_measure()
         #else:
-        #    beats_per_measure, index_onset = generate_beats(onsets_in_measure, measure_time, start_measure_time, index_onset, smooth_rms, rms_threshold)
-        beats_per_measure, index_onset = generate_beats(onsets_in_measure, measure_time, start_measure_time, index_onset, smooth_rms, rms_threshold, musical_sections)
+        #    beats_per_measure, index_onset = generate_beats(onsets_in_measure, measure_time, start_measure_time, index_onset, rms, rms_threshold)
+        beats_per_measure, index_onset = generate_beats(onsets_in_measure, measure_time, start_measure_time, index_onset, rms, rms_threshold, musical_sections)
         
         beatmap.append(beats_per_measure)
         start_measure_time += measure_time
@@ -173,7 +175,7 @@ def quantize_onsets(onsets, measure_time, subdivisions, start_measure_time, inde
         index_onset -= 1
     return quantized_onsets, index_onset
 
-def chartFileCreation(beatmap, bpms, start_time, song):
+def chart_file_creation(beatmap, bpms, start_time, song):
     # Format note start time
     text_content = "START_TIME:\n"
     text_content += str(start_time)+"\n"
@@ -196,34 +198,41 @@ def chartFileCreation(beatmap, bpms, start_time, song):
     
     print(f"Text file '{output_file}' generated successfully.")
 
-# main code
-song_name = "sink"
-y, sr = librosa.load("Music+Beatmaps/"+song_name+".mp3")
+def init_generate_chart(song_path, callback):
+    y, sr = librosa.load(song_path)
+    # Filter the audio
+    y = utils.audioFilter(y, sr)
 
-#y = utils.slice_music(y, sr, 40, 100)
+    # Grab the parameters for our generate_chart algorithm
+    onset_times = utils.onset_detection(y, sr)
+    bpms = [(utils.find_best_tempo(y, sr), 0)] # for the current version, we assume song is CONSTANT tempo
+    rms_values = librosa.feature.rms(y=y)[0]
+    smoothed_rms = utils.smooth_rms(rms_values) # smoothen out the rms curve
+    musical_sections = utils.segmentAnalysis(y, sr)
+    return onset_times, bpms, smoothed_rms, musical_sections#
 
-y = utils.audioFilter(y, sr)
-#y = librosa.effects.harmonic(y=y)
-# onset_env = librosa.onset.onset_strength(y=y, sr=sr)
-# pulse = librosa.beat.plp(onset_envelope=onset_env, sr=sr)
-# beats_plp = np.flatnonzero(librosa.util.localmax(pulse))
+if __name__ == "__main__":
 
-# times = librosa.times_like(onset_env)
-onset_times = utils.onset_detection(y, sr)
+    # main code
+    song_name = "sink"
+    y, sr = librosa.load("Music+Beatmaps/"+song_name+".mp3")
 
-# utils.createClickTrack(y, sr, librosa.frames_to_time(beats_plp), song_name+"click")
+    #y = utils.slice_music(y, sr, 40, 100)
 
-bpms = [(utils.find_best_tempo(y, sr), 0)] # for the current version, we assume CONSTANT tempo
-print(bpms)
-song_duration = librosa.get_duration(y=y, sr=sr) * 1000
+    y = utils.audioFilter(y, sr)
+    #y = librosa.effects.harmonic(y=y)
+    # onset_env = librosa.onset.onset_strength(y=y, sr=sr)
+    # pulse = librosa.beat.plp(onset_envelope=onset_env, sr=sr)
+    # beats_plp = np.flatnonzero(librosa.util.localmax(pulse))
 
-# TODO change to one function such as a generate_chart_init which prepares all the values
-rms_values = librosa.feature.rms(y=y)[0]
-smoothed_rms = utils.smooth_rms(rms_values)
-rms_threshold = utils.find_rms_threshold(smoothed_rms, sr)
-musical_sections = utils.segmentAnalysis(y, sr)
-#print(musical_sections)
+    # times = librosa.times_like(onset_env)
+    onset_times = utils.onset_detection(y, sr)
 
-beatmap, start_time = generate_chart(onset_times, bpms, song_duration, smoothed_rms, rms_threshold, musical_sections)
+    # utils.createClickTrack(y, sr, librosa.frames_to_time(beats_plp), song_name+"click")
 
-chartFileCreation(beatmap, bpms, start_time, song_name)
+    bpms = [(utils.find_best_tempo(y, sr), 0)] # for the current version, we assume CONSTANT tempo
+    print(bpms)
+
+    beatmap, start_time = generate_chart(y, sr)
+
+    chart_file_creation(beatmap, bpms, start_time, song_name)
