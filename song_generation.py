@@ -20,7 +20,8 @@ def find_best_subdivision_level(measure_time, min_interval):
             return subdivision
     return max(common_subdivisions)
 
-def generate_chart(y ,sr):
+async def generate_chart(song_path):
+    y, sr = librosa.load(song_path)
     onset_times, bpms, rms, musical_sections = init_generate_chart(y, sr)
     rms_threshold = utils.find_rms_threshold(rms, sr)
     song_duration = librosa.get_duration(y=y, sr=sr) * 1000
@@ -198,8 +199,7 @@ def chart_file_creation(beatmap, bpms, start_time, song):
     
     print(f"Text file '{output_file}' generated successfully.")
 
-def init_generate_chart(song_path, callback):
-    y, sr = librosa.load(song_path)
+def init_generate_chart(y, sr):
     # Filter the audio
     y = utils.audioFilter(y, sr)
 
@@ -209,7 +209,8 @@ def init_generate_chart(song_path, callback):
     rms_values = librosa.feature.rms(y=y)[0]
     smoothed_rms = utils.smooth_rms(rms_values) # smoothen out the rms curve
     musical_sections = utils.segmentAnalysis(y, sr)
-    return onset_times, bpms, smoothed_rms, musical_sections#
+    return onset_times, bpms, smoothed_rms, musical_sections
+
 
 if __name__ == "__main__":
 

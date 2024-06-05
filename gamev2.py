@@ -8,6 +8,7 @@ import json
 import game_engine as engine
 import song_generation
 from utils import bpm_for_time
+import asyncio
 
 # Initialisation de Pygame
 pygame.init()
@@ -34,6 +35,15 @@ font = pygame.font.Font(None, 20)
 # Charger l'image de fond
 background_image = pygame.image.load("assets/background.jpg")
 background_image = pygame.transform.scale(background_image, (screen_width, screen_height))
+
+# Liste des images a charge pour les notes
+# Load images for notes
+note_image_paths = [
+    "assets/note.png",
+    "assets/note.png",
+    "assets/note.png",
+    "assets/note.png"
+]
 
 # Dimensions des éléments
 button_width = 220
@@ -159,25 +169,26 @@ def load(map):
     
     return notes
 
-# Loading bar system
 def run_loading_screen():
     clock = pygame.time.Clock()
 
-    # Recharger l'image de fond pour la page de chargement
+    # Load background image
     background_image = pygame.image.load("assets/background.jpg")
     background_image = pygame.transform.scale(background_image, (screen_width, screen_height))
 
-    # Police de texte
+    # Text font
     font = pygame.font.SysFont(None, 36)
 
-    # Variables de la barre de chargement
-    largeur_barre = 600
-    hauteur_barre = 50
-    x_barre = (screen_width - largeur_barre) // 2
-    y_barre = (screen_height - hauteur_barre) // 2
-    largeur_remplissage = 0
+    # Variables for loading bar
+    bar_width = 600
+    bar_height = 50
+    x_bar = (screen_width - bar_width) // 2
+    y_bar = (screen_height - bar_height) // 2
+    fill_width = 0
 
-    ## PROGRESS BAR
+    # Progress bar update interval (in milliseconds)
+    update_interval = 20000  # 20 seconds
+
     # Current step status
     current_step = 0
 
@@ -192,33 +203,48 @@ def run_loading_screen():
     ]
 
     # Start the process
-    song_path = "Music+Beatmaps/sink.mp3"  # Replace with actual song path
-    song_generation.init_generate_chart(song_path)
+    song_path = "Music+Beatmaps/sink.mp3" 
+
+    # need to make async
+    task = asyncio.create_task(song_generation.generate_chart(song_path))
+
+    # Time of the last progress update
+    last_update_time = pygame.time.get_ticks()
 
     running = True
     while running:
-        for event in pygame.event.get():
-            if event.type == pygame.QUIT:
-                pygame.quit()
-                sys.exit()
+        if task.done():
+            running = False
+        else:
+            for event in pygame.event.get():
+                if event.type == pygame.QUIT:
+                    pygame.quit()
+                    sys.exit()
 
-        # Update loading bar
-        if current_step < 6:
-            fill_width = min(largeur_barre * (current_step / 6), fill_width + 1)
+            # Check if it's time to update the progress
+            current_time = pygame.time.get_ticks()
+            if current_time - last_update_time >= update_interval:
+                # Update current step
+                current_step += 1
+                # Reset last update time
+                last_update_time = current_time
 
-        # Affichage
-        screen.blit(background_image, (0, 0))
-        pygame.draw.rect(screen, WHITE, (x_barre, y_barre, largeur_barre, hauteur_barre))
-        pygame.draw.rect(screen, GRAY, (x_barre, y_barre, largeur_remplissage, hauteur_barre))
+            # Update loading bar
+            fill_width = min(bar_width * (current_step / 6), fill_width + 1)
 
-        # Display current step text
-        if current_step < len(step_texts):
-            current_step_text = step_texts[current_step]
-            text_surface = font.render(current_step_text, True, pygame.Color('white'))
-            screen.blit(text_surface, (x_barre, y_barre - 40))
+            # Display loading screen
+            screen.blit(background_image, (0, 0))
+            pygame.draw.rect(screen, WHITE, (x_bar, y_bar, bar_width, bar_height))
+            pygame.draw.rect(screen, GRAY, (x_bar, y_bar, fill_width, bar_height))
 
-        pygame.display.flip()
-        clock.tick(30)
+            # Display current step text
+            if current_step < len(step_texts):
+                current_step_text = step_texts[current_step]
+                text_surface = font.render(current_step_text, True, pygame.Color('white'))
+                screen.blit(text_surface, (x_bar, y_bar - 40))
+
+            pygame.display.flip()
+            clock.tick(30)
 
 # Systeme de recuperer la bibliotheque de musique
 song_list_file_name = 'config.json'
@@ -259,6 +285,7 @@ class MusicLibrary:
 
     def run(self):
         file_list = load_song_list()
+        file_rects = []
         selected_file = None
         while not selected_file:
             # Event handling inside the main loop
@@ -267,11 +294,12 @@ class MusicLibrary:
                     pygame.quit()
                     sys.exit()
                 elif event.type == pygame.MOUSEBUTTONDOWN:
-                    if file_rect.collidepoint(event.pos):
-                        print("yes")
-                        selected_file = file
+                    for file_rect, file in file_rects:  # Iterate over file rects and corresponding files
+                        if file_rect.collidepoint(event.pos):
+                            selected_file = file
+                            break
                     if return_button.collidepoint(event.pos):
-                        selected_file = "home"
+                        selected_file = "Select a music file"
 
             screen.fill(BG_COLOR)
             draw_text(screen, "Select a music file", pygame.Rect(0, 50, screen_width, 50), font, WHITE)
@@ -282,6 +310,7 @@ class MusicLibrary:
                 file_rect = pygame.Rect(50, y_offset + idx * 50, screen_width - 100, 50)
                 pygame.draw.rect(screen, GRAY, file_rect)
                 draw_text(screen, file, file_rect, font, BLACK)
+                file_rects.append((file_rect, file))
 
             pygame.display.flip()
         return selected_file
@@ -289,7 +318,7 @@ class MusicLibrary:
 class Gameplay():
     def __init__(self):
         #self.map = selectsong_button_text[:-4]
-        self.beatmap = engine.load("Music+Beatmaps/nhelv")
+        self.beatmap = load("Music+Beatmaps/nhelv")
         self.note_speed = 1
         self.BPM = 0
         self.notes = []
@@ -309,7 +338,7 @@ class Gameplay():
 
         running = True
         while running:
-            screen.fill((0, 0, 0))
+            screen.fill((255, 255, 255))
 
             # Handle events
             for event in pygame.event.get():
@@ -319,6 +348,7 @@ class Gameplay():
                 elif event.type == pygame.KEYDOWN:
                     if event.key in key_press_times:
                         key_press_times[event.key].append(current_time - start_time - 1000)
+                        print(f"Key {event.key} pressed at {current_time - start_time - 1000}")
 
             # Update the current time
             dt = clock.tick(60)  # Get the time passed since the last frame in milliseconds
@@ -336,7 +366,7 @@ class Gameplay():
                 if k[key.key]:
                     pygame.draw.rect(screen, key.coloridle, key.rect)
                     key.handled = False
-                if not k[key.key]:
+                else:
                     pygame.draw.rect(screen, key.coloractive, key.rect)
                     key.handled = True
 
@@ -349,9 +379,9 @@ class Gameplay():
                         note.dissolve()
                         if note.alpha == 0:
                             self.beatmap.remove((note, time_frame))
-
+    
                     note.draw(screen)
-
+    
                 # Check if the note should be hit based on the key press times
                 if not note.dissolving:
                     for key in keys:
@@ -362,16 +392,17 @@ class Gameplay():
                                     key_press_times[key.key].remove(press_time)  # Remove the handled key press time
                                     score += 1  # Increment the score when a note is hit
                                     break
-
+                                
             # Display the score on the screen
             score_text = font.render(f"Score: {score}", True, (255, 255, 255))
             screen.blit(score_text, (10, 10))
-
+    
             # Update the display
             pygame.display.update()
                 
             if not running:
                 break
+
 
 class Note():
     def __init__(self, key_index):
@@ -379,8 +410,7 @@ class Note():
         self.x = keys[key_index].rect.centerx - 45
         self.y = 0
         self.rect = pygame.Rect(self.x, self.y, 90, 20)
-        self.surface = pygame.Surface((90, 20), pygame.SRCALPHA)
-        self.surface.fill((255, 0 , 0))
+        self.image = pygame.image.load(note_image_paths[key_index]).convert_alpha()  # Assign the image based on key index
         self.alpha = 255  # Initial alpha value
         self.dissolving = False
     
@@ -393,10 +423,10 @@ class Note():
             self.alpha -= 20  # Adjust the decrement to control dissolve speed
             if self.alpha < 0:
                 self.alpha = 0
-            self.surface.set_alpha(self.alpha)
+            self.image.set_alpha(self.alpha)
 
     def draw(self, screen):
-        screen.blit(self.surface, self.rect.topleft)
+        screen.blit(self.image, self.rect.topleft)
 
 class Key():
     def __init__(self,x,y,coloridle,coloractive,key):
@@ -417,6 +447,7 @@ keys = [
 ]
 
 # Main loop
+
 while True:
     for event in pygame.event.get():
         if event.type == pygame.QUIT:
@@ -426,8 +457,9 @@ while True:
             mouse_pos = event.pos
             if button_box.collidepoint(mouse_pos):
                 if menu['selectsong_button_text'] != selectsong_button_text:
-                    run_loading_screen()
-                    Gameplay(menu['selectsong_button_text'])
+                    #run_loading_screen()
+                    #Gameplay(menu['selectsong_button_text'])
+                    Gameplay()
             elif dropdown_button_box.collidepoint(mouse_pos):
                 selected_file = select_file_for_editor(mp3_files)
                 if selected_file and selected_file not in mp3_files:
