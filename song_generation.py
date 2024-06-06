@@ -20,7 +20,7 @@ def find_best_subdivision_level(measure_time, min_interval):
             return subdivision
     return max(common_subdivisions)
 
-async def generate_chart(song_path):
+def generate_chart(song_path):
     y, sr = librosa.load(song_path)
     onset_times, bpms, rms, musical_sections = init_generate_chart(y, sr)
     rms_threshold = utils.find_rms_threshold(rms, sr)

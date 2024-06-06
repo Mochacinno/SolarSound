@@ -5,10 +5,9 @@ from pygame import mixer
 import tkinter as tk
 from tkinter import filedialog
 import json
-import game_engine as engine
 import song_generation
 from utils import bpm_for_time
-import asyncio
+from threading import Thread
 
 # Initialisation de Pygame
 pygame.init()
@@ -170,7 +169,25 @@ def load(map):
     
     return notes
 
+song_path = 0
+
+# custom thread
+# credit goes to : https://superfastpython.com/thread-return-values/
+class CustomThread(Thread):
+    # constructor
+    def __init__(self):
+        # execute the base constructor
+        Thread.__init__(self)
+        # set a default value
+        self.value = None
+ 
+    # function executed in a new thread
+    def run(self):
+        # store data in an instance variable
+        self.value = song_generation.generate_chart(song_path)
+
 def run_loading_screen():
+
     clock = pygame.time.Clock()
 
     # Load background image
@@ -188,7 +205,7 @@ def run_loading_screen():
     fill_width = 0
 
     # Progress bar update interval (in milliseconds)
-    update_interval = 20000  # 20 seconds
+    update_interval = 2000  # 20 seconds
 
     # Current step status
     current_step = 0
@@ -204,22 +221,24 @@ def run_loading_screen():
     ]
 
     # Start the process
+    global song_path
     song_path = "Music+Beatmaps/sink.mp3" 
+    custom_thread = CustomThread()
 
-    # need to make async
-    # task = asyncio.create_task(song_generation.generate_chart(song_path))
+    # Start the song generation
+    # Create and start the thread
+    custom_thread.start()
 
     # Time of the last progress update
     last_update_time = pygame.time.get_ticks()
 
     running = True
     while running:
-        # if task.done():
-        #     running = False
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
                 pygame.quit()
                 sys.exit()
+
         # Check if it's time to update the progress
         current_time = pygame.time.get_ticks()
         if current_time - last_update_time >= update_interval:
@@ -238,8 +257,16 @@ def run_loading_screen():
             current_step_text = step_texts[current_step]
             text_surface = font.render(current_step_text, True, pygame.Color('white'))
             screen.blit(text_surface, (x_bar, y_bar - 40))
+        else:
+            running = False
+        
         pygame.display.flip()
         clock.tick(30)
+        
+        
+
+    custom_thread.join()
+    value = custom_thread.value  # Ensure the task completes
 
 # Systeme de recuperer la bibliotheque de musique
 song_list_file_name = 'config.json'
@@ -485,44 +512,47 @@ keys = [
     Key(400,500,(255,255,0),(220,220,0),pygame.K_COMMA),
 ]
 
-# Main loop
+def main():
+    while True:
+        for event in pygame.event.get():
+            if event.type == pygame.QUIT:
+                pygame.quit()
+                sys.exit()
+            if event.type == pygame.MOUSEBUTTONDOWN:
+                mouse_pos = event.pos
+                if button_box.collidepoint(mouse_pos):
+                    if menu['selectsong_button_text'] != 'Select Song':  # Update this condition as needed
+                        song_path = menu['selectsong_button_text']
+                        run_loading_screen()
+                        Gameplay()
+                elif dropdown_button_box.collidepoint(mouse_pos):
+                    selected_file = select_file_for_editor(mp3_files)
+                    if selected_file and selected_file not in mp3_files:
+                        mp3_files.append(selected_file)
+                elif selectsong_button_box.collidepoint(mouse_pos):
+                    music_library = MusicLibrary()
+                    selected_file = music_library.music_chosen
+                    if selected_file:
+                        menu['selectsong_button_text'] = selected_file
 
-while True:
-    for event in pygame.event.get():
-        if event.type == pygame.QUIT:
-            pygame.quit()
-            sys.exit()
-        if event.type == pygame.MOUSEBUTTONDOWN:
-            mouse_pos = event.pos
-            if button_box.collidepoint(mouse_pos):
-                if menu['selectsong_button_text'] != selectsong_button_text:
-                    #run_loading_screen()
-                    #Gameplay(menu['selectsong_button_text'])
-                    Gameplay()
-            elif dropdown_button_box.collidepoint(mouse_pos):
-                selected_file = select_file_for_editor(mp3_files)
-                if selected_file and selected_file not in mp3_files:
-                    mp3_files.append(selected_file)
-            elif selectsong_button_box.collidepoint(mouse_pos):
-                music_library = MusicLibrary()
-                selected_file = music_library.music_chosen
-                if selected_file:
-                    menu['selectsong_button_text'] = selected_file
+        screen.blit(background_image, (0, 0))
 
-    screen.blit(background_image, (0, 0))
+        # Display title and buttons
+        title_text = title_font.render("SolarSound", True, TEXT_COLOR)
+        title_rect = title_text.get_rect(center=(screen_width // 2, title_y))
+        screen.blit(title_text, title_rect)
 
-    # Display title and buttons
-    title_text = title_font.render("SolarSound", True, TEXT_COLOR)
-    title_rect = title_text.get_rect(center=(screen_width // 2, title_y))
-    screen.blit(title_text, title_rect)
+        pygame.draw.rect(screen, BUTTON_COLOR, button_box)
+        draw_text(screen, button_text, button_box, font, TEXT_COLOR)
 
-    pygame.draw.rect(screen, BUTTON_COLOR, button_box)
-    draw_text(screen, button_text, button_box, font, TEXT_COLOR)
+        pygame.draw.rect(screen, GRAY, dropdown_button_box)
+        draw_text(screen, dropdown_button_text, dropdown_button_box, font, TEXT_COLOR)
+        
+        pygame.draw.rect(screen, GRAY, selectsong_button_box)
+        draw_text(screen, menu['selectsong_button_text'], selectsong_button_box, font, TEXT_COLOR)
 
-    pygame.draw.rect(screen, GRAY, dropdown_button_box)
-    draw_text(screen, dropdown_button_text, dropdown_button_box, font, TEXT_COLOR)
-    
-    pygame.draw.rect(screen, GRAY, selectsong_button_box)
-    draw_text(screen, menu['selectsong_button_text'], selectsong_button_box, font, TEXT_COLOR)
+        pygame.display.update()
 
-    pygame.display.update()
+if __name__ == "__main__":
+    # Run the main function
+    main()
