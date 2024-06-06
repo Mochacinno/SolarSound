@@ -31,6 +31,7 @@ BG_COLOR = (30, 30, 30)
 # Police d'écriture
 title_font = pygame.font.Font(None, 100)
 font = pygame.font.Font(None, 20)
+font2 = pygame.font.SysFont('Arial.ttf', 30)
 
 # Charger l'image de fond
 background_image = pygame.image.load("assets/background.jpg")
@@ -206,45 +207,39 @@ def run_loading_screen():
     song_path = "Music+Beatmaps/sink.mp3" 
 
     # need to make async
-    task = asyncio.create_task(song_generation.generate_chart(song_path))
+    # task = asyncio.create_task(song_generation.generate_chart(song_path))
 
     # Time of the last progress update
     last_update_time = pygame.time.get_ticks()
 
     running = True
     while running:
-        if task.done():
-            running = False
-        else:
-            for event in pygame.event.get():
-                if event.type == pygame.QUIT:
-                    pygame.quit()
-                    sys.exit()
-
-            # Check if it's time to update the progress
-            current_time = pygame.time.get_ticks()
-            if current_time - last_update_time >= update_interval:
-                # Update current step
-                current_step += 1
-                # Reset last update time
-                last_update_time = current_time
-
-            # Update loading bar
-            fill_width = min(bar_width * (current_step / 6), fill_width + 1)
-
-            # Display loading screen
-            screen.blit(background_image, (0, 0))
-            pygame.draw.rect(screen, WHITE, (x_bar, y_bar, bar_width, bar_height))
-            pygame.draw.rect(screen, GRAY, (x_bar, y_bar, fill_width, bar_height))
-
-            # Display current step text
-            if current_step < len(step_texts):
-                current_step_text = step_texts[current_step]
-                text_surface = font.render(current_step_text, True, pygame.Color('white'))
-                screen.blit(text_surface, (x_bar, y_bar - 40))
-
-            pygame.display.flip()
-            clock.tick(30)
+        # if task.done():
+        #     running = False
+        for event in pygame.event.get():
+            if event.type == pygame.QUIT:
+                pygame.quit()
+                sys.exit()
+        # Check if it's time to update the progress
+        current_time = pygame.time.get_ticks()
+        if current_time - last_update_time >= update_interval:
+            # Update current step
+            current_step += 1
+            # Reset last update time
+            last_update_time = current_time
+        # Update loading bar
+        fill_width = min(bar_width * (current_step / 6), fill_width + 1)
+        # Display loading screen
+        screen.blit(background_image, (0, 0))
+        pygame.draw.rect(screen, WHITE, (x_bar, y_bar, bar_width, bar_height))
+        pygame.draw.rect(screen, GRAY, (x_bar, y_bar, fill_width, bar_height))
+        # Display current step text
+        if current_step < len(step_texts):
+            current_step_text = step_texts[current_step]
+            text_surface = font.render(current_step_text, True, pygame.Color('white'))
+            screen.blit(text_surface, (x_bar, y_bar - 40))
+        pygame.display.flip()
+        clock.tick(30)
 
 # Systeme de recuperer la bibliotheque de musique
 song_list_file_name = 'config.json'
@@ -318,7 +313,7 @@ class MusicLibrary:
 class Gameplay():
     def __init__(self):
         #self.map = selectsong_button_text[:-4]
-        self.beatmap = load("Music+Beatmaps/nhelv")
+        self.beatmap = load("Music+Beatmaps/sink")
         self.note_speed = 1
         self.BPM = 0
         self.notes = []
@@ -386,13 +381,57 @@ class Gameplay():
                 if not note.dissolving:
                     for key in keys:
                         if note.key_index == keys.index(key):
+                            texte_score_time = 0
                             for press_time in key_press_times[key.key]:
-                                if abs(press_time - time_frame) < 60:  # SCORING SYSTEM
+                                if abs(press_time - time_frame) < 30:  # SCORING SYSTEM
+                                    note.dissolving = True  # Start the dissolve effect
+                                    key_press_times[key.key].remove(press_time)  # Remove the handled key press time
+                                    score += 2  # Increment the score when a note is hit
+                                    texte_score_time = current_time
+                                    #print(f'1 {texte_score_time}')
+
+                                    # Créer une surface contenant le texte
+                                    texte = "Perfect"
+                                    image_texte = font2.render(texte, True, GRAY)
+
+                                    # Obtenir le rectangle de l'image du texte pour le positionnement
+                                    rect_texte = image_texte.get_rect()
+
+                                    # Centrer le texte au milieu de la fenêtre
+                                    rect_texte.center = (400, 300)
+                                    screen.blit(image_texte, rect_texte) 
+
+                                    '''if abs(texte_score_time-current_time)>1000:
+                                        print(f'2 {texte_score_time-current_time}')
+                                        print(current_time)
+
+                                        screen.blit(" ", rect_texte) 
+                                    '''
+
+                                elif abs(press_time - time_frame) < 50:  # SCORING SYSTEM
                                     note.dissolving = True  # Start the dissolve effect
                                     key_press_times[key.key].remove(press_time)  # Remove the handled key press time
                                     score += 1  # Increment the score when a note is hit
-                                    break
-                                
+                                    texte_score_time = current_time
+                                    #print(f'1 {texte_score_time}')
+                                    # Créer une surface contenant le texte
+                                    texte = "Good"
+                                    image_texte = font2.render(texte, True, GRAY)
+
+                                    # Obtenir le rectangle de l'image du texte pour le positionnement
+                                    rect_texte = image_texte.get_rect()
+
+                                    # Centrer le texte au milieu de la fenêtre
+                                    rect_texte.center = (400, 300)
+                                    screen.blit(image_texte, rect_texte) 
+
+                                    '''if abs(texte_score_time-current_time)>1000:
+                                        print(f'2 {texte_score_time-current_time}')
+                                        print(current_time)
+
+                                        screen.blit(" ", rect_texte)    
+                                    '''
+
             # Display the score on the screen
             score_text = font.render(f"Score: {score}", True, (255, 255, 255))
             screen.blit(score_text, (10, 10))
