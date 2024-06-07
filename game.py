@@ -337,9 +337,42 @@ class MusicLibrary:
             pygame.display.flip()
         return selected_file
 
+class EndScreen():
+    def __init__(self, song_name, score) -> None:
+        self.song_name = song_name
+        self.score = score
+        self.run()
+
+    def run(self):
+
+        running = True
+        while running:
+            screen.fill((0, 0, 0))
+
+            # Handle events
+            for event in pygame.event.get():
+                if event.type == pygame.QUIT:
+                    pygame.quit()
+                    quit()
+                elif event.type == pygame.KEYDOWN:
+                    running = False
+        
+            # Display the score on the screen
+            score_text = title_font.render(f"Score: {self.score}", True, (255, 255, 255))
+            screen_width, screen_height = screen.get_size()
+            text_width = score_text.get_width()
+            text_height = score_text.get_height()
+            screen.blit(score_text, (screen_width // 2 - text_width // 2 , screen_height // 2 - text_height // 2))
+            help_text = font2.render("appuyez sur n'importe quelle touche pour continuer", True, (255, 255, 255))
+            screen.blit(help_text, (screen_width // 2 - help_text.get_width() // 2, screen_height // 2 - help_text.get_height() // 2 + 150))
+    
+            # Update the display
+            pygame.display.update()
+
 class Gameplay():
     def __init__(self):
         #self.map = selectsong_button_text[:-4]
+        self.song_name = "sink"
         self.beatmap = load("Music+Beatmaps/sink")
         self.note_speed = 1
         self.BPM = 0
@@ -358,6 +391,9 @@ class Gameplay():
         clock = pygame.time.Clock()
         speed = 500
 
+        # Last note time
+        last_note_time = self.beatmap[-1][1]
+
         running = True
         while running:
             screen.fill((255, 255, 255))
@@ -370,7 +406,7 @@ class Gameplay():
                 elif event.type == pygame.KEYDOWN:
                     if event.key in key_press_times:
                         key_press_times[event.key].append(current_time - start_time - 1000)
-                        print(f"Key {event.key} pressed at {current_time - start_time - 1000}")
+                        #print(f"Key {event.key} pressed at {current_time - start_time - 1000}")
 
             # Update the current time
             dt = clock.tick(60)  # Get the time passed since the last frame in milliseconds
@@ -393,7 +429,8 @@ class Gameplay():
                     key.handled = True
 
             # Spawn and move notes
-            for note, time_frame in self.beatmap[:]:
+            for i, (note, time_frame) in enumerate(self.beatmap[:]):
+
                 if current_time - start_time >= time_frame:
                     if not note.dissolving:
                         note.update((speed / 1000) * dt)  # Move the note down
@@ -408,13 +445,11 @@ class Gameplay():
                 if not note.dissolving:
                     for key in keys:
                         if note.key_index == keys.index(key):
-                            texte_score_time = 0
                             for press_time in key_press_times[key.key]:
                                 if abs(press_time - time_frame) < 30:  # SCORING SYSTEM
                                     note.dissolving = True  # Start the dissolve effect
                                     key_press_times[key.key].remove(press_time)  # Remove the handled key press time
                                     score += 2  # Increment the score when a note is hit
-                                    texte_score_time = current_time
                                     #print(f'1 {texte_score_time}')
 
                                     # Créer une surface contenant le texte
@@ -439,7 +474,6 @@ class Gameplay():
                                     note.dissolving = True  # Start the dissolve effect
                                     key_press_times[key.key].remove(press_time)  # Remove the handled key press time
                                     score += 1  # Increment the score when a note is hit
-                                    texte_score_time = current_time
                                     #print(f'1 {texte_score_time}')
                                     # Créer une surface contenant le texte
                                     texte = "Good"
@@ -459,16 +493,16 @@ class Gameplay():
                                         screen.blit(" ", rect_texte)    
                                     '''
 
+            if current_time - start_time > last_note_time + 5000 - 235000:
+                running = False # Go out of loop
+ 
             # Display the score on the screen
             score_text = font.render(f"Score: {score}", True, (255, 255, 255))
             screen.blit(score_text, (10, 10))
     
             # Update the display
             pygame.display.update()
-                
-            if not running:
-                break
-
+        EndScreen(self.song_name, score)
 
 class Note():
     def __init__(self, key_index):
@@ -523,7 +557,7 @@ def main():
                 if button_box.collidepoint(mouse_pos):
                     if menu['selectsong_button_text'] != 'Select Song':  # Update this condition as needed
                         song_path = menu['selectsong_button_text']
-                        run_loading_screen()
+                        #run_loading_screen()
                         Gameplay()
                 elif dropdown_button_box.collidepoint(mouse_pos):
                     selected_file = select_file_for_editor(mp3_files)
