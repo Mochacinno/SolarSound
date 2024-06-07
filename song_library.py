@@ -4,8 +4,8 @@ import json
 import os
 import tkinter as tk
 from tkinter import filedialog
-
-from config import *
+from game_config import *
+from main import draw_text
 
 song_list_file_name = 'config.json'
 
@@ -31,7 +31,7 @@ def select_file_for_editor(song_list):
         return file_path
     return None
 
-class MusicLibrary:
+class MusicLibrary():
     def __init__(self) -> None:
         self.music_chosen = self.run()
 
