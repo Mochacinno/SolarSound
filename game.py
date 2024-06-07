@@ -86,7 +86,6 @@ def draw_text(surface, text, rect, font, color=BLACK):
     surface.blit(text_surface, text_rect)
 
 # LOADING SONG Function
-
 def load(map):
     mixer.music.load(map+".mp3")
 
@@ -263,10 +262,9 @@ def run_loading_screen():
         pygame.display.flip()
         clock.tick(30)
         
-        
 
-    custom_thread.join()
-    value = custom_thread.value  # Ensure the task completes
+    custom_thread.join() # Ensure the task completes
+    value = custom_thread.value 
 
 # Systeme de recuperer la bibliotheque de musique
 song_list_file_name = 'config.json'
@@ -465,7 +463,7 @@ class Gameplay():
     
             # Update the display
             pygame.display.update()
-                
+    
             if not running:
                 break
 
