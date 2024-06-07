@@ -122,7 +122,7 @@ class Gameplay():
     def __init__(self):
         #self.map = selectsong_button_text[:-4]
         self.song_name = "sink"
-        self.beatmap = load("Music+Beatmaps/sink")
+        self.beatmap = load("charts/sink")
         self.note_speed = 1
         self.BPM = 0
         self.notes = []

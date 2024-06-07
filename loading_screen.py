@@ -48,7 +48,7 @@ def run_loading_screen():
 
     # Start the process
     global song_path
-    song_path = "Music+Beatmaps/sink.mp3" 
+    song_path = "charts/sink.mp3" 
     custom_thread = CustomThread()
 
     # Start the song generation
