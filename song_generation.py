@@ -8,19 +8,27 @@ def find_section_label(start_measure_time, musical_sections):
             return section_label
     return None
 
-# TO review
-def find_best_subdivision_level(measure_time, min_interval):
-    #print(f"measure_time: {measure_time} with min_interval {min_interval}")
-    # Consider common musical subdivisions: 1, 2, 4, 8, 16, 32, etc.
-    common_subdivisions = [2**i for i in range(6)]  # Up to 32th note
-    for subdivision in common_subdivisions:
-        interval = measure_time / subdivision
-        #print(abs(interval - min_interval))
-        if abs(interval - min_interval) < 50:
-            return subdivision
-    return max(common_subdivisions)
+# # TO review
+# def find_best_subdivision_level(measure_time, min_interval):
+#     #print(f"measure_time: {measure_time} with min_interval {min_interval}")
+#     # Consider common musical subdivisions: 1, 2, 4, 8, 16, 32, etc.
+#     common_subdivisions = [2**i for i in range(6)]  # Up to 32th note
+#     for subdivision in common_subdivisions:
+#         interval = measure_time / subdivision
+#         #print(abs(interval - min_interval))
+#         if abs(interval - min_interval) < 50:
+#             return subdivision
+#     return max(common_subdivisions)
 
 def generate_chart(song_path):
+    """Generate a chart.
+
+    Args:
+        song_path (tuple: (y, sr)): _description_
+
+    Returns:
+        _type_: _description_
+    """
     y, sr = librosa.load(song_path)
     onset_times, bpms, rms, musical_sections = init_generate_chart(y, sr)
     rms_threshold = utils.find_rms_threshold(rms, sr)
@@ -31,22 +39,13 @@ def generate_chart(song_path):
 
     measure_time = calculate_measure_time(start_bpm)
     
-    #print(f"measure_time: {measure_time}")
-    
     start_time = onset_times[0]
     bpms = bpms
     start_measure_time = start_time
     index_onset = 0
 
     while start_measure_time <= song_duration:
-        #print(f"start_measure_time: {start_measure_time}")
-        #print(f"measure_time: {measure_time}")
         onsets_in_measure, index_onset = collect_onsets_in_measure(onset_times, start_measure_time, measure_time, index_onset)
-        #print(f"raw: {onsets_in_measure}")
-        #if len(onsets_in_measure) == 0:
-        #    beats_per_measure = generate_empty_measure()
-        #else:
-        #    beats_per_measure, index_onset = generate_beats(onsets_in_measure, measure_time, start_measure_time, index_onset, rms, rms_threshold)
         beats_per_measure, index_onset = generate_beats(onsets_in_measure, measure_time, start_measure_time, index_onset, rms, rms_threshold, musical_sections)
         
         beatmap.append(beats_per_measure)
@@ -54,7 +53,7 @@ def generate_chart(song_path):
         
         # Update measure time based on BPM changes
         bpm = utils.bpm_for_time(bpms, start_measure_time)
-        #print(f"for bpm: {bpm}")
+
         measure_time = calculate_measure_time(bpm)
     return beatmap, start_time
 
@@ -64,12 +63,9 @@ def calculate_measure_time(bpm):
 
 def collect_onsets_in_measure(onset_times, start_measure_time, measure_time, index_onset):
     end_measure_time = start_measure_time + measure_time
-    #print(f"end_measure_time: {end_measure_time}")
     onsets_in_measure = []
 
-    #print("ONSET WINDOW")
     while index_onset < len(onset_times) and start_measure_time <= onset_times[index_onset] < end_measure_time:
-        #print(onset_times[index_onset])
         onsets_in_measure.append(onset_times[index_onset])
         index_onset += 1
     
@@ -78,13 +74,11 @@ def collect_onsets_in_measure(onset_times, start_measure_time, measure_time, ind
 def generate_empty_measure():
     return [np.zeros(4, dtype=int) for _ in range(4)]
 
-# Main function to generate beats
 def generate_beats(onsets_in_measure, measure_time, start_measure_time, index_onset, smooth_rms, rms_threshold, musical_sections, sr=22050):
     
     # Find the section label for the current measure time
     current_section_label = find_section_label(start_measure_time, musical_sections)
-    #print(f"current_section_label: {current_section_label} for start_measure_time: {start_measure_time}")
-
+    
     # Static variables to store section notes and track the active section
     if not hasattr(generate_beats, 'section_notes_dict'):
         generate_beats.section_notes_dict = {}
@@ -92,7 +86,7 @@ def generate_beats(onsets_in_measure, measure_time, start_measure_time, index_on
 
     section_notes_dict = generate_beats.section_notes_dict
 
-    # Ensure section dictionary structure
+    # ensure section dictionary structure
     if current_section_label is not None:
         if current_section_label not in section_notes_dict:
             section_notes_dict[current_section_label] = []
@@ -109,12 +103,9 @@ def generate_beats(onsets_in_measure, measure_time, start_measure_time, index_on
         generate_beats.active_section_label = None
         beats_per_measure = []
 
-    #print(f"dict: {generate_beats.section_notes_dict}")
-
     # Convert start_measure_time to frames and check RMS
     frame_index = librosa.time_to_frames(start_measure_time / 1000, sr=sr)
     
-    # TODO - Tweak values to find the best time to switch to onset detection or not
     onset_detection_mode = False
     if smooth_rms[frame_index] > rms_threshold:
         ideal_subdivision = 8
@@ -135,7 +126,6 @@ def generate_beats(onsets_in_measure, measure_time, start_measure_time, index_on
         onsets_in_measure, index_onset = quantize_onsets(onsets_in_measure, measure_time, ideal_subdivision, start_measure_time, index_onset)
         print(onsets_in_measure)
 
-    #print(onsets_in_measure)
     # Generate beats for the measure
     # TODO - avoid generating same note on same key in quick succession
     beats_per_measure = []
@@ -171,7 +161,6 @@ def quantize_onsets(onsets, measure_time, subdivisions, start_measure_time, inde
     quantized_onsets = [min(grid_points, key=lambda x: abs(x - onset)) for onset in onsets]
     
     if end_measure_time == max(quantized_onsets):
-        #print(f"{onset_times[index_onset - 1]} was replaced")
         onset_times[index_onset - 1] = max(quantized_onsets)
         index_onset -= 1
     return quantized_onsets, index_onset
@@ -190,7 +179,7 @@ def chart_file_creation(beatmap, bpms, start_time, song):
         for group in groups:
             text_content += ''.join(map(str, group))  # Convert group to string and append to text content
             text_content += "\n"
-        text_content += ",\n"  # Add comma and newline after every measure
+        text_content += ",\n"  #add comma and newline after every measure
     
     # Write text content to a file
     output_file = "Music+Beatmaps/"+song+".txt"
