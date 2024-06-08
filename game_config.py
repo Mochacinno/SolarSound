@@ -8,6 +8,12 @@ pygame.display.set_caption("Menu de démarrage - Jeu de rythme")
 
 FPS = 60 # setting the frames per second of the main menu
 
+# keybinds
+key_1_bind = pygame.K_z
+key_2_bind = pygame.K_x
+key_3_bind = pygame.K_m
+key_4_bind = pygame.K_COMMA
+
 # Couleurs
 WHITE = (255, 255, 255)
 BLACK = (0, 0, 0)

@@ -3,6 +3,16 @@ import numpy as np
 import utils
 
 def find_section_label(start_measure_time, musical_sections):
+    """
+    Trouve l'étiquette de section musicale correspondant au temps de début de la mesure donnée.
+
+    Args:
+        start_measure_time (int): Temps de début de la mesure en millisecondes.
+        musical_sections (list): Liste des sections musicales sous forme de tuples (étiquette, temps de début, temps de fin).
+
+    Returns:
+        str: L'étiquette de section trouvée ou None si aucune section ne correspond.
+    """
     for section_label, start_time, end_time in musical_sections:
         if start_time <= start_measure_time < end_time:
             return section_label
@@ -21,13 +31,14 @@ def find_section_label(start_measure_time, musical_sections):
 #     return max(common_subdivisions)
 
 def generate_chart(song_path):
-    """Generate a chart.
+    """
+    Génère une beatmap pour une chanson donnée.
 
     Args:
-        song_path (tuple: (y, sr)): _description_
+        song_path (str): Le chemin du fichier audio de la chanson.
 
     Returns:
-        _type_: _description_
+        tuple: Une beatmap sous forme de liste et le temps de début de la chanson.
     """
     y, sr = librosa.load(song_path)
     onset_times, bpms, rms, musical_sections = init_generate_chart(y, sr)
@@ -58,7 +69,15 @@ def generate_chart(song_path):
     return beatmap, start_time
 
 def calculate_measure_time(bpm):
-    # calculates ( 60 / bpm ) * 4
+    """
+    Calcule le temps d'une mesure en millisecondes basé sur le BPM.
+    Le calcul et ( 60 / bpm ) * 4
+    Args:
+        bpm (int): Battements par minute.
+
+    Returns:
+        int: Temps d'une mesure en millisecondes.
+    """
     return int(240000 / bpm)
 
 def collect_onsets_in_measure(onset_times, start_measure_time, measure_time, index_onset):
@@ -72,10 +91,31 @@ def collect_onsets_in_measure(onset_times, start_measure_time, measure_time, ind
     return onsets_in_measure, index_onset
 
 def generate_empty_measure():
+    """
+    Génère une mesure vide avec des zéros.
+
+    Returns:
+        list: Liste de numpy arrays de zéros représentant une mesure vide.
+    """
     return [np.zeros(4, dtype=int) for _ in range(4)]
 
 def generate_beats(onsets_in_measure, measure_time, start_measure_time, index_onset, smooth_rms, rms_threshold, musical_sections, sr=22050):
-    
+    """
+    Génère des beats pour une mesure donnée.
+
+    Args:
+        onsets_in_measure (list): Liste des onsets dans la mesure.
+        measure_time (int): Durée de la mesure en millisecondes.
+        start_measure_time (int): Temps de début de la mesure en millisecondes.
+        index_onset (int): Index actuel dans la liste des onsets.
+        smooth_rms (list): Liste des valeurs RMS lissées.
+        rms_threshold (float): Seuil RMS pour la détection des onsets.
+        musical_sections (list): Liste des sections musicales sous forme de tuples (étiquette, temps de début, temps de fin).
+        sr (int): Taux d'échantillonnage de l'audio.
+
+    Returns:
+        tuple: Liste des beats par mesure et nouvel index d'onset.
+    """
     # Find the section label for the current measure time
     current_section_label = find_section_label(start_measure_time, musical_sections)
     
@@ -153,7 +193,19 @@ def generate_beats(onsets_in_measure, measure_time, start_measure_time, index_on
     return beats_per_measure, index_onset
 
 def quantize_onsets(onsets, measure_time, subdivisions, start_measure_time, index_onset):
-    
+    """
+    Quantifie les onsets (déclenchements de notes) selon les subdivisions de la mesure.
+
+    Args:
+        onsets (list): Liste des onsets à quantifier.
+        measure_time (int): Durée de la mesure en millisecondes.
+        subdivisions (int): Nombre de subdivisions dans la mesure.
+        start_measure_time (int): Temps de début de la mesure en millisecondes.
+        index_onset (int): Index actuel dans la liste des onsets.
+
+    Returns:
+        tuple: Liste des onsets quantifiés et nouvel index d'onset.
+    """
     interval = measure_time // subdivisions
     end_measure_time = start_measure_time + measure_time
     grid_points = np.arange(start_measure_time, end_measure_time + interval, interval)
@@ -166,6 +218,18 @@ def quantize_onsets(onsets, measure_time, subdivisions, start_measure_time, inde
     return quantized_onsets, index_onset
 
 def chart_file_creation(beatmap, bpms, start_time, song):
+    """
+    Crée un fichier texte contenant les données de la beatmap.
+
+    Args:
+        beatmap (list): La beatmap générée.
+        bpms (list): Liste des BPMs et de leurs temps de début correspondants.
+        start_time (int): Temps de début de la chanson en millisecondes.
+        song (str): Nom de la chanson.
+
+    Returns:
+        None
+    """
     # Format note start time
     text_content = "START_TIME:\n"
     text_content += str(start_time)+"\n"
@@ -189,6 +253,18 @@ def chart_file_creation(beatmap, bpms, start_time, song):
     print(f"Text file '{output_file}' generated successfully.")
 
 def init_generate_chart(y, sr):
+    """
+    Initialise les paramètres nécessaires pour générer une beatmap à partir d'un fichier audio.
+
+    Cette fonction filtre l'audio, détecte les onsets, calcule le tempo, lisse les valeurs RMS et segmente les sections musicales.
+
+    Args:
+        y (np.ndarray): Signal audio chargé.
+        sr (int): Taux d'échantillonnage de l'audio.
+
+    Returns:
+        tuple: Contient les temps d'onset, les BPMs, les valeurs RMS lissées et les sections musicales sous forme de listes.
+    """
     # Filter the audio
     y = utils.audioFilter(y, sr)
 

@@ -2,80 +2,6 @@ import pygame
 from utils import bpm_for_time
 from game_config import *
 
-# LOADING SONG Function
-def load(map):
-    pygame.mixer.music.load(map+".mp3")
-
-    with open(map+'.txt', 'r') as file:
-        lines = file.readlines()
-    
-    start_time = None
-    bpms = []
-    beatmap = []
-    beats_in_measure = []
-
-    # Parse START_TIME
-    index = 0
-    while index < len(lines) and lines[index].strip() != "START_TIME:":
-        index += 1
-    index += 1  # Move to the value line
-    if index < len(lines):
-        start_time = int(lines[index].strip())
-    
-    # Parse BPMS
-    index += 1  # Move past START_TIME value line
-    while index < len(lines) and lines[index].strip() != "BPMS:":
-        index += 1
-    index += 1  # Move to the first BPM line
-    while index < len(lines) and lines[index].strip() and lines[index].strip() != "NOTES:":
-        line = lines[index].strip().rstrip(',')
-        time, bpm = line.split(':')
-        bpms.append([int(bpm), int(time)])
-        index += 1
-    
-    # Parse NOTES
-    index += 1  # Move past the BPMS section header
-    while index < len(lines):
-        stripped_line = lines[index].strip()
-        if stripped_line:
-            if "," in stripped_line:
-                if beats_in_measure:
-                    beatmap.append(beats_in_measure)
-                    beats_in_measure = []
-            else:
-                beat = [int(block) for block in stripped_line]
-                beats_in_measure.append(beat)
-        index += 1
-    
-    if beats_in_measure:
-        beatmap.append(beats_in_measure)
-    
-    bpm = bpm_for_time(bpms, start_time)
-    measure_time = int(240000 / bpm)
-    current_time = start_time
-
-    res = []
-    for beats_per_mesure in beatmap:
-        for i in range(len(beats_per_mesure)):
-            # Calculate the time for the current beat by adding the time for the previous beat
-            beats_per_mesure[i] = (beats_per_mesure[i], (current_time + ((measure_time // (len(beats_per_mesure))) * (i))))
-            # Update the previous time for the next iteration
-        current_time += measure_time
-        bpm = bpm_for_time(bpms, current_time)
-        measure_time = int(240000 / bpm)
-        res.append(beats_per_mesure)
-
-    # print(res)
-    # [[([1, 0, 0, 0], 250.0), ([0, 0, 0, 0], 500.0), ([0, 0, 0, 0], 750.0), ([0, 0, 0, 0], 1000.0)], [([0, 1, 0, 0], 1333.3333333333333), ([0, 0, 0, 1], 1666.6666666666665), ([1, 0, 0, 0], 1999.9999999999998)], [([0, 0, 0, 0], 2250.0), ([1, 0, 0, 0], 2500.0), ([0, 0, 0, 0], 2750.0), ([0, 0, 0, 0], 3000.0)]]
-    notes = []
-    for beats in res:
-        for beat, time in beats:
-            for key_index in range(len(beat)):
-                if beat[key_index] == 1:
-                    notes.append((Note(key_index), time))
-    
-    return notes
-
 class Note():
     def __init__(self, key_index):
         self.key_index = key_index
@@ -87,10 +13,19 @@ class Note():
         self.dissolving = False
     
     def update(self, speed):
+        """
+        Met à jour la position de la note en fonction de la vitesse.
+
+        Paramètres:
+        speed (int): La vitesse à laquelle la note se déplace.
+        """
         self.y += speed
         self.rect.y = self.y
 
     def dissolve(self):
+        """
+        Fait disparaître progressivement la note en diminuant sa transparence.
+        """
         if self.alpha > 0:
             self.alpha -= 20  # Adjust the decrement to control dissolve speed
             if self.alpha < 0:
@@ -98,6 +33,12 @@ class Note():
             self.image.set_alpha(self.alpha)
 
     def draw(self, screen):
+        """
+        Dessine la note sur l'écran.
+
+        Paramètres:
+        screen (pygame.Surface): La surface sur laquelle dessiner la note.
+        """
         screen.blit(self.image, self.rect.topleft)
 
 class Key():
@@ -110,26 +51,118 @@ class Key():
         self.rect = pygame.Rect(self.x,self.y,90,40)
         self.handled = False
 
-# initialising keys
-keys = [
-    Key(100, 500, (255, 0, 0), (220, 0, 0), pygame.K_z),
-    Key(200, 500, (0, 255, 0), (0, 220, 0), pygame.K_x),
-    Key(300, 500, (0, 0, 255), (0, 0, 220), pygame.K_m),
-    Key(400, 500, (255, 255, 0), (220, 220, 0), pygame.K_COMMA),
-]
-
 class Gameplay():
+    """
+    Gère la logique de jeu et les événements.
+
+    Attributs:
+    song_name (str): Le nom de la chanson.
+    beatmap (list): La carte de rythme (beatmap) chargée.
+    note_speed (int): La vitesse des notes.
+    BPM (int): Le BPM de la chanson.
+    notes (list): Liste des notes.
+    note_index (int): L'index de la note actuelle.
+    """
     def __init__(self):
+        """
+        Initialise les paramètres du jeu
+        """
         #self.map = selectsong_button_text[:-4]
         self.song_name = "sink"
-        self.beatmap = load("charts/sink")
+        self.beatmap = self.load("charts/sink")
         self.note_speed = 1
         self.BPM = 0
         self.notes = []
         self.note_index = 0
         self.run()
-        
+
+    # LOADING SONG Function
+    def load(self, map):
+        """
+        Charge la musique et la carte de rythme (beatmap) pour le jeu.
+
+        Paramètres:
+        map (str): Le nom de la carte de rythme à charger, sans l'extension de fichier.
+
+        Retourne:
+        notes (list): Une liste de tuples contenant des objets Note et leurs temps associés.
+        """
+        pygame.mixer.music.load(map+".mp3")
+
+        with open(map+'.txt', 'r') as file:
+            lines = file.readlines()
+
+        start_time = None
+        bpms = []
+        beatmap = []
+        beats_in_measure = []
+
+        # Parse START_TIME
+        index = 0
+        while index < len(lines) and lines[index].strip() != "START_TIME:":
+            index += 1
+        index += 1  # Move to the value line
+        if index < len(lines):
+            start_time = int(lines[index].strip())
+
+        # Parse BPMS
+        index += 1  # Move past START_TIME value line
+        while index < len(lines) and lines[index].strip() != "BPMS:":
+            index += 1
+        index += 1  # Move to the first BPM line
+        while index < len(lines) and lines[index].strip() and lines[index].strip() != "NOTES:":
+            line = lines[index].strip().rstrip(',')
+            time, bpm = line.split(':')
+            bpms.append([int(bpm), int(time)])
+            index += 1
+
+        # Parse NOTES
+        index += 1  # Move past the BPMS section header
+        while index < len(lines):
+            stripped_line = lines[index].strip()
+            if stripped_line:
+                if "," in stripped_line:
+                    if beats_in_measure:
+                        beatmap.append(beats_in_measure)
+                        beats_in_measure = []
+                else:
+                    beat = [int(block) for block in stripped_line]
+                    beats_in_measure.append(beat)
+            index += 1
+
+        if beats_in_measure:
+            beatmap.append(beats_in_measure)
+
+        bpm = bpm_for_time(bpms, start_time)
+        measure_time = int(240000 / bpm)
+        current_time = start_time
+
+        res = []
+        for beats_per_mesure in beatmap:
+            for i in range(len(beats_per_mesure)):
+                # Calculate the time for the current beat by adding the time for the previous beat
+                beats_per_mesure[i] = (beats_per_mesure[i], (current_time + ((measure_time // (len(beats_per_mesure))) * (i))))
+                # Update the previous time for the next iteration
+            current_time += measure_time
+            bpm = bpm_for_time(bpms, current_time)
+            measure_time = int(240000 / bpm)
+            res.append(beats_per_mesure)
+
+        # print(res)
+        # [[([1, 0, 0, 0], 250.0), ([0, 0, 0, 0], 500.0), ([0, 0, 0, 0], 750.0), ([0, 0, 0, 0], 1000.0)], [([0, 1, 0, 0], 1333.3333333333333), ([0, 0, 0, 1], 1666.6666666666665), ([1, 0, 0, 0], 1999.9999999999998)], [([0, 0, 0, 0], 2250.0), ([1, 0, 0, 0], 2500.0), ([0, 0, 0, 0], 2750.0), ([0, 0, 0, 0], 3000.0)]]
+        notes = []
+        for beats in res:
+            for beat, time in beats:
+                for key_index in range(len(beat)):
+                    if beat[key_index] == 1:
+                        notes.append((Note(key_index), time))
+
+        return notes
+
     def run(self):
+        """
+        Lance la boucle principale du jeu.
+        """
         # Initialize a dictionary to store key press times
         key_press_times = {key.key: [] for key in keys}
         # Reset game variables
@@ -234,7 +267,7 @@ class Gameplay():
                                         screen.blit(" ", rect_texte)    
                                     '''
 
-            if current_time - start_time > last_note_time + 5000 - 235000:
+            if current_time - start_time > last_note_time + 5000:
                 running = False # Go out of loop
 
             # Display the score on the screen
@@ -250,13 +283,25 @@ class Gameplay():
         EndScreen(self.song_name, score)
 
 class EndScreen():
+    """
+    Affiche l'écran de fin avec le score final.
+
+    Attributs:
+    song_name (str): Le nom de la chanson.
+    score (int): Le score final du joueur.
+    """
     def __init__(self, song_name, score) -> None:
+        """
+        initialise les variables comme le nom de la musique et le score pour l'affichage
+        """
         self.song_name = song_name
         self.score = score
         self.run()
 
     def run(self):
-
+        """
+        Lance la boucle principale de l'écran de fin.
+        """
         running = True
         while running:
             screen.fill((0, 0, 0))
@@ -280,3 +325,10 @@ class EndScreen():
     
             # Update the display
             pygame.display.update()
+
+keys = [
+    Key(100, 500, (255, 0, 0), (220, 0, 0), key_1_bind),
+    Key(200, 500, (0, 255, 0), (0, 220, 0), key_2_bind),
+    Key(300, 500, (0, 0, 255), (0, 0, 220), key_3_bind),
+    Key(400, 500, (255, 255, 0), (220, 220, 0), key_4_bind)
+    ]
