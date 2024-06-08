@@ -10,18 +10,39 @@ from main import draw_text
 song_list_file_name = 'config.json'
 
 def save_song_list(song_list):
+    """
+    Enregistre la liste des chansons dans un fichier JSON.
+
+    Args:
+        song_list (list): La liste des chansons à enregistrer.
+    """
     existing_songs = load_song_list()
     combined_songs = list(set(existing_songs + song_list))
     with open(song_list_file_name, 'w') as config_file:
         json.dump(combined_songs, config_file)
 
 def load_song_list():
+    """
+    Charge la liste des chansons à partir d'un fichier JSON.
+
+    Returns:
+        list: La liste des chansons chargées.
+    """
     if os.path.exists(song_list_file_name):
         with open(song_list_file_name, 'r') as song_list_file:
             return json.load(song_list_file)
     return []
 
 def select_file_for_editor(song_list):
+    """
+    Ouvre une boîte de dialogue pour sélectionner un fichier MP3 et l'ajoute à la liste des chansons.
+
+    Args:
+        song_list (list): La liste des chansons existantes.
+
+    Returns:
+        str: Le chemin du fichier sélectionné, ou None si aucun fichier n'a été sélectionné.
+    """
     root = tk.Tk()
     root.withdraw()
     file_path = filedialog.askopenfilename(filetypes=[("MP3 files", "*.mp3")])
@@ -32,10 +53,25 @@ def select_file_for_editor(song_list):
     return None
 
 class MusicLibrary():
+    """
+    Une classe pour gérer la sélection de musique dans la bibliothèque musicale.
+
+    Attributs:
+        music_chosen (str): Le fichier de musique sélectionné.
+    """
     def __init__(self) -> None:
+        """
+        Initialise la classe MusicLibrary et lance la sélection de musique.
+        """
         self.music_chosen = self.run()
 
     def run(self):
+        """
+        Exécute l'interface de sélection de musique et retourne le fichier sélectionné.
+
+        Returns:
+            str: Le fichier de musique sélectionné.
+        """
         file_list = load_song_list()
         file_rects = []
         selected_file = None

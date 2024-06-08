@@ -6,7 +6,7 @@ screen_height = 600
 screen = pygame.display.set_mode((screen_width, screen_height))
 pygame.display.set_caption("Menu de démarrage - Jeu de rythme")
 
-FPS = 60
+FPS = 60 # setting the frames per second of the main menu
 
 # Couleurs
 WHITE = (255, 255, 255)
@@ -21,10 +21,7 @@ title_font = pygame.font.Font(None, 100)
 font = pygame.font.Font(None, 20)
 font2 = pygame.font.SysFont('Arial.ttf', 30)
 
-# Charger l'image de fond
-# background_image = pygame.image.load("assets/background.jpg")
-# background_image = pygame.transform.scale(background_image, (screen_width, screen_height))
-
+# Charger l'image de menu principal avec l'effet parallax
 bg_images = [pygame.image.load(f"assets/background-{4-i}.png").convert_alpha() for i in range(1,4)]
 bg_offset = [(0, 0), (116, 16), (0, -90)]
 bg_speeds = [0.2, 0.3, 0.8]
