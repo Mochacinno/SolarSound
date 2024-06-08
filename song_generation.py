@@ -58,13 +58,15 @@ def generate_chart(song_path):
     measure_time = calculate_measure_time(start_bpm)
     
     start_time = onset_times[0]
-    bpms = bpms
+    subdivision_factor = 1
+    if start_bpm > 200:
+        subdivision_factor = 2
     start_measure_time = start_time
     index_onset = 0
 
     while start_measure_time <= song_duration:
         onsets_in_measure, index_onset = collect_onsets_in_measure(onset_times, start_measure_time, measure_time, index_onset)
-        beats_per_measure, index_onset = generate_beats(onsets_in_measure, measure_time, start_measure_time, index_onset, rms, rms_threshold, musical_sections)
+        beats_per_measure, index_onset = generate_beats(subdivision_factor, onsets_in_measure, measure_time, start_measure_time, index_onset, rms, rms_threshold, musical_sections, 22050, onset_times)
         
         beatmap.append(beats_per_measure)
         start_measure_time += measure_time
@@ -73,7 +75,7 @@ def generate_chart(song_path):
         bpm = utils.bpm_for_time(bpms, start_measure_time)
 
         measure_time = calculate_measure_time(bpm)
-    
+    print(beatmap)
     chart_file_creation(beatmap, bpms, start_time, song_name)
 
 def calculate_measure_time(bpm):
@@ -107,7 +109,7 @@ def generate_empty_measure():
     """
     return [np.zeros(4, dtype=int) for _ in range(4)]
 
-def generate_beats(onsets_in_measure, measure_time, start_measure_time, index_onset, smooth_rms, rms_threshold, musical_sections, sr=22050):
+def generate_beats(subdivision_factor, onsets_in_measure, measure_time, start_measure_time, index_onset, smooth_rms, rms_threshold, musical_sections, sr, onset_times):
     """
     Génère des beats pour une mesure donnée.
 
@@ -134,7 +136,7 @@ def generate_beats(onsets_in_measure, measure_time, start_measure_time, index_on
 
     section_notes_dict = generate_beats.section_notes_dict
 
-    # ensure section dictionary structure
+    # Ensure section dictionary structure
     if current_section_label is not None:
         if current_section_label not in section_notes_dict:
             section_notes_dict[current_section_label] = []
@@ -156,51 +158,50 @@ def generate_beats(onsets_in_measure, measure_time, start_measure_time, index_on
     
     onset_detection_mode = False
     if smooth_rms[frame_index] > rms_threshold:
-        ideal_subdivision = 8
+        ideal_subdivision = 16 // subdivision_factor
     elif smooth_rms[frame_index] > 2 * rms_threshold / 3:
-        #ideal_subdivision = 4
-        ideal_subdivision = 8 # switches to onset detection
+        ideal_subdivision = 8 // subdivision_factor # switches to onset detection
         onset_detection_mode = True
     elif smooth_rms[frame_index] > rms_threshold / 8:
-        ideal_subdivision = 8 # switches to onset detection
+        ideal_subdivision = 4 // subdivision_factor # switches to onset detection
         onset_detection_mode = True
     else:
-        #ideal_subdivions = None
-        ideal_subdivision = 8 # switches to onset detection
+        ideal_subdivision = 16 // subdivision_factor # switches to onset detection
         onset_detection_mode = True
 
     if onset_detection_mode and len(onsets_in_measure) != 0:
-        # Quantize onsets
-        onsets_in_measure, index_onset = quantize_onsets(onsets_in_measure, measure_time, ideal_subdivision, start_measure_time, index_onset)
-        #print(onsets_in_measure)
+        # Quantize onsetsq
+        onsets_in_measure, index_onset = quantize_onsets(onsets_in_measure, measure_time, ideal_subdivision, start_measure_time, index_onset, onset_times)
 
     # Generate beats for the measure
-    # TODO - avoid generating same note on same key in quick succession
     beats_per_measure = []
     beat = start_measure_time
-    if ideal_subdivision is None:
-        for i in range(4):
-            group = np.zeros(4, dtype=int)
-            beats_per_measure.append(group)
-    else:
-        for i in range(ideal_subdivision):
-            #print(beat)
-            group = np.zeros(4, dtype=int)
-            if onset_detection_mode and beat in onsets_in_measure:
-                idx = np.random.randint(0, 4)
-                group[idx] = 1
-            if not onset_detection_mode:
-                group[np.random.randint(0, 4)] = 1
-            beats_per_measure.append(group)
-            beat += measure_time // ideal_subdivision
+    last_key = -1  # Initialize last key to an invalid value
 
-     # Store the generated beats in the dictionary if they belong to a section
+    for i in range(ideal_subdivision):
+        group = np.zeros(4, dtype=int)
+        if onset_detection_mode and beat in onsets_in_measure:
+            idx = np.random.randint(0, 4)
+            while idx == last_key:
+                idx = np.random.randint(0, 4)
+            group[idx] = 1
+            last_key = idx
+        if not onset_detection_mode:
+            idx = np.random.randint(0, 4)
+            while idx == last_key:
+                idx = np.random.randint(0, 4)
+            group[idx] = 1
+            last_key = idx
+        beats_per_measure.append(group)
+        beat += measure_time // ideal_subdivision
+
+    # Store the generated beats in the dictionary if they belong to a section
     if current_section_label is not None:
         section_notes_dict[current_section_label].append(beats_per_measure)
     
     return beats_per_measure, index_onset
 
-def quantize_onsets(onsets, measure_time, subdivisions, start_measure_time, index_onset):
+def quantize_onsets(onsets, measure_time, subdivisions, start_measure_time, index_onset, onset_times):
     """
     Quantifie les onsets (déclenchements de notes) selon les subdivisions de la mesure.
 
@@ -214,6 +215,7 @@ def quantize_onsets(onsets, measure_time, subdivisions, start_measure_time, inde
     Returns:
         tuple: Liste des onsets quantifiés et nouvel index d'onset.
     """
+    
     interval = measure_time // subdivisions
     end_measure_time = start_measure_time + measure_time
     grid_points = np.arange(start_measure_time, end_measure_time + interval, interval)
@@ -288,25 +290,26 @@ def init_generate_chart(y, sr):
 if __name__ == "__main__":
 
     # main code
-    song_name = "sink"
-    y, sr = librosa.load("Music+Beatmaps/"+song_name+".mp3")
+    # song_name = "sink"
+    # y, sr = librosa.load("Music+Beatmaps/"+song_name+".mp3")
 
-    #y = utils.slice_music(y, sr, 40, 100)
+    # #y = utils.slice_music(y, sr, 40, 100)
 
-    y = utils.audioFilter(y, sr)
-    #y = librosa.effects.harmonic(y=y)
-    # onset_env = librosa.onset.onset_strength(y=y, sr=sr)
-    # pulse = librosa.beat.plp(onset_envelope=onset_env, sr=sr)
-    # beats_plp = np.flatnonzero(librosa.util.localmax(pulse))
+    # y = utils.audioFilter(y, sr)
+    # #y = librosa.effects.harmonic(y=y)
+    # # onset_env = librosa.onset.onset_strength(y=y, sr=sr)
+    # # pulse = librosa.beat.plp(onset_envelope=onset_env, sr=sr)
+    # # beats_plp = np.flatnonzero(librosa.util.localmax(pulse))
 
-    # times = librosa.times_like(onset_env)
-    onset_times = utils.onset_detection(y, sr)
+    # # times = librosa.times_like(onset_env)
+    # onset_times = utils.onset_detection(y, sr)
 
-    # utils.createClickTrack(y, sr, librosa.frames_to_time(beats_plp), song_name+"click")
+    # # utils.createClickTrack(y, sr, librosa.frames_to_time(beats_plp), song_name+"click")
 
-    bpms = [(utils.find_best_tempo(y, sr), 0)] # for the current version, we assume CONSTANT tempo
-    print(bpms)
+    # bpms = [(utils.find_best_tempo(y, sr), 0)] # for the current version, we assume CONSTANT tempo
+    # print(bpms)
 
-    beatmap, start_time = generate_chart(y, sr)
+    # beatmap, start_time = generate_chart(y, sr)
 
-    chart_file_creation(beatmap, bpms, start_time, song_name)
+    # chart_file_creation(beatmap, bpms, start_time, song_name)
+    generate_chart("D:\Downloads HDD\Fujii Kaze - Tabiji (Official Video).mp3")
