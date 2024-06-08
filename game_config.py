@@ -6,6 +6,8 @@ screen_height = 600
 screen = pygame.display.set_mode((screen_width, screen_height))
 pygame.display.set_caption("Menu de démarrage - Jeu de rythme")
 
+FPS = 60
+
 # Couleurs
 WHITE = (255, 255, 255)
 BLACK = (0, 0, 0)
@@ -20,8 +22,16 @@ font = pygame.font.Font(None, 20)
 font2 = pygame.font.SysFont('Arial.ttf', 30)
 
 # Charger l'image de fond
-background_image = pygame.image.load("assets/background.jpg")
-background_image = pygame.transform.scale(background_image, (screen_width, screen_height))
+# background_image = pygame.image.load("assets/background.jpg")
+# background_image = pygame.transform.scale(background_image, (screen_width, screen_height))
+
+bg_images = [pygame.image.load(f"assets/background-{4-i}.png").convert_alpha() for i in range(1,4)]
+bg_offset = [(0, 0), (116, 16), (0, -90)]
+bg_speeds = [0.2, 0.3, 0.8]
+
+bg_images[1] = pygame.transform.scale(bg_images[1], (bg_images[1].get_width() * 1.05, bg_images[1].get_height() * 1.05))
+bg_images[2] = pygame.transform.scale(bg_images[2], (bg_images[2].get_width() * 1.2, bg_images[2].get_height() * 1.2))
+
 
 # Liste des images a charge pour les notes
 note_image_paths = [
