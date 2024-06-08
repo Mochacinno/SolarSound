@@ -17,23 +17,93 @@ def draw_text(surface, text, rect, font, color=BLACK):
     text_rect = text_surface.get_rect(center=rect.center)
     surface.blit(text_surface, text_rect)
 
-#Lerp function for interpolation
-def lerp(start, end, t):
-    return start + t * (end - start)
+class ParallaxBg:
+    """
+    Une classe pour gérer l'effet de parallaxe en arrière-plan dans une application Pygame.
+
+    Attributs:
+        bg_images (list): Une liste d'images d'arrière-plan.
+        bg_offsets (list): Une liste de tuples contenant les décalages pour chaque image d'arrière-plan.
+        bg_speeds (list): Une liste de vitesses pour chaque image d'arrière-plan pour l'effet de parallaxe.
+        easing_factor (float): Le facteur pour adoucir le mouvement de parallaxe.
+        target_parallax_pos (float): La position cible pour l'effet de parallaxe.
+        parallax_pos (float): La position actuelle de l'effet de parallaxe.
+    """
+    def __init__(self, bg_images, bg_offsets, bg_speeds) -> None:
+        """
+        Initialise la classe ParallaxBg avec des images d'arrière-plan, des décalages et des vitesses.
+
+        Args:
+            bg_images (list): Une liste d'images d'arrière-plan.
+            bg_offsets (list): Une liste de tuples contenant les décalages pour chaque image d'arrière-plan.
+            bg_speeds (list): Une liste de vitesses pour chaque image d'arrière-plan pour l'effet de parallaxe.
+        """
+        self.bg_images = bg_images
+        self.bg_offsets = bg_offsets
+        self.bg_speeds = bg_speeds
+        self.easing_factor = 0.2
+        self.target_parallax_pos = 1
+        self.parallax_pos = 1
+
+    #Lerp function for interpolation
+    def lerp(self, start, end, easing_factor) -> float:
+        """
+        Effectue une interpolation linéaire entre les valeurs de début et de fin.
+
+        Args:
+            start (float): La valeur de départ.
+            end (float): La valeur de fin.
+            easing_factor (float): Le facteur pour adoucir l'interpolation.
+
+        Returns:
+            float: La valeur interpolée.
+        """
+        return start + easing_factor * (end - start)
+
+    def draw_bg(self, parallax_pos):
+        """
+        Dessine les images d'arrière-plan avec l'effet de parallaxe.
+
+        Args:
+            parallax_pos (float): La position actuelle de l'effet de parallaxe.
+        """
+        for i, bg_image in enumerate(self.bg_images):
+            screen.blit(bg_image, (((parallax_pos * self.bg_speeds[i]) - (bg_image.get_width() - screen_width) // 2) + self.bg_offsets[i][0], self.bg_offsets[i][1]))
+    
+    def update_parallax_pos(self):
+        """
+        Met à jour la position de l'effet de parallaxe et dessine les images d'arrière-plan.
+        """
+        self.parallax_pos = self.lerp(self.parallax_pos, self.target_parallax_pos, self.easing_factor)
+        self.draw_bg(self.parallax_pos)
+
+    def parallax(self, event=None):
+        """
+        Met à jour la position cible pour l'effet de parallaxe en fonction du mouvement de la souris.
+
+        Args:
+            event (pygame.event.Event, optionnel): L'événement contenant la position de la souris. Par défaut à None.
+        """
+        # Check if the mouse is in the window
+        self.mouse_in_window = pygame.mouse.get_focused()
+
+        if self.mouse_in_window:
+            # Get the current mouse position
+            if event:
+                mouse_x, mouse_y = event.pos
+                self.target_parallax_pos = ((mouse_x - (screen_width // 2)) / screen_width) * 100
+        else:
+            self.target_parallax_pos = 0
+
+        self.update_parallax_pos()
+
+
+main_menu_bg = ParallaxBg(bg_images, bg_offset, bg_speeds)
 
 def main():
     mp3_files = load_song_list()
     menu = {'selectsong_button_text': selectsong_button_text}
     
-    mouse_in_window = True
-    parallax_pos = 1
-    target_parallax_pos = 1
-    easing = 0.2
-
-    def draw_bg():
-        for i, bg_image in enumerate(bg_images):
-            screen.blit(bg_image, (((parallax_pos * bg_speeds[i]) - (bg_image.get_width() - screen_width) // 2) + bg_offset[i][0], bg_offset[i][1]))
-
     while True:
         clock.tick(FPS)
         for event in pygame.event.get():
@@ -41,20 +111,7 @@ def main():
                 pygame.quit()
                 sys.exit()
             elif event.type == pygame.MOUSEMOTION:
-                # Check if the mouse is in the window
-                mouse_in_window = pygame.mouse.get_focused()
-                 # Get the current mouse position
-                mouse_x, mouse_y = event.pos
-                
-                target_parallax_pos = ((mouse_x - (screen_width // 2)) / screen_width) * 100
-
-                # # Determine the direction of the mouse movement
-                # if mouse_x > previous_mouse_x:
-                #     parallax_pos += 5
-                # elif mouse_x < previous_mouse_x:
-                #     parallax_pos -= 5
-                # Update the previous mouse position
-                # previous_mouse_x = mouse_x
+                main_menu_bg.parallax(event)
 
             if event.type == pygame.MOUSEBUTTONDOWN:
                 mouse_pos = event.pos
@@ -71,14 +128,8 @@ def main():
                     selected_file = music_library.music_chosen
                     if selected_file:
                         menu['selectsong_button_text'] = selected_file
-        if not mouse_in_window:
-            target_parallax_pos = 0
-
-        # interpolate for smooth parallax
-        parallax_pos = lerp(parallax_pos, target_parallax_pos, easing)
-
-        #screen.blit(background_image, (0, 0))
-        draw_bg()
+        
+        main_menu_bg.parallax()
 
         title_text = title_font.render("SolarSound", True, TEXT_COLOR)
         title_rect = title_text.get_rect(center=(screen_width // 2, title_y))
