@@ -1,6 +1,14 @@
 import librosa
 import numpy as np
 import utils
+import os
+
+def extract_filename(filepath):
+    # Extract the base name (filename with extension)
+    base_name = os.path.basename(filepath)
+    # Remove the extension
+    name_without_ext = os.path.splitext(base_name)[0]
+    return name_without_ext
 
 def find_section_label(start_measure_time, musical_sections):
     """
@@ -32,14 +40,13 @@ def find_section_label(start_measure_time, musical_sections):
 
 def generate_chart(song_path):
     """
-    Génère une beatmap pour une chanson donnée.
+    Génère une beatmap pour une chanson donnée. Et puis la sauvegarder sous forme fichier .txt
 
     Args:
         song_path (str): Le chemin du fichier audio de la chanson.
 
-    Returns:
-        tuple: Une beatmap sous forme de liste et le temps de début de la chanson.
     """
+    song_name = extract_filename(song_path)
     y, sr = librosa.load(song_path)
     onset_times, bpms, rms, musical_sections = init_generate_chart(y, sr)
     rms_threshold = utils.find_rms_threshold(rms, sr)
@@ -66,7 +73,8 @@ def generate_chart(song_path):
         bpm = utils.bpm_for_time(bpms, start_measure_time)
 
         measure_time = calculate_measure_time(bpm)
-    return beatmap, start_time
+    
+    chart_file_creation(beatmap, bpms, start_time, song_name)
 
 def calculate_measure_time(bpm):
     """
@@ -164,7 +172,7 @@ def generate_beats(onsets_in_measure, measure_time, start_measure_time, index_on
     if onset_detection_mode and len(onsets_in_measure) != 0:
         # Quantize onsets
         onsets_in_measure, index_onset = quantize_onsets(onsets_in_measure, measure_time, ideal_subdivision, start_measure_time, index_onset)
-        print(onsets_in_measure)
+        #print(onsets_in_measure)
 
     # Generate beats for the measure
     # TODO - avoid generating same note on same key in quick succession
@@ -176,7 +184,7 @@ def generate_beats(onsets_in_measure, measure_time, start_measure_time, index_on
             beats_per_measure.append(group)
     else:
         for i in range(ideal_subdivision):
-            print(beat)
+            #print(beat)
             group = np.zeros(4, dtype=int)
             if onset_detection_mode and beat in onsets_in_measure:
                 idx = np.random.randint(0, 4)
@@ -246,7 +254,7 @@ def chart_file_creation(beatmap, bpms, start_time, song):
         text_content += ",\n"  #add comma and newline after every measure
     
     # Write text content to a file
-    output_file = "Music+Beatmaps/"+song+".txt"
+    output_file = "charts/"+song+".txt"
     with open(output_file, 'w') as file:
         file.write(text_content)
     

@@ -1,6 +1,7 @@
 import pygame
 from utils import bpm_for_time
 from game_config import *
+from song_generation import extract_filename
 
 class Note():
     def __init__(self, key_index):
@@ -63,13 +64,12 @@ class Gameplay():
     notes (list): Liste des notes.
     note_index (int): L'index de la note actuelle.
     """
-    def __init__(self):
+    def __init__(self, song_path):
         """
         Initialise les paramètres du jeu
         """
         #self.map = selectsong_button_text[:-4]
-        self.song_name = "sink"
-        self.beatmap = self.load("charts/sink")
+        self.beatmap = self.load(song_path)
         self.note_speed = 1
         self.BPM = 0
         self.notes = []
@@ -77,7 +77,7 @@ class Gameplay():
         self.run()
 
     # LOADING SONG Function
-    def load(self, map):
+    def load(self, song_path):
         """
         Charge la musique et la carte de rythme (beatmap) pour le jeu.
 
@@ -87,9 +87,9 @@ class Gameplay():
         Retourne:
         notes (list): Une liste de tuples contenant des objets Note et leurs temps associés.
         """
-        pygame.mixer.music.load(map+".mp3")
-
-        with open(map+'.txt', 'r') as file:
+        pygame.mixer.music.load(song_path)
+        song_name = extract_filename(song_path)
+        with open(f"charts/{song_name}.txt", 'r') as file:
             lines = file.readlines()
 
         start_time = None
@@ -280,7 +280,7 @@ class Gameplay():
             if not running:
                 break
 
-        EndScreen(self.song_name, score)
+        EndScreen(score)
 
 class EndScreen():
     """
@@ -290,11 +290,10 @@ class EndScreen():
     song_name (str): Le nom de la chanson.
     score (int): Le score final du joueur.
     """
-    def __init__(self, song_name, score) -> None:
+    def __init__(self, score) -> None:
         """
-        initialise les variables comme le nom de la musique et le score pour l'affichage
+        initialise le variablescore pour l'affichage
         """
-        self.song_name = song_name
         self.score = score
         self.run()
 

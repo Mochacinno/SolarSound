@@ -4,16 +4,20 @@ from game_config import *
 import song_generation
 import sys
 
+song_path = 0
+
 class CustomThread(Thread):
     def __init__(self):
         Thread.__init__(self)
         self.value = None
 
     def run(self):
+        global song_path
         self.value = song_generation.generate_chart(song_path)
 
-def run_loading_screen():
-
+def run_loading_screen(song_path2):
+    global song_path
+    song_path = song_path2
     clock = pygame.time.Clock()
 
     # Load background image
@@ -31,7 +35,7 @@ def run_loading_screen():
     fill_width = 0
 
     # Progress bar update interval (in milliseconds)
-    update_interval = 2000  # 20 seconds
+    update_interval = 10000  # 20 seconds
 
     # Current step status
     current_step = 0
@@ -47,8 +51,6 @@ def run_loading_screen():
     ]
 
     # Start the process
-    global song_path
-    song_path = "charts/sink.mp3" 
     custom_thread = CustomThread()
 
     # Start the song generation

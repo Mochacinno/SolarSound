@@ -145,9 +145,10 @@ def main():
             if event.type == pygame.MOUSEBUTTONDOWN:
                 mouse_pos = event.pos
                 if button_box.collidepoint(mouse_pos):
-                    if menu['selectsong_button_text'] != 'Select Song':
-                        #run_loading_screen()
-                        Gameplay()
+                    song_path = menu['selectsong_button_text']
+                    if song_path != 'Select Song':
+                        run_loading_screen(song_path)
+                        Gameplay(song_path)
                 elif dropdown_button_box.collidepoint(mouse_pos):
                     selected_file = select_file_for_editor(mp3_files)
                     if selected_file and selected_file not in mp3_files:
