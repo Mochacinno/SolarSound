@@ -1,16 +1,16 @@
-<mxfile host="app.diagrams.net" modified="2024-06-07T09:12:54.235Z" agent="Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/125.0.0.0 Safari/537.36" etag="9UGJ1Fvc450Krj7lzqBQ" version="24.4.13" type="device">
+<mxfile host="app.diagrams.net" modified="2024-06-09T10:19:56.901Z" agent="Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/125.0.0.0 Safari/537.36" etag="3wOttpCz_F1QLqHGvrgN" version="24.5.2" type="github">
   <diagram id="C5RBs43oDa-KdzZeNtuy" name="Page-1">
-    <mxGraphModel dx="2954" dy="5835" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="827" pageHeight="1169" math="0" shadow="0">
+    <mxGraphModel dx="2650" dy="5669" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="827" pageHeight="1169" math="0" shadow="0">
       <root>
         <mxCell id="WIyWlLk6GJQsqaUBKTNV-0" />
         <mxCell id="WIyWlLk6GJQsqaUBKTNV-1" parent="WIyWlLk6GJQsqaUBKTNV-0" />
         <mxCell id="-Nyvp81KzP3HBZppvLe6-5" value="initialisation" style="rounded=1;whiteSpace=wrap;html=1;fontSize=12;glass=0;strokeWidth=1;shadow=0;align=center;labelPosition=center;verticalLabelPosition=top;verticalAlign=bottom;fillColor=#dae8fc;strokeColor=#6c8ebf;" parent="WIyWlLk6GJQsqaUBKTNV-1" vertex="1">
-          <mxGeometry x="65" y="-4570" width="710" height="640" as="geometry" />
+          <mxGeometry x="50" y="-4580" width="725" height="650" as="geometry" />
         </mxCell>
         <mxCell id="-Nyvp81KzP3HBZppvLe6-75" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;" parent="WIyWlLk6GJQsqaUBKTNV-1" source="-Nyvp81KzP3HBZppvLe6-0" target="-Nyvp81KzP3HBZppvLe6-74" edge="1">
           <mxGeometry relative="1" as="geometry" />
         </mxCell>
-        <mxCell id="-Nyvp81KzP3HBZppvLe6-0" value="initialisation" style="rounded=1;whiteSpace=wrap;html=1;fontSize=12;glass=0;strokeWidth=1;shadow=0;fillColor=#dae8fc;strokeColor=#6c8ebf;" parent="WIyWlLk6GJQsqaUBKTNV-1" vertex="1">
+        <mxCell id="-Nyvp81KzP3HBZppvLe6-0" value="Initialisation" style="rounded=1;whiteSpace=wrap;html=1;fontSize=12;glass=0;strokeWidth=1;shadow=0;fillColor=#dae8fc;strokeColor=#6c8ebf;" parent="WIyWlLk6GJQsqaUBKTNV-1" vertex="1">
           <mxGeometry x="250" y="-3260" width="120" height="40" as="geometry" />
         </mxCell>
         <mxCell id="-Nyvp81KzP3HBZppvLe6-63" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;entryX=0.5;entryY=0;entryDx=0;entryDy=0;" parent="WIyWlLk6GJQsqaUBKTNV-1" source="-Nyvp81KzP3HBZppvLe6-1" target="-Nyvp81KzP3HBZppvLe6-4" edge="1">
@@ -29,36 +29,36 @@
             </Array>
           </mxGeometry>
         </mxCell>
-        <mxCell id="-Nyvp81KzP3HBZppvLe6-1" value="Filter audio" style="rounded=1;whiteSpace=wrap;html=1;fontSize=12;glass=0;strokeWidth=1;shadow=0;" parent="WIyWlLk6GJQsqaUBKTNV-1" vertex="1">
+        <mxCell id="-Nyvp81KzP3HBZppvLe6-1" value="Appliquer un filtre sur le signal" style="rounded=1;whiteSpace=wrap;html=1;fontSize=12;glass=0;strokeWidth=1;shadow=0;" parent="WIyWlLk6GJQsqaUBKTNV-1" vertex="1">
           <mxGeometry x="355" y="-4430" width="120" height="40" as="geometry" />
         </mxCell>
         <mxCell id="-Nyvp81KzP3HBZppvLe6-3" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;entryX=0.5;entryY=0;entryDx=0;entryDy=0;" parent="WIyWlLk6GJQsqaUBKTNV-1" source="-Nyvp81KzP3HBZppvLe6-2" target="-Nyvp81KzP3HBZppvLe6-0" edge="1">
           <mxGeometry relative="1" as="geometry" />
         </mxCell>
-        <mxCell id="-Nyvp81KzP3HBZppvLe6-2" value="mp3 file" style="ellipse;whiteSpace=wrap;html=1;" parent="WIyWlLk6GJQsqaUBKTNV-1" vertex="1">
-          <mxGeometry x="185" y="-3470" width="250" height="140" as="geometry" />
+        <mxCell id="-Nyvp81KzP3HBZppvLe6-2" value="Args:&lt;br&gt;&lt;br&gt;&lt;div style=&quot;&quot;&gt;&lt;span style=&quot;background-color: initial;&quot;&gt;&amp;nbsp;song_path (str): Le chemin du fichier&amp;nbsp;&lt;/span&gt;&lt;/div&gt;&lt;div style=&quot;&quot;&gt;&lt;span style=&quot;background-color: initial;&quot;&gt;audio de la chanson&lt;/span&gt;&lt;/div&gt;" style="ellipse;whiteSpace=wrap;html=1;align=center;" parent="WIyWlLk6GJQsqaUBKTNV-1" vertex="1">
+          <mxGeometry x="182.5" y="-3460" width="255" height="120" as="geometry" />
         </mxCell>
         <mxCell id="-Nyvp81KzP3HBZppvLe6-72" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;" parent="WIyWlLk6GJQsqaUBKTNV-1" source="-Nyvp81KzP3HBZppvLe6-4" target="-Nyvp81KzP3HBZppvLe6-60" edge="1">
           <mxGeometry relative="1" as="geometry">
             <Array as="points">
               <mxPoint x="170" y="-4160" />
-              <mxPoint x="420" y="-4160" />
+              <mxPoint x="426" y="-4160" />
             </Array>
           </mxGeometry>
         </mxCell>
-        <mxCell id="-Nyvp81KzP3HBZppvLe6-4" value="Find tempo of music" style="rounded=1;whiteSpace=wrap;html=1;fontSize=12;glass=0;strokeWidth=1;shadow=0;" parent="WIyWlLk6GJQsqaUBKTNV-1" vertex="1">
-          <mxGeometry x="110" y="-4280" width="120" height="40" as="geometry" />
+        <mxCell id="-Nyvp81KzP3HBZppvLe6-4" value="Trouver le tempo de la musique (BPM)" style="rounded=1;whiteSpace=wrap;html=1;fontSize=12;glass=0;strokeWidth=1;shadow=0;" parent="WIyWlLk6GJQsqaUBKTNV-1" vertex="1">
+          <mxGeometry x="110" y="-4285" width="120" height="50" as="geometry" />
         </mxCell>
         <mxCell id="-Nyvp81KzP3HBZppvLe6-71" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;" parent="WIyWlLk6GJQsqaUBKTNV-1" source="-Nyvp81KzP3HBZppvLe6-53" target="-Nyvp81KzP3HBZppvLe6-60" edge="1">
           <mxGeometry relative="1" as="geometry">
             <Array as="points">
               <mxPoint x="340" y="-4160" />
-              <mxPoint x="420" y="-4160" />
+              <mxPoint x="426" y="-4160" />
             </Array>
           </mxGeometry>
         </mxCell>
-        <mxCell id="-Nyvp81KzP3HBZppvLe6-53" value="Find recurring sections of music" style="rounded=1;whiteSpace=wrap;html=1;fontSize=12;glass=0;strokeWidth=1;shadow=0;" parent="WIyWlLk6GJQsqaUBKTNV-1" vertex="1">
-          <mxGeometry x="280" y="-4280" width="120" height="40" as="geometry" />
+        <mxCell id="-Nyvp81KzP3HBZppvLe6-53" value="Trouver des sections de musique récurrentes" style="rounded=1;whiteSpace=wrap;html=1;fontSize=12;glass=0;strokeWidth=1;shadow=0;" parent="WIyWlLk6GJQsqaUBKTNV-1" vertex="1">
+          <mxGeometry x="280" y="-4290" width="120" height="60" as="geometry" />
         </mxCell>
         <mxCell id="-Nyvp81KzP3HBZppvLe6-66" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;exitX=0.5;exitY=1;exitDx=0;exitDy=0;" parent="WIyWlLk6GJQsqaUBKTNV-1" source="-Nyvp81KzP3HBZppvLe6-1" target="-Nyvp81KzP3HBZppvLe6-54" edge="1">
           <mxGeometry relative="1" as="geometry">
@@ -71,19 +71,20 @@
         <mxCell id="-Nyvp81KzP3HBZppvLe6-70" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;entryX=0.5;entryY=0;entryDx=0;entryDy=0;" parent="WIyWlLk6GJQsqaUBKTNV-1" source="-Nyvp81KzP3HBZppvLe6-54" target="-Nyvp81KzP3HBZppvLe6-60" edge="1">
           <mxGeometry relative="1" as="geometry">
             <Array as="points">
-              <mxPoint x="520" y="-4160" />
-              <mxPoint x="420" y="-4160" />
+              <mxPoint x="510" y="-4160" />
+              <mxPoint x="426" y="-4160" />
+              <mxPoint x="426" y="-4093" />
             </Array>
           </mxGeometry>
         </mxCell>
-        <mxCell id="-Nyvp81KzP3HBZppvLe6-54" value="Detect peaks in audio" style="rounded=1;whiteSpace=wrap;html=1;fontSize=12;glass=0;strokeWidth=1;shadow=0;" parent="WIyWlLk6GJQsqaUBKTNV-1" vertex="1">
-          <mxGeometry x="450" y="-4280" width="120" height="40" as="geometry" />
+        <mxCell id="-Nyvp81KzP3HBZppvLe6-54" value="&lt;span style=&quot;text-align: left;&quot;&gt;Le temps d&#39;apparition d&#39;une détection d&#39;un pic (onset)&lt;/span&gt;" style="rounded=1;whiteSpace=wrap;html=1;fontSize=12;glass=0;strokeWidth=1;shadow=0;" parent="WIyWlLk6GJQsqaUBKTNV-1" vertex="1">
+          <mxGeometry x="450" y="-4295" width="120" height="70" as="geometry" />
         </mxCell>
         <mxCell id="-Nyvp81KzP3HBZppvLe6-62" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;" parent="WIyWlLk6GJQsqaUBKTNV-1" source="-Nyvp81KzP3HBZppvLe6-57" target="-Nyvp81KzP3HBZppvLe6-1" edge="1">
           <mxGeometry relative="1" as="geometry" />
         </mxCell>
-        <mxCell id="-Nyvp81KzP3HBZppvLe6-57" value="Parametre :&lt;br&gt;y -&amp;gt;&lt;div&gt;sr -&amp;gt;&lt;br&gt;&lt;div&gt;&lt;div&gt;&lt;br&gt;&lt;/div&gt;&lt;/div&gt;&lt;/div&gt;" style="ellipse;whiteSpace=wrap;html=1;" parent="WIyWlLk6GJQsqaUBKTNV-1" vertex="1">
-          <mxGeometry x="355" y="-4550" width="120" height="80" as="geometry" />
+        <mxCell id="-Nyvp81KzP3HBZppvLe6-57" value="Args:&lt;br&gt;y (np.ndarray): Signal audio chargé.&lt;br&gt;sr (int): Taux d&#39;échantillonnage de l&#39;audio." style="ellipse;whiteSpace=wrap;html=1;" parent="WIyWlLk6GJQsqaUBKTNV-1" vertex="1">
+          <mxGeometry x="308.75" y="-4560" width="211.25" height="90" as="geometry" />
         </mxCell>
         <mxCell id="-Nyvp81KzP3HBZppvLe6-67" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;exitX=0.5;exitY=1;exitDx=0;exitDy=0;" parent="WIyWlLk6GJQsqaUBKTNV-1" source="-Nyvp81KzP3HBZppvLe6-1" target="-Nyvp81KzP3HBZppvLe6-58" edge="1">
           <mxGeometry relative="1" as="geometry">
@@ -93,25 +94,21 @@
             </Array>
           </mxGeometry>
         </mxCell>
-        <mxCell id="-Nyvp81KzP3HBZppvLe6-68" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;" parent="WIyWlLk6GJQsqaUBKTNV-1" source="-Nyvp81KzP3HBZppvLe6-58" target="-Nyvp81KzP3HBZppvLe6-59" edge="1">
-          <mxGeometry relative="1" as="geometry" />
+        <mxCell id="-Nyvp81KzP3HBZppvLe6-58" value="&lt;span style=&quot;text-align: left;&quot;&gt;Calculer l&#39;énergie globale de la musique pour un moment donné&lt;/span&gt;" style="rounded=1;whiteSpace=wrap;html=1;fontSize=12;glass=0;strokeWidth=1;shadow=0;" parent="WIyWlLk6GJQsqaUBKTNV-1" vertex="1">
+          <mxGeometry x="620" y="-4295" width="120" height="70" as="geometry" />
         </mxCell>
-        <mxCell id="-Nyvp81KzP3HBZppvLe6-58" value="Root mean squared values of the audio spectorgram" style="rounded=1;whiteSpace=wrap;html=1;fontSize=12;glass=0;strokeWidth=1;shadow=0;" parent="WIyWlLk6GJQsqaUBKTNV-1" vertex="1">
-          <mxGeometry x="620" y="-4330" width="120" height="40" as="geometry" />
-        </mxCell>
-        <mxCell id="-Nyvp81KzP3HBZppvLe6-69" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;entryX=0.5;entryY=0;entryDx=0;entryDy=0;" parent="WIyWlLk6GJQsqaUBKTNV-1" source="-Nyvp81KzP3HBZppvLe6-59" target="-Nyvp81KzP3HBZppvLe6-60" edge="1">
+        <mxCell id="-Nyvp81KzP3HBZppvLe6-69" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;entryX=0.5;entryY=0;entryDx=0;entryDy=0;exitX=0.5;exitY=1;exitDx=0;exitDy=0;" parent="WIyWlLk6GJQsqaUBKTNV-1" source="-Nyvp81KzP3HBZppvLe6-58" target="-Nyvp81KzP3HBZppvLe6-60" edge="1">
           <mxGeometry relative="1" as="geometry">
             <Array as="points">
               <mxPoint x="680" y="-4160" />
-              <mxPoint x="420" y="-4160" />
+              <mxPoint x="426" y="-4160" />
+              <mxPoint x="426" y="-4093" />
             </Array>
+            <mxPoint x="680" y="-4200" as="sourcePoint" />
           </mxGeometry>
         </mxCell>
-        <mxCell id="-Nyvp81KzP3HBZppvLe6-59" value="smooth curve" style="rounded=1;whiteSpace=wrap;html=1;fontSize=12;glass=0;strokeWidth=1;shadow=0;" parent="WIyWlLk6GJQsqaUBKTNV-1" vertex="1">
-          <mxGeometry x="620" y="-4240" width="120" height="40" as="geometry" />
-        </mxCell>
-        <mxCell id="-Nyvp81KzP3HBZppvLe6-60" value="returns :&amp;nbsp;&lt;div&gt;bpms -&amp;gt;&lt;br&gt;musical_sections&lt;br&gt;onset_times&lt;br&gt;rms&lt;/div&gt;" style="ellipse;whiteSpace=wrap;html=1;" parent="WIyWlLk6GJQsqaUBKTNV-1" vertex="1">
-          <mxGeometry x="308.75" y="-4090" width="222.5" height="130" as="geometry" />
+        <mxCell id="-Nyvp81KzP3HBZppvLe6-60" value="&lt;div&gt;Returns:&lt;/div&gt;&lt;br&gt;tuple: Contient les temps d&#39;onset, les BPMs, les valeurs RMS lissées et les sections musicales sous forme de listes." style="ellipse;whiteSpace=wrap;html=1;" parent="WIyWlLk6GJQsqaUBKTNV-1" vertex="1">
+          <mxGeometry x="300" y="-4093" width="251.25" height="110" as="geometry" />
         </mxCell>
         <mxCell id="-Nyvp81KzP3HBZppvLe6-64" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;exitX=0.5;exitY=1;exitDx=0;exitDy=0;" parent="WIyWlLk6GJQsqaUBKTNV-1" source="-Nyvp81KzP3HBZppvLe6-1" target="-Nyvp81KzP3HBZppvLe6-1" edge="1">
           <mxGeometry relative="1" as="geometry" />
@@ -119,37 +116,37 @@
         <mxCell id="-Nyvp81KzP3HBZppvLe6-144" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;entryX=0.5;entryY=0;entryDx=0;entryDy=0;" parent="WIyWlLk6GJQsqaUBKTNV-1" source="-Nyvp81KzP3HBZppvLe6-74" target="-Nyvp81KzP3HBZppvLe6-76" edge="1">
           <mxGeometry relative="1" as="geometry" />
         </mxCell>
-        <mxCell id="-Nyvp81KzP3HBZppvLe6-74" value="Calculate measure time for the current time of the music" style="rounded=1;whiteSpace=wrap;html=1;fontSize=12;glass=0;strokeWidth=1;shadow=0;" parent="WIyWlLk6GJQsqaUBKTNV-1" vertex="1">
-          <mxGeometry x="250" y="-3150" width="120" height="40" as="geometry" />
+        <mxCell id="-Nyvp81KzP3HBZppvLe6-74" value="Calculer le temps de la mesure à 4/4 pour le temps actuel de la musique" style="rounded=1;whiteSpace=wrap;html=1;fontSize=12;glass=0;strokeWidth=1;shadow=0;" parent="WIyWlLk6GJQsqaUBKTNV-1" vertex="1">
+          <mxGeometry x="235" y="-3170" width="150" height="80" as="geometry" />
         </mxCell>
         <mxCell id="-Nyvp81KzP3HBZppvLe6-145" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;" parent="WIyWlLk6GJQsqaUBKTNV-1" source="-Nyvp81KzP3HBZppvLe6-76" target="-Nyvp81KzP3HBZppvLe6-77" edge="1">
           <mxGeometry relative="1" as="geometry" />
         </mxCell>
-        <mxCell id="-Nyvp81KzP3HBZppvLe6-76" value="get onsets that are within measure time" style="rounded=1;whiteSpace=wrap;html=1;fontSize=12;glass=0;strokeWidth=1;shadow=0;" parent="WIyWlLk6GJQsqaUBKTNV-1" vertex="1">
-          <mxGeometry x="250" y="-3010" width="120" height="40" as="geometry" />
+        <mxCell id="-Nyvp81KzP3HBZppvLe6-76" value="Obtenir des pics dans le signal (onsets) qui se situent dans le temps de mesure" style="rounded=1;whiteSpace=wrap;html=1;fontSize=12;glass=0;strokeWidth=1;shadow=0;" parent="WIyWlLk6GJQsqaUBKTNV-1" vertex="1">
+          <mxGeometry x="242.5" y="-3010" width="135" height="83" as="geometry" />
         </mxCell>
         <mxCell id="-Nyvp81KzP3HBZppvLe6-149" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;entryX=0.5;entryY=0;entryDx=0;entryDy=0;" parent="WIyWlLk6GJQsqaUBKTNV-1" source="-Nyvp81KzP3HBZppvLe6-77" target="-Nyvp81KzP3HBZppvLe6-147" edge="1">
           <mxGeometry relative="1" as="geometry" />
         </mxCell>
-        <mxCell id="-Nyvp81KzP3HBZppvLe6-77" value="generate beats" style="rounded=1;whiteSpace=wrap;html=1;fontSize=12;glass=0;strokeWidth=1;shadow=0;fillColor=#fff2cc;strokeColor=#d6b656;" parent="WIyWlLk6GJQsqaUBKTNV-1" vertex="1">
-          <mxGeometry x="250" y="-2910" width="120" height="40" as="geometry" />
+        <mxCell id="-Nyvp81KzP3HBZppvLe6-77" value="Générer des notes" style="rounded=1;whiteSpace=wrap;html=1;fontSize=12;glass=0;strokeWidth=1;shadow=0;fillColor=#fff2cc;strokeColor=#d6b656;" parent="WIyWlLk6GJQsqaUBKTNV-1" vertex="1">
+          <mxGeometry x="250" y="-2880" width="120" height="40" as="geometry" />
         </mxCell>
-        <mxCell id="-Nyvp81KzP3HBZppvLe6-97" value="generate beats" style="rounded=1;whiteSpace=wrap;html=1;fontSize=12;glass=0;strokeWidth=1;shadow=0;align=center;labelPosition=center;verticalLabelPosition=top;verticalAlign=bottom;fillColor=#fff2cc;strokeColor=#d6b656;" parent="WIyWlLk6GJQsqaUBKTNV-1" vertex="1">
+        <mxCell id="-Nyvp81KzP3HBZppvLe6-97" value="générer des notes" style="rounded=1;whiteSpace=wrap;html=1;fontSize=12;glass=0;strokeWidth=1;shadow=0;align=center;labelPosition=center;verticalLabelPosition=top;verticalAlign=bottom;fillColor=#fff2cc;strokeColor=#d6b656;" parent="WIyWlLk6GJQsqaUBKTNV-1" vertex="1">
           <mxGeometry x="1430" y="-4370" width="870" height="1557" as="geometry" />
         </mxCell>
-        <mxCell id="hQlWsIJ_XEUXE3eXvBtQ-36" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;" edge="1" parent="WIyWlLk6GJQsqaUBKTNV-1" source="-Nyvp81KzP3HBZppvLe6-100" target="hQlWsIJ_XEUXE3eXvBtQ-35">
+        <mxCell id="hQlWsIJ_XEUXE3eXvBtQ-36" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;" parent="WIyWlLk6GJQsqaUBKTNV-1" source="-Nyvp81KzP3HBZppvLe6-100" target="hQlWsIJ_XEUXE3eXvBtQ-35" edge="1">
           <mxGeometry relative="1" as="geometry" />
         </mxCell>
-        <mxCell id="-Nyvp81KzP3HBZppvLe6-100" value="Generate beats &#39;randomly&#39; for measure" style="rounded=1;whiteSpace=wrap;html=1;fontSize=12;glass=0;strokeWidth=1;shadow=0;" parent="WIyWlLk6GJQsqaUBKTNV-1" vertex="1">
-          <mxGeometry x="1925" y="-3213" width="120" height="40" as="geometry" />
+        <mxCell id="-Nyvp81KzP3HBZppvLe6-100" value="&lt;div&gt;Générer les beats aléatoirement pour la mesure&lt;/div&gt;" style="rounded=1;whiteSpace=wrap;html=1;fontSize=12;glass=0;strokeWidth=1;shadow=0;" parent="WIyWlLk6GJQsqaUBKTNV-1" vertex="1">
+          <mxGeometry x="1925" y="-3240" width="120" height="67" as="geometry" />
         </mxCell>
         <mxCell id="-Nyvp81KzP3HBZppvLe6-133" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;entryX=0.5;entryY=0;entryDx=0;entryDy=0;" parent="WIyWlLk6GJQsqaUBKTNV-1" source="-Nyvp81KzP3HBZppvLe6-109" target="-Nyvp81KzP3HBZppvLe6-121" edge="1">
           <mxGeometry relative="1" as="geometry" />
         </mxCell>
-        <mxCell id="-Nyvp81KzP3HBZppvLe6-109" value="Parametre :&lt;br&gt;&lt;div&gt;onsets in measure&lt;br&gt;measure_time&lt;/div&gt;&lt;div&gt;start_measure_time&lt;/div&gt;&lt;div&gt;index_onset&lt;/div&gt;&lt;div&gt;rms&lt;/div&gt;&lt;div&gt;rms_threshold&lt;/div&gt;&lt;div&gt;musical_sections&lt;/div&gt;&lt;div&gt;&lt;div&gt;&lt;div&gt;&lt;br&gt;&lt;/div&gt;&lt;/div&gt;&lt;/div&gt;" style="ellipse;whiteSpace=wrap;html=1;" parent="WIyWlLk6GJQsqaUBKTNV-1" vertex="1">
-          <mxGeometry x="1665" y="-4333" width="230" height="170" as="geometry" />
+        <mxCell id="-Nyvp81KzP3HBZppvLe6-109" value="Args:&lt;br&gt;onsets_in_measure (list): Liste des onsets dans la mesure.&lt;br&gt;measure_time (int): Durée de la mesure en millisecondes.&lt;br&gt;&amp;nbsp;start_measure_time (int): Temps de début de la mesure en millisecondes.&lt;br&gt;&amp;nbsp;index_onset (int): Index actuel dans la liste des onsets.&lt;br&gt;&amp;nbsp;smooth_rms (list): Liste des valeurs moyenne quadratiques lissées.&lt;br&gt;rms_threshold (float): Seuil de la valeur moyenne quadratique&amp;nbsp;pour la détection des onsets.&lt;br&gt;&amp;nbsp;musical_sections (list): Liste des sections musicales sous forme de tuples (id de section, temps de début, temps de fin).&lt;br&gt;sr (int): Taux d&#39;échantillonnage de l&#39;audio." style="ellipse;whiteSpace=wrap;html=1;" parent="WIyWlLk6GJQsqaUBKTNV-1" vertex="1">
+          <mxGeometry x="1525" y="-4350" width="510" height="213" as="geometry" />
         </mxCell>
-        <mxCell id="-Nyvp81KzP3HBZppvLe6-115" value="returns :&amp;nbsp;&lt;div&gt;bpms -&amp;gt;&lt;br&gt;musical_sections&lt;br&gt;onset_times&lt;br&gt;rms&lt;/div&gt;" style="ellipse;whiteSpace=wrap;html=1;" parent="WIyWlLk6GJQsqaUBKTNV-1" vertex="1">
+        <mxCell id="-Nyvp81KzP3HBZppvLe6-115" value="Returns:&lt;br&gt;tuple: Liste des notes généré par mesure à 4/4 et nouvel index d&#39;onset." style="ellipse;whiteSpace=wrap;html=1;" parent="WIyWlLk6GJQsqaUBKTNV-1" vertex="1">
           <mxGeometry x="1548.75" y="-2993" width="222.5" height="130" as="geometry" />
         </mxCell>
         <mxCell id="-Nyvp81KzP3HBZppvLe6-116" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;exitX=0.5;exitY=1;exitDx=0;exitDy=0;" parent="WIyWlLk6GJQsqaUBKTNV-1" source="-Nyvp81KzP3HBZppvLe6-100" target="-Nyvp81KzP3HBZppvLe6-100" edge="1">
@@ -160,7 +157,7 @@
             <mxPoint x="1985" y="-3413" as="targetPoint" />
           </mxGeometry>
         </mxCell>
-        <mxCell id="hQlWsIJ_XEUXE3eXvBtQ-14" value="No" style="edgeLabel;html=1;align=center;verticalAlign=middle;resizable=0;points=[];" vertex="1" connectable="0" parent="-Nyvp81KzP3HBZppvLe6-171">
+        <mxCell id="hQlWsIJ_XEUXE3eXvBtQ-14" value="Non" style="edgeLabel;html=1;align=center;verticalAlign=middle;resizable=0;points=[];" parent="-Nyvp81KzP3HBZppvLe6-171" vertex="1" connectable="0">
           <mxGeometry x="-0.0953" relative="1" as="geometry">
             <mxPoint as="offset" />
           </mxGeometry>
@@ -173,18 +170,18 @@
             <mxPoint x="2135" y="-3413" as="targetPoint" />
           </mxGeometry>
         </mxCell>
-        <mxCell id="-Nyvp81KzP3HBZppvLe6-176" value="Yes" style="edgeLabel;html=1;align=center;verticalAlign=middle;resizable=0;points=[];" parent="-Nyvp81KzP3HBZppvLe6-173" vertex="1" connectable="0">
+        <mxCell id="-Nyvp81KzP3HBZppvLe6-176" value="Oui" style="edgeLabel;html=1;align=center;verticalAlign=middle;resizable=0;points=[];" parent="-Nyvp81KzP3HBZppvLe6-173" vertex="1" connectable="0">
           <mxGeometry x="0.1393" y="1" relative="1" as="geometry">
             <mxPoint x="14" y="17" as="offset" />
           </mxGeometry>
         </mxCell>
-        <mxCell id="-Nyvp81KzP3HBZppvLe6-117" value="Should we use onset&amp;nbsp;&lt;div&gt;detection times ?&lt;/div&gt;" style="rhombus;whiteSpace=wrap;html=1;" parent="WIyWlLk6GJQsqaUBKTNV-1" vertex="1">
+        <mxCell id="-Nyvp81KzP3HBZppvLe6-117" value="&lt;div&gt;Nous utilisons les temps de détection des onsets?&lt;/div&gt;" style="rhombus;whiteSpace=wrap;html=1;" parent="WIyWlLk6GJQsqaUBKTNV-1" vertex="1">
           <mxGeometry x="1895" y="-3433" width="180" height="110" as="geometry" />
         </mxCell>
-        <mxCell id="hQlWsIJ_XEUXE3eXvBtQ-37" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;entryX=0.5;entryY=0;entryDx=0;entryDy=0;" edge="1" parent="WIyWlLk6GJQsqaUBKTNV-1" source="-Nyvp81KzP3HBZppvLe6-120" target="hQlWsIJ_XEUXE3eXvBtQ-35">
+        <mxCell id="hQlWsIJ_XEUXE3eXvBtQ-37" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;entryX=0.5;entryY=0;entryDx=0;entryDy=0;" parent="WIyWlLk6GJQsqaUBKTNV-1" source="-Nyvp81KzP3HBZppvLe6-120" target="hQlWsIJ_XEUXE3eXvBtQ-35" edge="1">
           <mxGeometry relative="1" as="geometry" />
         </mxCell>
-        <mxCell id="-Nyvp81KzP3HBZppvLe6-120" value="quantise onset beats" style="rounded=1;whiteSpace=wrap;html=1;fontSize=12;glass=0;strokeWidth=1;shadow=0;" parent="WIyWlLk6GJQsqaUBKTNV-1" vertex="1">
+        <mxCell id="-Nyvp81KzP3HBZppvLe6-120" value="&lt;div&gt;Quantifier les onsets&lt;/div&gt;" style="rounded=1;whiteSpace=wrap;html=1;fontSize=12;glass=0;strokeWidth=1;shadow=0;" parent="WIyWlLk6GJQsqaUBKTNV-1" vertex="1">
           <mxGeometry x="2080" y="-3213" width="120" height="40" as="geometry" />
         </mxCell>
         <mxCell id="-Nyvp81KzP3HBZppvLe6-169" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;entryX=0.5;entryY=0;entryDx=0;entryDy=0;" parent="WIyWlLk6GJQsqaUBKTNV-1" source="-Nyvp81KzP3HBZppvLe6-121" target="-Nyvp81KzP3HBZppvLe6-126" edge="1">
@@ -196,25 +193,25 @@
             </Array>
           </mxGeometry>
         </mxCell>
-        <mxCell id="hQlWsIJ_XEUXE3eXvBtQ-16" value="No" style="edgeLabel;html=1;align=center;verticalAlign=middle;resizable=0;points=[];" vertex="1" connectable="0" parent="-Nyvp81KzP3HBZppvLe6-169">
+        <mxCell id="hQlWsIJ_XEUXE3eXvBtQ-16" value="Non" style="edgeLabel;html=1;align=center;verticalAlign=middle;resizable=0;points=[];" parent="-Nyvp81KzP3HBZppvLe6-169" vertex="1" connectable="0">
           <mxGeometry x="-0.2006" y="2" relative="1" as="geometry">
             <mxPoint as="offset" />
           </mxGeometry>
         </mxCell>
-        <mxCell id="-Nyvp81KzP3HBZppvLe6-121" value="Are we in a section of&amp;nbsp;&lt;div&gt;music that&amp;nbsp;&lt;span style=&quot;background-color: initial;&quot;&gt;will&amp;nbsp;&lt;/span&gt;&lt;/div&gt;&lt;div&gt;&lt;span style=&quot;background-color: initial;&quot;&gt;appear again ?&lt;/span&gt;&lt;/div&gt;" style="rhombus;whiteSpace=wrap;html=1;" parent="WIyWlLk6GJQsqaUBKTNV-1" vertex="1">
+        <mxCell id="-Nyvp81KzP3HBZppvLe6-121" value="&lt;div&gt;Dans une section de&amp;nbsp;&lt;/div&gt;&lt;div&gt;musique qui&amp;nbsp;&lt;/div&gt;&lt;div&gt;réapparaîtra?&lt;/div&gt;" style="rhombus;whiteSpace=wrap;html=1;" parent="WIyWlLk6GJQsqaUBKTNV-1" vertex="1">
           <mxGeometry x="1675" y="-4103" width="210" height="120" as="geometry" />
         </mxCell>
-        <mxCell id="hQlWsIJ_XEUXE3eXvBtQ-32" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;" edge="1" parent="WIyWlLk6GJQsqaUBKTNV-1" source="-Nyvp81KzP3HBZppvLe6-125" target="-Nyvp81KzP3HBZppvLe6-115">
+        <mxCell id="hQlWsIJ_XEUXE3eXvBtQ-32" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;" parent="WIyWlLk6GJQsqaUBKTNV-1" source="-Nyvp81KzP3HBZppvLe6-125" target="-Nyvp81KzP3HBZppvLe6-115" edge="1">
           <mxGeometry relative="1" as="geometry" />
         </mxCell>
-        <mxCell id="-Nyvp81KzP3HBZppvLe6-125" value="regenerate the same notes generated for that section" style="rounded=1;whiteSpace=wrap;html=1;fontSize=12;glass=0;strokeWidth=1;shadow=0;" parent="WIyWlLk6GJQsqaUBKTNV-1" vertex="1">
-          <mxGeometry x="1600" y="-3893" width="120" height="40" as="geometry" />
+        <mxCell id="-Nyvp81KzP3HBZppvLe6-125" value="&lt;div&gt;régénérer les mêmes notes générées pour cette section&lt;/div&gt;" style="rounded=1;whiteSpace=wrap;html=1;fontSize=12;glass=0;strokeWidth=1;shadow=0;" parent="WIyWlLk6GJQsqaUBKTNV-1" vertex="1">
+          <mxGeometry x="1600" y="-3893" width="120" height="73" as="geometry" />
         </mxCell>
-        <mxCell id="hQlWsIJ_XEUXE3eXvBtQ-27" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;" edge="1" parent="WIyWlLk6GJQsqaUBKTNV-1" source="-Nyvp81KzP3HBZppvLe6-126" target="hQlWsIJ_XEUXE3eXvBtQ-0">
+        <mxCell id="hQlWsIJ_XEUXE3eXvBtQ-27" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;" parent="WIyWlLk6GJQsqaUBKTNV-1" source="-Nyvp81KzP3HBZppvLe6-126" target="hQlWsIJ_XEUXE3eXvBtQ-0" edge="1">
           <mxGeometry relative="1" as="geometry" />
         </mxCell>
-        <mxCell id="-Nyvp81KzP3HBZppvLe6-126" value="store all notes generated for that measure" style="rounded=1;whiteSpace=wrap;html=1;fontSize=12;glass=0;strokeWidth=1;shadow=0;" parent="WIyWlLk6GJQsqaUBKTNV-1" vertex="1">
-          <mxGeometry x="1841.25" y="-3893" width="120" height="40" as="geometry" />
+        <mxCell id="-Nyvp81KzP3HBZppvLe6-126" value="&lt;div&gt;stocker toutes les notes générées pour cette mesure&lt;/div&gt;" style="rounded=1;whiteSpace=wrap;html=1;fontSize=12;glass=0;strokeWidth=1;shadow=0;" parent="WIyWlLk6GJQsqaUBKTNV-1" vertex="1">
+          <mxGeometry x="1841.25" y="-3893" width="120" height="73" as="geometry" />
         </mxCell>
         <mxCell id="-Nyvp81KzP3HBZppvLe6-150" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;entryX=1;entryY=0.5;entryDx=0;entryDy=0;" parent="WIyWlLk6GJQsqaUBKTNV-1" source="-Nyvp81KzP3HBZppvLe6-147" target="-Nyvp81KzP3HBZppvLe6-74" edge="1">
           <mxGeometry relative="1" as="geometry">
@@ -225,7 +222,7 @@
             </Array>
           </mxGeometry>
         </mxCell>
-        <mxCell id="-Nyvp81KzP3HBZppvLe6-160" value="No" style="edgeLabel;html=1;align=center;verticalAlign=middle;resizable=0;points=[];" parent="-Nyvp81KzP3HBZppvLe6-150" vertex="1" connectable="0">
+        <mxCell id="-Nyvp81KzP3HBZppvLe6-160" value="Non" style="edgeLabel;html=1;align=center;verticalAlign=middle;resizable=0;points=[];" parent="-Nyvp81KzP3HBZppvLe6-150" vertex="1" connectable="0">
           <mxGeometry x="-0.8044" y="3" relative="1" as="geometry">
             <mxPoint x="59" y="-187" as="offset" />
           </mxGeometry>
@@ -235,22 +232,16 @@
             <mxPoint x="350" y="-2680" as="targetPoint" />
           </mxGeometry>
         </mxCell>
-        <mxCell id="-Nyvp81KzP3HBZppvLe6-161" value="Yes" style="edgeLabel;html=1;align=center;verticalAlign=middle;resizable=0;points=[];" parent="-Nyvp81KzP3HBZppvLe6-152" vertex="1" connectable="0">
+        <mxCell id="-Nyvp81KzP3HBZppvLe6-161" value="Oui" style="edgeLabel;html=1;align=center;verticalAlign=middle;resizable=0;points=[];" parent="-Nyvp81KzP3HBZppvLe6-152" vertex="1" connectable="0">
           <mxGeometry x="-0.3417" y="2" relative="1" as="geometry">
             <mxPoint x="-22" as="offset" />
           </mxGeometry>
         </mxCell>
-        <mxCell id="-Nyvp81KzP3HBZppvLe6-147" value="are we at the end of the music ?" style="rhombus;whiteSpace=wrap;html=1;" parent="WIyWlLk6GJQsqaUBKTNV-1" vertex="1">
-          <mxGeometry x="245" y="-2790" width="130" height="80" as="geometry" />
+        <mxCell id="-Nyvp81KzP3HBZppvLe6-147" value="La fin de la musique ?" style="rhombus;whiteSpace=wrap;html=1;" parent="WIyWlLk6GJQsqaUBKTNV-1" vertex="1">
+          <mxGeometry x="232.5" y="-2790" width="155" height="80" as="geometry" />
         </mxCell>
-        <mxCell id="-Nyvp81KzP3HBZppvLe6-159" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;entryX=0.5;entryY=0;entryDx=0;entryDy=0;" parent="WIyWlLk6GJQsqaUBKTNV-1" source="-Nyvp81KzP3HBZppvLe6-157" target="-Nyvp81KzP3HBZppvLe6-158" edge="1">
-          <mxGeometry relative="1" as="geometry" />
-        </mxCell>
-        <mxCell id="-Nyvp81KzP3HBZppvLe6-157" value="turn notes array into a beatmap file" style="rounded=1;whiteSpace=wrap;html=1;fontSize=12;glass=0;strokeWidth=1;shadow=0;" parent="WIyWlLk6GJQsqaUBKTNV-1" vertex="1">
-          <mxGeometry x="250" y="-2670" width="120" height="40" as="geometry" />
-        </mxCell>
-        <mxCell id="-Nyvp81KzP3HBZppvLe6-158" value="beatmap .txt file" style="ellipse;whiteSpace=wrap;html=1;" parent="WIyWlLk6GJQsqaUBKTNV-1" vertex="1">
-          <mxGeometry x="250" y="-2570" width="120" height="40" as="geometry" />
+        <mxCell id="-Nyvp81KzP3HBZppvLe6-157" value="Transformer la liste des notes en un fichier .txt et&amp;nbsp;l&#39;enregistrer dans un dossier" style="rounded=1;whiteSpace=wrap;html=1;fontSize=12;glass=0;strokeWidth=1;shadow=0;" parent="WIyWlLk6GJQsqaUBKTNV-1" vertex="1">
+          <mxGeometry x="235" y="-2660" width="150" height="80" as="geometry" />
         </mxCell>
         <mxCell id="-Nyvp81KzP3HBZppvLe6-166" value="" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;entryX=0.5;entryY=0;entryDx=0;entryDy=0;exitX=0.5;exitY=1;exitDx=0;exitDy=0;" parent="WIyWlLk6GJQsqaUBKTNV-1" source="-Nyvp81KzP3HBZppvLe6-121" target="-Nyvp81KzP3HBZppvLe6-125" edge="1">
           <mxGeometry relative="1" as="geometry">
@@ -262,61 +253,58 @@
             </Array>
           </mxGeometry>
         </mxCell>
-        <mxCell id="hQlWsIJ_XEUXE3eXvBtQ-15" value="Yes" style="edgeLabel;html=1;align=center;verticalAlign=middle;resizable=0;points=[];" vertex="1" connectable="0" parent="-Nyvp81KzP3HBZppvLe6-166">
+        <mxCell id="hQlWsIJ_XEUXE3eXvBtQ-15" value="Oui" style="edgeLabel;html=1;align=center;verticalAlign=middle;resizable=0;points=[];" parent="-Nyvp81KzP3HBZppvLe6-166" vertex="1" connectable="0">
           <mxGeometry x="0.0578" y="-1" relative="1" as="geometry">
             <mxPoint as="offset" />
           </mxGeometry>
         </mxCell>
-        <mxCell id="hQlWsIJ_XEUXE3eXvBtQ-7" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;" edge="1" parent="WIyWlLk6GJQsqaUBKTNV-1" source="hQlWsIJ_XEUXE3eXvBtQ-0" target="hQlWsIJ_XEUXE3eXvBtQ-5">
+        <mxCell id="hQlWsIJ_XEUXE3eXvBtQ-7" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;" parent="WIyWlLk6GJQsqaUBKTNV-1" source="hQlWsIJ_XEUXE3eXvBtQ-0" target="hQlWsIJ_XEUXE3eXvBtQ-5" edge="1">
           <mxGeometry relative="1" as="geometry" />
         </mxCell>
-        <mxCell id="hQlWsIJ_XEUXE3eXvBtQ-12" value="Yes" style="edgeLabel;html=1;align=center;verticalAlign=middle;resizable=0;points=[];" vertex="1" connectable="0" parent="hQlWsIJ_XEUXE3eXvBtQ-7">
+        <mxCell id="hQlWsIJ_XEUXE3eXvBtQ-12" value="Oui" style="edgeLabel;html=1;align=center;verticalAlign=middle;resizable=0;points=[];" parent="hQlWsIJ_XEUXE3eXvBtQ-7" vertex="1" connectable="0">
           <mxGeometry x="-0.321" y="1" relative="1" as="geometry">
             <mxPoint as="offset" />
           </mxGeometry>
         </mxCell>
-        <mxCell id="hQlWsIJ_XEUXE3eXvBtQ-8" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;" edge="1" parent="WIyWlLk6GJQsqaUBKTNV-1" source="hQlWsIJ_XEUXE3eXvBtQ-0" target="hQlWsIJ_XEUXE3eXvBtQ-6">
+        <mxCell id="hQlWsIJ_XEUXE3eXvBtQ-8" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;" parent="WIyWlLk6GJQsqaUBKTNV-1" source="hQlWsIJ_XEUXE3eXvBtQ-0" target="hQlWsIJ_XEUXE3eXvBtQ-6" edge="1">
           <mxGeometry relative="1" as="geometry" />
         </mxCell>
-        <mxCell id="hQlWsIJ_XEUXE3eXvBtQ-13" value="No" style="edgeLabel;html=1;align=center;verticalAlign=middle;resizable=0;points=[];" vertex="1" connectable="0" parent="hQlWsIJ_XEUXE3eXvBtQ-8">
+        <mxCell id="hQlWsIJ_XEUXE3eXvBtQ-13" value="Non" style="edgeLabel;html=1;align=center;verticalAlign=middle;resizable=0;points=[];" parent="hQlWsIJ_XEUXE3eXvBtQ-8" vertex="1" connectable="0">
           <mxGeometry x="0.1438" y="-1" relative="1" as="geometry">
             <mxPoint as="offset" />
           </mxGeometry>
         </mxCell>
-        <mxCell id="hQlWsIJ_XEUXE3eXvBtQ-0" value="Is the rms value at this moment high ?" style="rhombus;whiteSpace=wrap;html=1;" vertex="1" parent="WIyWlLk6GJQsqaUBKTNV-1">
+        <mxCell id="hQlWsIJ_XEUXE3eXvBtQ-0" value="&lt;div&gt;La valeur moyenne&amp;nbsp;&lt;/div&gt;&lt;div&gt;quadratique est-elle élevée&amp;nbsp;&lt;/div&gt;&lt;div&gt;à ce moment?&lt;/div&gt;" style="rhombus;whiteSpace=wrap;html=1;" parent="WIyWlLk6GJQsqaUBKTNV-1" vertex="1">
           <mxGeometry x="1811.25" y="-3783" width="180" height="110" as="geometry" />
         </mxCell>
-        <mxCell id="hQlWsIJ_XEUXE3eXvBtQ-33" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;" edge="1" parent="WIyWlLk6GJQsqaUBKTNV-1" source="hQlWsIJ_XEUXE3eXvBtQ-5" target="-Nyvp81KzP3HBZppvLe6-117">
+        <mxCell id="hQlWsIJ_XEUXE3eXvBtQ-33" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;" parent="WIyWlLk6GJQsqaUBKTNV-1" source="hQlWsIJ_XEUXE3eXvBtQ-5" target="-Nyvp81KzP3HBZppvLe6-117" edge="1">
           <mxGeometry relative="1" as="geometry" />
         </mxCell>
-        <mxCell id="hQlWsIJ_XEUXE3eXvBtQ-5" value="High subdivision value" style="rounded=1;whiteSpace=wrap;html=1;fontSize=12;glass=0;strokeWidth=1;shadow=0;" vertex="1" parent="WIyWlLk6GJQsqaUBKTNV-1">
+        <mxCell id="hQlWsIJ_XEUXE3eXvBtQ-5" value="&lt;div&gt;Utiliser une subdivision élevée&lt;/div&gt;" style="rounded=1;whiteSpace=wrap;html=1;fontSize=12;glass=0;strokeWidth=1;shadow=0;" parent="WIyWlLk6GJQsqaUBKTNV-1" vertex="1">
           <mxGeometry x="1841.25" y="-3573" width="120" height="40" as="geometry" />
         </mxCell>
-        <mxCell id="hQlWsIJ_XEUXE3eXvBtQ-34" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;entryX=0.5;entryY=0;entryDx=0;entryDy=0;" edge="1" parent="WIyWlLk6GJQsqaUBKTNV-1" source="hQlWsIJ_XEUXE3eXvBtQ-6" target="-Nyvp81KzP3HBZppvLe6-117">
+        <mxCell id="hQlWsIJ_XEUXE3eXvBtQ-34" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;entryX=0.5;entryY=0;entryDx=0;entryDy=0;" parent="WIyWlLk6GJQsqaUBKTNV-1" source="hQlWsIJ_XEUXE3eXvBtQ-6" target="-Nyvp81KzP3HBZppvLe6-117" edge="1">
           <mxGeometry relative="1" as="geometry" />
         </mxCell>
-        <mxCell id="hQlWsIJ_XEUXE3eXvBtQ-6" value="Low subdivision value" style="rounded=1;whiteSpace=wrap;html=1;fontSize=12;glass=0;strokeWidth=1;shadow=0;" vertex="1" parent="WIyWlLk6GJQsqaUBKTNV-1">
+        <mxCell id="hQlWsIJ_XEUXE3eXvBtQ-6" value="&lt;div&gt;Utiliser une subdivision basse&lt;/div&gt;" style="rounded=1;whiteSpace=wrap;html=1;fontSize=12;glass=0;strokeWidth=1;shadow=0;" parent="WIyWlLk6GJQsqaUBKTNV-1" vertex="1">
           <mxGeometry x="2000" y="-3573" width="120" height="40" as="geometry" />
         </mxCell>
-        <mxCell id="hQlWsIJ_XEUXE3eXvBtQ-29" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;exitX=0.5;exitY=1;exitDx=0;exitDy=0;" edge="1" parent="WIyWlLk6GJQsqaUBKTNV-1" source="hQlWsIJ_XEUXE3eXvBtQ-6" target="hQlWsIJ_XEUXE3eXvBtQ-6">
+        <mxCell id="hQlWsIJ_XEUXE3eXvBtQ-29" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;exitX=0.5;exitY=1;exitDx=0;exitDy=0;" parent="WIyWlLk6GJQsqaUBKTNV-1" source="hQlWsIJ_XEUXE3eXvBtQ-6" target="hQlWsIJ_XEUXE3eXvBtQ-6" edge="1">
           <mxGeometry relative="1" as="geometry" />
         </mxCell>
-        <mxCell id="hQlWsIJ_XEUXE3eXvBtQ-30" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;exitX=0.25;exitY=1;exitDx=0;exitDy=0;entryX=0.333;entryY=0.75;entryDx=0;entryDy=0;entryPerimeter=0;" edge="1" parent="WIyWlLk6GJQsqaUBKTNV-1" source="-Nyvp81KzP3HBZppvLe6-125" target="-Nyvp81KzP3HBZppvLe6-125">
+        <mxCell id="hQlWsIJ_XEUXE3eXvBtQ-39" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;entryX=0.5;entryY=0;entryDx=0;entryDy=0;" parent="WIyWlLk6GJQsqaUBKTNV-1" source="hQlWsIJ_XEUXE3eXvBtQ-35" target="-Nyvp81KzP3HBZppvLe6-115" edge="1">
           <mxGeometry relative="1" as="geometry" />
         </mxCell>
-        <mxCell id="hQlWsIJ_XEUXE3eXvBtQ-39" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;entryX=0.5;entryY=0;entryDx=0;entryDy=0;" edge="1" parent="WIyWlLk6GJQsqaUBKTNV-1" source="hQlWsIJ_XEUXE3eXvBtQ-35" target="-Nyvp81KzP3HBZppvLe6-115">
-          <mxGeometry relative="1" as="geometry" />
+        <mxCell id="hQlWsIJ_XEUXE3eXvBtQ-35" value="Générer des notes selon toutes les critères" style="rounded=1;whiteSpace=wrap;html=1;fontSize=12;glass=0;strokeWidth=1;shadow=0;" parent="WIyWlLk6GJQsqaUBKTNV-1" vertex="1">
+          <mxGeometry x="2000" y="-3080" width="120" height="63" as="geometry" />
         </mxCell>
-        <mxCell id="hQlWsIJ_XEUXE3eXvBtQ-35" value="Generate notes" style="rounded=1;whiteSpace=wrap;html=1;fontSize=12;glass=0;strokeWidth=1;shadow=0;" vertex="1" parent="WIyWlLk6GJQsqaUBKTNV-1">
-          <mxGeometry x="2000" y="-3073" width="120" height="40" as="geometry" />
+        <mxCell id="hQlWsIJ_XEUXE3eXvBtQ-44" value="&lt;ul&gt;&lt;li&gt;&lt;span style=&quot;text-align: center;&quot;&gt;Trouver le tempo de la musique (BPM)&lt;/span&gt;&lt;br&gt;&lt;/li&gt;&lt;ul&gt;&lt;li&gt;par &lt;font face=&quot;monospace&quot;&gt;find_tempo()&lt;/font&gt;, utilisant la bibliothèque librosa, qui nous permet d&#39;estimer le tempo pour chaque bloc d&#39;audio. Mais nous nous sommes rendu compte qu&#39;il y avait une erreur d&#39;octave, et nous avons donc effectué une analyse statistique de tous les tempos estimés pour la durée de la musique afin d&#39;obtenir une seule estimation du tempo pour la musique. Cela signifie que vous ne pouvez pas estimer un tempo pour une musique qui a des changements de tempo.&lt;/li&gt;&lt;/ul&gt;&lt;li&gt;&lt;span style=&quot;text-align: center;&quot;&gt;Trouver des sections de musique récurrentes&lt;/span&gt;&lt;/li&gt;&lt;ul&gt;&lt;li&gt;&lt;font face=&quot;monospace&quot;&gt;segmentAnalysis()&lt;/font&gt;, ce qui est fait par l&#39;analyse de la matrice de récurrence, ou en prenant une section de l&#39;audio et en la comparant à l&#39;audio entier, puis en décalant cette section et en continuant jusqu&#39;à la fin.&lt;/li&gt;&lt;/ul&gt;&lt;li&gt;Le temps d&#39;apparition d&#39;une détection d&#39;un pic (onset)&lt;br&gt;&lt;/li&gt;&lt;ul&gt;&lt;li&gt;en utilisant &lt;font face=&quot;monospace&quot;&gt;onset_detection()&lt;/font&gt; qui est une fonction fournie dans la bibliothèque librosa.&lt;/li&gt;&lt;/ul&gt;&lt;li&gt;&lt;span style=&quot;background-color: initial;&quot;&gt;Calculer l&#39;énergie globale de la musique pour un moment donné&lt;/span&gt;&lt;/li&gt;&lt;ul&gt;&lt;li&gt;En analysant sa valeur moyenne quadratique, qui est fournie par la bibliothèque librosa: &lt;font face=&quot;monospace&quot;&gt;rms()&lt;/font&gt;, nous traitons ces données en les lissant.&lt;br&gt;&lt;/li&gt;&lt;/ul&gt;&lt;/ul&gt;" style="rounded=0;whiteSpace=wrap;html=1;align=left;" parent="WIyWlLk6GJQsqaUBKTNV-1" vertex="1">
+          <mxGeometry x="-770" y="-4470" width="720" height="340" as="geometry" />
         </mxCell>
-        <mxCell id="hQlWsIJ_XEUXE3eXvBtQ-44" value="&lt;ul&gt;&lt;li&gt;find_tempo(_)&lt;/li&gt;&lt;ul&gt;&lt;li&gt;en utilisant la libraire librosa, qui nous permet de&#39;estimer le tempo à chaque frame de l&#39;audio. Mais on s&#39;est rendu compte qu&#39;il y a &#39;octave&#39; erreur, donc on a fait de l&#39;analyse statistques de toutes les tempos estimer pour la duree de musique pour donner en sortie une seule estimation de tempo de la musique. Donc ca veut dire on ne peut pas estimer une tempo sur une musique qui a des changements de tempo.&lt;/li&gt;&lt;/ul&gt;&lt;li&gt;recurring_sections():&lt;/li&gt;&lt;ul&gt;&lt;li&gt;se fait par analyse de matrice recurrence ou on compare par soi même ou on prendre une sections de l&#39;audio et compare par toute l&#39;audio, puis on decale cette section et continue jusqua la fin.&lt;/li&gt;&lt;/ul&gt;&lt;li&gt;detect peaks&lt;/li&gt;&lt;ul&gt;&lt;li&gt;en utilisant onset_detection qui est une fonction fournie dans la bibliotheque &quot;librosa&quot;&lt;/li&gt;&lt;/ul&gt;&lt;li&gt;rms values:&lt;/li&gt;&lt;ul&gt;&lt;li&gt;Par analyse de rms qui est fournie par la bibliotheque librosa, on process ce donnee by smoothing it.&lt;/li&gt;&lt;/ul&gt;&lt;/ul&gt;" style="rounded=0;whiteSpace=wrap;html=1;align=left;" vertex="1" parent="WIyWlLk6GJQsqaUBKTNV-1">
-          <mxGeometry x="-690" y="-4480" width="720" height="340" as="geometry" />
-        </mxCell>
-        <mxCell id="hQlWsIJ_XEUXE3eXvBtQ-46" value="&lt;ul&gt;&lt;li&gt;find_tempo(_)&lt;/li&gt;&lt;ul&gt;&lt;li&gt;en utilisant la libraire librosa, qui nous permet de&#39;estimer le tempo à chaque frame de l&#39;audio. Mais on s&#39;est rendu compte qu&#39;il y a &#39;octave&#39; erreur, donc on a fait de l&#39;analyse statistques de toutes les tempos estimer pour la duree de musique pour donner en sortie une seule estimation de tempo de la musique. Donc ca veut dire on ne peut pas estimer une tempo sur une musique qui a des changements de tempo.&lt;/li&gt;&lt;/ul&gt;&lt;li&gt;recurring_sections():&lt;/li&gt;&lt;ul&gt;&lt;li&gt;se fait par analyse de matrice recurrence ou on compare par soi même ou on prendre une sections de l&#39;audio et compare par toute l&#39;audio, puis on decale cette section et continue jusqua la fin.&lt;/li&gt;&lt;/ul&gt;&lt;li&gt;detect peaks&lt;/li&gt;&lt;ul&gt;&lt;li&gt;en utilisant onset_detection qui est une fonction fournie dans la bibliotheque &quot;librosa&quot;&lt;/li&gt;&lt;/ul&gt;&lt;li&gt;rms values:&lt;/li&gt;&lt;ul&gt;&lt;li&gt;Par analyse de rms qui est fournie par la bibliotheque librosa, on process ce donnee by smoothing it.&lt;/li&gt;&lt;/ul&gt;&lt;/ul&gt;" style="rounded=0;whiteSpace=wrap;html=1;align=left;" vertex="1" parent="WIyWlLk6GJQsqaUBKTNV-1">
+        <mxCell id="hQlWsIJ_XEUXE3eXvBtQ-46" value="&lt;ul&gt;&lt;li&gt;Les éléments en couleur sont des grandes fonctions, ils seront donc détaillés séparément par la suite&lt;br&gt;&lt;/li&gt;&lt;li&gt;&lt;span style=&quot;background-color: initial;&quot;&gt;Initialisation&lt;/span&gt;&lt;br&gt;&lt;/li&gt;&lt;ul&gt;&lt;li&gt;Obtenir des informations sur le signal audio, comme le BPM (battements par minute), le temps d&#39;apparition d&#39;une détection d&#39;un pic (onset), la valeur moyenne quadratique de la musique pour juger de l&#39;énergie globale de la musique à un moment donné, toutes ces variables aideront à juger de ce qui sera généré pour la suite.&lt;br&gt;&lt;/li&gt;&lt;/ul&gt;&lt;li&gt;Calculer le temps de la mesure à 4/4 pour le temps actuel de la musique&lt;/li&gt;&lt;ul&gt;&lt;li&gt;Utilisation de la fonction &lt;code&gt;calculate_measure_time&lt;/code&gt; pour déterminer la durée de chaque mesure en millisecondes en fonction du BPM.&lt;br&gt;&lt;/li&gt;&lt;/ul&gt;&lt;li&gt;&lt;span style=&quot;text-align: center;&quot;&gt;Obtenir des pics dans le signal (onsets) qui se situent dans le temps de mesure&lt;/span&gt;&lt;br&gt;&lt;/li&gt;&lt;ul&gt;&lt;li&gt;Collecter des onsets dans chaque mesure avec &lt;code&gt;collect_onsets_in_measure&lt;/code&gt;.&lt;/li&gt;&lt;/ul&gt;&lt;li&gt;Générer des notes:&lt;br&gt;&lt;/li&gt;&lt;ul&gt;&lt;li&gt;Transformation des onsets en une liste de notes avec leurs temps correspondants par &lt;code&gt;generate_beats&lt;/code&gt;.&lt;br&gt;&lt;/li&gt;&lt;/ul&gt;&lt;li&gt;Fin de la musique ?&lt;/li&gt;&lt;ul&gt;&lt;li&gt;Vérification si la musique est terminée en comparant le temps courant avec la durée totale de l&#39;audio.&lt;br&gt;&lt;/li&gt;&lt;/ul&gt;&lt;li&gt;&lt;span style=&quot;text-align: center;&quot;&gt;Transformer la liste des notes en un fichier .txt et&amp;nbsp;l&#39;enregistrer dans un dossier&lt;/span&gt;&lt;br&gt;&lt;/li&gt;&lt;ul&gt;&lt;li style=&quot;&quot;&gt;Si la musique est terminé, écriture des notes dans un fichier texte et sauvegarde dans le dossier spécifié.&lt;/li&gt;&lt;/ul&gt;&lt;/ul&gt;" style="rounded=0;whiteSpace=wrap;html=1;align=left;" parent="WIyWlLk6GJQsqaUBKTNV-1" vertex="1">
           <mxGeometry x="-700" y="-3120" width="720" height="340" as="geometry" />
         </mxCell>
-        <mxCell id="hQlWsIJ_XEUXE3eXvBtQ-47" value="&lt;ul&gt;&lt;li&gt;find_tempo(_)&lt;/li&gt;&lt;ul&gt;&lt;li&gt;en utilisant la libraire librosa, qui nous permet de&#39;estimer le tempo à chaque frame de l&#39;audio. Mais on s&#39;est rendu compte qu&#39;il y a &#39;octave&#39; erreur, donc on a fait de l&#39;analyse statistques de toutes les tempos estimer pour la duree de musique pour donner en sortie une seule estimation de tempo de la musique. Donc ca veut dire on ne peut pas estimer une tempo sur une musique qui a des changements de tempo.&lt;/li&gt;&lt;/ul&gt;&lt;li&gt;recurring_sections():&lt;/li&gt;&lt;ul&gt;&lt;li&gt;se fait par analyse de matrice recurrence ou on compare par soi même ou on prendre une sections de l&#39;audio et compare par toute l&#39;audio, puis on decale cette section et continue jusqua la fin.&lt;/li&gt;&lt;/ul&gt;&lt;li&gt;detect peaks&lt;/li&gt;&lt;ul&gt;&lt;li&gt;en utilisant onset_detection qui est une fonction fournie dans la bibliotheque &quot;librosa&quot;&lt;/li&gt;&lt;/ul&gt;&lt;li&gt;rms values:&lt;/li&gt;&lt;ul&gt;&lt;li&gt;Par analyse de rms qui est fournie par la bibliotheque librosa, on process ce donnee by smoothing it.&lt;/li&gt;&lt;/ul&gt;&lt;/ul&gt;" style="rounded=0;whiteSpace=wrap;html=1;align=left;" vertex="1" parent="WIyWlLk6GJQsqaUBKTNV-1">
+        <mxCell id="hQlWsIJ_XEUXE3eXvBtQ-47" value="&lt;ul&gt;&lt;li&gt;&lt;div style=&quot;&quot;&gt;Dans une section de&amp;nbsp;&lt;span style=&quot;background-color: initial;&quot;&gt;musique qui&amp;nbsp;&lt;/span&gt;&lt;span style=&quot;background-color: initial;&quot;&gt;réapparaîtra?&lt;/span&gt;&lt;/div&gt;&lt;/li&gt;&lt;ul&gt;&lt;li&gt;Nous vérifions si le temps de début de la mesure actuelle appartient à une section musicale récurrente à l&#39;aide de &lt;font face=&quot;monospace&quot;&gt;find_section_label()&lt;/font&gt;&lt;/li&gt;&lt;ul&gt;&lt;li&gt;Si oui, régénérer les mêmes notes pour cette section afin de maintenir la cohérence des sections récurrentes&lt;/li&gt;&lt;li&gt;Si non, toutes les notes générées pour cette mesure sont stockées pour une éventuelle utilisation future&lt;/li&gt;&lt;/ul&gt;&lt;/ul&gt;&lt;li&gt;&lt;span style=&quot;background-color: initial;&quot;&gt;La valeur moyenne&amp;nbsp;&lt;/span&gt;&lt;span style=&quot;background-color: initial;&quot;&gt;quadratique est-elle élevée à ce moment?&lt;/span&gt;&lt;br&gt;&lt;/li&gt;&lt;ul&gt;&lt;li&gt;&lt;span style=&quot;background-color: initial;&quot;&gt;Si la valeur moyenne quadratique est élevée, la subdivision,&amp;nbsp;&lt;/span&gt;où la mesure 4/4 peut être découpée en plus petits morceaux équidistants appelés subdivision, est une valeur élevée pour générer des notes plus détaillés.&lt;/li&gt;&lt;li&gt;&lt;span style=&quot;background-color: initial;&quot;&gt;Si la valeur moyenne quadratique est basse, une subdivision plus faible est utilisée&lt;/span&gt;&lt;/li&gt;&lt;/ul&gt;&lt;li&gt;&lt;span style=&quot;background-color: initial;&quot;&gt;Devons-nous utiliser les temps de détection des onsets ?&lt;/span&gt;&lt;/li&gt;&lt;ul&gt;&lt;li&gt;La décision d&#39;utiliser les temps de détection des onsets est prise en fonction de la valeur moyenne quadratique (RMS).&lt;/li&gt;&lt;ul&gt;&lt;li&gt;Si oui, les onsets sont quantifiés par le fonction &lt;font face=&quot;monospace&quot;&gt;quantize_onsets()&lt;/font&gt; pour pouvoir mettre dans les morceaux équidistant&amp;nbsp;appelés subdivision, densément ou rarement, en fonction de la valeur subdivision. Et ainsi forment nos notes pour ce boucle.&lt;br&gt;&lt;/li&gt;&lt;li&gt;Si non, les notes sont générés aléatoirement pour cette mesure&lt;/li&gt;&lt;/ul&gt;&lt;/ul&gt;&lt;li&gt;&lt;span style=&quot;background-color: initial;&quot;&gt;Générer des notes&lt;/span&gt;&lt;/li&gt;&lt;ul&gt;&lt;li&gt;&lt;span style=&quot;background-color: initial;&quot;&gt;Les notes sont ensuite générées en fonction des subdivisions et des onsets quantifiés ou aléatoires.&lt;br&gt;&lt;/span&gt;&lt;/li&gt;&lt;/ul&gt;&lt;/ul&gt;" style="rounded=0;whiteSpace=wrap;html=1;align=left;" parent="WIyWlLk6GJQsqaUBKTNV-1" vertex="1">
           <mxGeometry x="670" y="-3770" width="720" height="340" as="geometry" />
         </mxCell>
       </root>
