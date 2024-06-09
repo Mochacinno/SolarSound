@@ -10,7 +10,7 @@ class Note():
         self.y = 0
         self.rect = pygame.Rect(self.x, self.y, 90, 20)
         self.image = pygame.image.load(note_image_paths[key_index]).convert_alpha()  # Assign the image based on key index
-        #self.image = pygame.transform.scale(self.image, (80, 80))
+        self.image = pygame.transform.scale(self.image, (100, 100))
         self.alpha = 255  # Initial alpha value
         self.dissolving = False
     
@@ -41,17 +41,28 @@ class Note():
         Paramètres:
         screen (pygame.Surface): La surface sur laquelle dessiner la note.
         """
-        screen.blit(self.image, self.rect.topleft)
+        image_rect = self.image.get_rect(center=self.rect.center)
+        screen.blit(self.image, image_rect.topleft)
 
 class Key():
-    def __init__(self,x,y,coloridle,coloractive,key):
+    def __init__(self, x, y, key_index, key):
         self.x = x
         self.y = y
-        self.coloridle = coloridle
-        self.coloractive = coloractive
         self.key = key
-        self.rect = pygame.Rect(self.x,self.y,90,40)
+        self.rect = pygame.Rect(self.x, self.y, 90, 40)
+        self.image = key_image_paths[3-key_index]
+        self.image = pygame.transform.scale(self.image, (80, 80))
         self.handled = False
+
+    def draw(self, screen):
+        """
+        Dessine le key sur l'écran.
+
+        Paramètres:
+        screen (pygame.Surface): La surface sur laquelle dessiner la note.
+        """
+        image_rect = self.image.get_rect(center=self.rect.center)
+        screen.blit(self.image, image_rect.topleft)
 
 class Gameplay():
     """
@@ -177,6 +188,8 @@ class Gameplay():
         # Last note time
         last_note_time = self.beatmap[-1][1]
 
+        texte = "" # pour le score
+
         running = True
         while running:
             screen.blit(fond_gameplay, (0,0))
@@ -188,7 +201,6 @@ class Gameplay():
                 elif event.type == pygame.KEYDOWN:
                     if event.key in key_press_times:
                         key_press_times[event.key].append(current_time - start_time - 1000)
-                        print(f"Key {event.key} pressed at {current_time - start_time - 1000}")
                         #print(f"Key {event.key} pressed at {current_time - start_time - 1000}")
 
             # Update the current time
@@ -203,10 +215,10 @@ class Gameplay():
             k = pygame.key.get_pressed()
             for key in keys:
                 if k[key.key]:
-                    pygame.draw.rect(screen, key.coloridle, key.rect)
+                    key.draw(screen)
                     key.handled = False
                 else:
-                    pygame.draw.rect(screen, key.coloractive, key.rect)
+                    key.draw(screen)
                     key.handled = True
 
             # Spawn and move notes
@@ -221,59 +233,49 @@ class Gameplay():
                             self.beatmap.remove((note, time_frame))
     
                     note.draw(screen)
-    
                 # Check if the note should be hit based on the key press times
                 if not note.dissolving:
                     for key in keys:
                         if note.key_index == keys.index(key):
-                            texte_score_time = 0
                             for press_time in key_press_times[key.key]:
-                                if abs(press_time - time_frame) < 30:  # SCORING SYSTEM
+                                if abs(press_time - time_frame) < 50:  # SCORING SYSTEM
                                     note.dissolving = True  # Start the dissolve effect
                                     key_press_times[key.key].remove(press_time)  # Remove the handled key press time
-                                    score += 2  # Increment the score when a note is hit
-                                    texte_score_time = current_time
-                                    #print(f'1 {texte_score_time}')
+                                    score += 500  # Increment the score when a note is hit
 
                                     # Créer une surface contenant le texte
-                                    texte = "Perfect"
-                                    image_texte = font2.render(texte, True, GRAY)
-                                    # Obtenir le rectangle de l'image du texte pour le positionnement
-                                    rect_texte = image_texte.get_rect()
-                                    # Centrer le texte au milieu de la fenêtre
-                                    rect_texte.center = (400, 300)
-                                    screen.blit(image_texte, rect_texte) 
-                                    '''if abs(texte_score_time-current_time)>1000:
-                                        print(f'2 {texte_score_time-current_time}')
-                                        print(current_time)
-                                        screen.blit(" ", rect_texte) 
-                                    '''
-                                elif abs(press_time - time_frame) < 50:  # SCORING SYSTEM
+                                    texte = "Perfect !"
+
+                                elif abs(press_time - time_frame) < 80:  # SCORING SYSTEM
                                     note.dissolving = True  # Start the dissolve effect
                                     key_press_times[key.key].remove(press_time)  # Remove the handled key press time
-                                    score += 1  # Increment the score when a note is hit
-                                    texte_score_time = current_time
-                                    #print(f'1 {texte_score_time}')
+                                    score += 300  # Increment the score when a note is hit
                                     # Créer une surface contenant le texte
-                                    texte = "Good"
-                                    image_texte = font2.render(texte, True, GRAY)
-                                    # Obtenir le rectangle de l'image du texte pour le positionnement
-                                    rect_texte = image_texte.get_rect()
-                                    # Centrer le texte au milieu de la fenêtre
-                                    rect_texte.center = (400, 300)
-                                    screen.blit(image_texte, rect_texte) 
-                                    '''if abs(texte_score_time-current_time)>1000:
-                                        print(f'2 {texte_score_time-current_time}')
-                                        print(current_time)
-                                        screen.blit(" ", rect_texte)    
-                                    '''
+                                    texte = "Good !"
+                                
+                                elif abs(press_time - time_frame) < 200:  # SCORING SYSTEM
+                                    note.dissolving = True  # Start the dissolve effect
+                                    key_press_times[key.key].remove(press_time)  # Remove the handled key press time
+                                    score += 100  # Increment the score when a note is hit
+                                    # Créer une surface contenant le texte
+                                    texte = "Late !"
+
+                image_texte = font2.render(texte, True, GRAY)
+                # Obtenir le rectangle de l'image du texte pour le positionnement
+                rect_texte = image_texte.get_rect()
+                # Centrer le texte à la fenêtre
+                rect_texte.center = (400, 400)
+                screen.blit(image_texte, rect_texte) 
 
             if current_time - start_time > last_note_time + 5000:
                 running = False # Go out of loop
 
             # Display the score on the screen
-            score_text = font.render(f"Score: {score}", True, (255, 255, 255))
-            screen.blit(score_text, (10, 10))
+            score_texte = font.render(f"Score: {score}", True, GRAY)
+            score_rect_texte = score_texte.get_rect()
+            # Centrer le texte à la fenêtre
+            score_rect_texte.center = (400, 430)
+            screen.blit(score_texte, score_rect_texte)
 
             # Update the display
             pygame.display.update()
@@ -327,8 +329,8 @@ class EndScreen():
             pygame.display.update()
 
 keys = [
-    Key(200, 500, (255, 0, 0), (220, 0, 0), key_1_bind),
-    Key(300, 500, (0, 255, 0), (0, 220, 0), key_2_bind),
-    Key(400, 500, (0, 0, 255), (0, 0, 220), key_3_bind),
-    Key(500, 500, (255, 255, 0), (220, 220, 0), key_4_bind)
+    Key(200, 500, 0, key_1_bind),
+    Key(300, 500, 1, key_2_bind),
+    Key(400, 500, 2, key_3_bind),
+    Key(500, 500, 3, key_4_bind)
     ]

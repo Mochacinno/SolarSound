@@ -1,6 +1,7 @@
 import pygame
 import sys
-import multiprocessing  # Import multiprocessing module
+import multiprocessing
+from song_generation import extract_filename
 
 pygame.init()
 pygame.mixer.init()
@@ -131,8 +132,12 @@ def main():
                 if button_box.collidepoint(mouse_pos):
                     song_path = menu['selectsong_button_text']
                     if song_path != 'Select Song':
-                        run_loading_screen(song_path)
-                        Gameplay(song_path)
+
+                        chart_path = f'charts/{extract_filename(song_path)}.txt'
+                        if not os.path.exists(chart_path):
+                            run_loading_screen(song_path)
+                        else:
+                            Gameplay(song_path)
                 elif dropdown_button_box.collidepoint(mouse_pos):
                     # Start the select file for editor function in a separate process
                     if editor_process is None or not editor_process.is_alive():

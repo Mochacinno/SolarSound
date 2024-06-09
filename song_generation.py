@@ -160,10 +160,10 @@ def generate_beats(subdivision_factor, onsets_in_measure, measure_time, start_me
     if smooth_rms[frame_index] > rms_threshold:
         ideal_subdivision = 8 // subdivision_factor
     elif smooth_rms[frame_index] > 2 * rms_threshold / 3:
-        ideal_subdivision = 4 // subdivision_factor # switches to onset detection
+        ideal_subdivision = 8 // subdivision_factor # switches to onset detection
         onset_detection_mode = True
     elif smooth_rms[frame_index] > rms_threshold / 8:
-        ideal_subdivision = 4 // subdivision_factor # switches to onset detection
+        ideal_subdivision = 8 // subdivision_factor # switches to onset detection
         onset_detection_mode = True
     else:
         ideal_subdivision = 8 // subdivision_factor # switches to onset detection

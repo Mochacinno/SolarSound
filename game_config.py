@@ -25,8 +25,8 @@ BG_COLOR = (30, 30, 30)
 
 # Police d'écriture
 title_font = pygame.font.Font(None, 100)
-font = pygame.font.Font(None, 20)
-font2 = pygame.font.SysFont('Arial.ttf', 30)
+font = pygame.font.Font(None, 30)
+font2 = pygame.font.SysFont(None, 40)
 
 # Charger l'image de menu principal avec l'effet parallax
 bg_images = [pygame.image.load(f"assets/background-{4-i}.png").convert_alpha() for i in range(1,4)]
@@ -47,6 +47,15 @@ note_image_paths = [
     "assets/flèche_bas.png",
     "assets/flèche_droite.png"
 ]
+
+key_image_paths = [
+    pygame.transform.rotate(pygame.image.load("assets/note.png").convert_alpha(), 90),
+    pygame.image.load("assets/note.png").convert_alpha(),
+    pygame.transform.rotate(pygame.image.load("assets/note.png").convert_alpha(), 180),
+    pygame.transform.rotate(pygame.image.load("assets/note.png").convert_alpha(), 270)
+]
+
+
 
 # Dimensions des éléments
 button_width = 220
