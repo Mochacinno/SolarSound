@@ -1,5 +1,5 @@
 # Solar Sound
-## A python generative beatmap 4-key rhythm game
+### A python generative beatmap 4-key rhythm game
 
 ## Explication des règles du jeu de rythme : 
 ### Avant de Jouer
