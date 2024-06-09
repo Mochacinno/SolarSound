@@ -1,6 +1,6 @@
 import pygame
 import sys
-import threading  # Import threading module
+import multiprocessing  # Import multiprocessing module
 
 pygame.init()
 pygame.mixer.init()
@@ -9,21 +9,11 @@ clock = pygame.time.Clock()
 
 from game_config import *
 from song_library import *
-from loading_screen import * # TODO: ensure this works and add docstrings
+from loading_screen import *
 from gameplay import Gameplay
 
 # Function to draw text on screen
 def draw_text(surface, text, rect, font, color=BLACK):
-    """
-    Fonction pour dessiner du texte à l'écran.
-
-    Args:
-        surface (pygame.Surface): La surface sur laquelle dessiner le texte.
-        text (str): Le texte à afficher.
-        rect (pygame.Rect): Le rectangle définissant la position et les dimensions du texte.
-        font (pygame.font.Font): La police utilisée pour rendre le texte.
-        color (tuple): La couleur du texte. Par défaut, BLACK (noir).
-    """
     text_surface = font.render(text, True, color)
     text_rect = text_surface.get_rect(center=rect.center)
     surface.blit(text_surface, text_rect)
@@ -108,35 +98,25 @@ class ParallaxBg:
 
         self.update_parallax_pos()
 
-
 main_menu_bg = ParallaxBg(bg_images, bg_offset, bg_speeds)
-# Thread flag
-editor_thread = None
+
+# Process flag
+editor_process = None
+
+def reset_editor_process():
+    global editor_process
+    editor_process = None
+
+def select_file_for_editor_process(song_list):
+    select_file_for_editor(song_list)
+    reset_editor_process()
 
 def main():
-    """
-    Fonction principale pour exécuter le menu principal de l'application Pygame.
+    global editor_process
 
-    Cette fonction gère le chargement de la liste des fichiers MP3, les événements Pygame, 
-    le rendu de l'effet de parallaxe en arrière-plan, et l'affichage des boutons du menu.
-
-    Elle écoute les événements de la souris et du clavier pour permettre l'interaction 
-    avec les éléments du menu, tels que le démarrage du jeu, la sélection de chansons, 
-    et la sélection de fichiers pour l'éditeur.
-
-    Attributs globaux:
-        mp3_files (list): La liste des fichiers MP3 chargés.
-        menu (dict): Un dictionnaire contenant le texte du bouton de sélection de chanson.
-
-    Boucle principale:
-        - Gère les événements Pygame.
-        - Met à jour la position de l'effet de parallaxe.
-        - Rend le texte du titre et les boutons du menu à l'écran.
-    """
-    global editor_thread
     mp3_files = load_song_list()
     menu = {'selectsong_button_text': selectsong_button_text}
-    
+
     while True:
         clock.tick(FPS)
         for event in pygame.event.get():
@@ -154,10 +134,10 @@ def main():
                         run_loading_screen(song_path)
                         Gameplay(song_path)
                 elif dropdown_button_box.collidepoint(mouse_pos):
-                    # Start the select file for editor function in a separate thread
-                    if editor_thread is None or not editor_thread.is_alive():
-                        editor_thread = threading.Thread(target=select_file_for_editor, args=(mp3_files,))
-                        editor_thread.start()
+                    # Start the select file for editor function in a separate process
+                    if editor_process is None or not editor_process.is_alive():
+                        editor_process = multiprocessing.Process(target=select_file_for_editor_process, args=(mp3_files,))
+                        editor_process.start()
                 elif selectsong_button_box.collidepoint(mouse_pos):
                     music_library = MusicLibrary()
                     selected_file = music_library.music_chosen
@@ -182,4 +162,5 @@ def main():
         pygame.display.update()
 
 if __name__ == "__main__":
+    multiprocessing.set_start_method('spawn')  # Required for Windows
     main()
