@@ -9,7 +9,7 @@ class Note():
         self.x = keys[key_index].rect.centerx - 45
         self.y = 0
         self.rect = pygame.Rect(self.x, self.y, 90, 20)
-        self.image = pygame.image.load(note_image_paths[key_index]).convert_alpha()  # Assign the image based on key index
+        self.image = pygame.image.load(note_image_paths[3-key_index]).convert_alpha()  # Assign the image based on key index
         #self.image = pygame.transform.scale(self.image, (80, 80))
         self.alpha = 255  # Initial alpha value
         self.dissolving = False

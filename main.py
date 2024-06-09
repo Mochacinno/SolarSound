@@ -1,5 +1,6 @@
 import pygame
 import sys
+import threading  # Import threading module
 
 pygame.init()
 pygame.mixer.init()
@@ -109,6 +110,8 @@ class ParallaxBg:
 
 
 main_menu_bg = ParallaxBg(bg_images, bg_offset, bg_speeds)
+# Thread flag
+editor_thread = None
 
 def main():
     """
@@ -130,6 +133,7 @@ def main():
         - Met à jour la position de l'effet de parallaxe.
         - Rend le texte du titre et les boutons du menu à l'écran.
     """
+    global editor_thread
     mp3_files = load_song_list()
     menu = {'selectsong_button_text': selectsong_button_text}
     
@@ -147,12 +151,13 @@ def main():
                 if button_box.collidepoint(mouse_pos):
                     song_path = menu['selectsong_button_text']
                     if song_path != 'Select Song':
-                        #run_loading_screen(song_path)
+                        run_loading_screen(song_path)
                         Gameplay(song_path)
                 elif dropdown_button_box.collidepoint(mouse_pos):
-                    selected_file = select_file_for_editor(mp3_files)
-                    if selected_file and selected_file not in mp3_files:
-                        mp3_files.append(selected_file)
+                    # Start the select file for editor function in a separate thread
+                    if editor_thread is None or not editor_thread.is_alive():
+                        editor_thread = threading.Thread(target=select_file_for_editor, args=(mp3_files,))
+                        editor_thread.start()
                 elif selectsong_button_box.collidepoint(mouse_pos):
                     music_library = MusicLibrary()
                     selected_file = music_library.music_chosen

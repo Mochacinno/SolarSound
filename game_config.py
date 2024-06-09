@@ -42,10 +42,10 @@ fond_gameplay = pygame.transform.scale(fond_gameplay, (screen_width, screen_heig
 
 # Liste des images a charge pour les notes
 note_image_paths = [
-    "assets/flèche.png",
-    "assets/flèche.png",
-    "assets/flèche.png",
-    "assets/flèche.png"
+    "assets/flèche_gauche.png",
+    "assets/flèche_haut.png",
+    "assets/flèche_bas.png",
+    "assets/flèche_droite.png"
 ]
 
 # Dimensions des éléments
