@@ -147,7 +147,7 @@ def main():
                 if button_box.collidepoint(mouse_pos):
                     song_path = menu['selectsong_button_text']
                     if song_path != 'Select Song':
-                        run_loading_screen(song_path)
+                        #run_loading_screen(song_path)
                         Gameplay(song_path)
                 elif dropdown_button_box.collidepoint(mouse_pos):
                     selected_file = select_file_for_editor(mp3_files)

@@ -1,5 +1,6 @@
 import pygame
 
+pygame.init() # bug where faut initiliaser pygame ici aussi sinon erreur de fonts
 # Dimensions de la fenêtre
 screen_width = 800
 screen_height = 600
@@ -35,13 +36,16 @@ bg_speeds = [0.2, 0.3, 0.8]
 bg_images[1] = pygame.transform.scale(bg_images[1], (bg_images[1].get_width() * 1.05, bg_images[1].get_height() * 1.05))
 bg_images[2] = pygame.transform.scale(bg_images[2], (bg_images[2].get_width() * 1.2, bg_images[2].get_height() * 1.2))
 
+# Charger l'image de menu gameplay
+fond_gameplay = pygame.image.load("assets/fond.jpg").convert()
+fond_gameplay = pygame.transform.scale(fond_gameplay, (screen_width, screen_height))
 
 # Liste des images a charge pour les notes
 note_image_paths = [
-    "assets/note.png",
-    "assets/note.png",
-    "assets/note.png",
-    "assets/note.png"
+    "assets/flèche.png",
+    "assets/flèche.png",
+    "assets/flèche.png",
+    "assets/flèche.png"
 ]
 
 # Dimensions des éléments

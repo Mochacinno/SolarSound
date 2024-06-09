@@ -288,7 +288,7 @@ def init_generate_chart(y, sr):
 
 
 if __name__ == "__main__":
-
+    generate_chart("assets/tabiji.mp3")
     # main code
     # song_name = "sink"
     # y, sr = librosa.load("Music+Beatmaps/"+song_name+".mp3")
@@ -312,4 +312,4 @@ if __name__ == "__main__":
     # beatmap, start_time = generate_chart(y, sr)
 
     # chart_file_creation(beatmap, bpms, start_time, song_name)
-    generate_chart("D:\Downloads HDD\Fujii Kaze - Tabiji (Official Video).mp3")
+    #generate_chart("D:\Downloads HDD\Fujii Kaze - Tabiji (Official Video).mp3")

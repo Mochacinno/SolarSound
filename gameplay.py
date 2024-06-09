@@ -78,6 +78,7 @@ class Gameplay():
 
     # LOADING SONG Function
     def load(self, song_path):
+        print(song_path)
         """
         Charge la musique et la carte de rythme (beatmap) pour le jeu.
 
@@ -178,7 +179,7 @@ class Gameplay():
 
         running = True
         while running:
-            screen.fill((255, 255, 255))
+            screen.blit(fond_gameplay, (0,0))
             # Handle events
             for event in pygame.event.get():
                 if event.type == pygame.QUIT:
