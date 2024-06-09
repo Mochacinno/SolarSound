@@ -283,7 +283,7 @@ def init_generate_chart(y, sr):
     bpms = [(utils.find_best_tempo(y, sr), 0)] # for the current version, we assume song is CONSTANT tempo
     rms_values = librosa.feature.rms(y=y)[0]
     smoothed_rms = utils.smooth_rms(rms_values) # smoothen out the rms curve
-    musical_sections = utils.segmentAnalysis(y, sr)
+    musical_sections = utils.segment_analysis(y, sr)
     return onset_times, bpms, smoothed_rms, musical_sections
 
 

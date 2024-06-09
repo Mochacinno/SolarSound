@@ -162,7 +162,7 @@ def find_rms_threshold(smoothed_rms, sr) :
 
     return threshold
 
-def segmentPicking(labels, times): 
+def segment_picking(labels, times): 
     # needs to both be form of a numpy array
     # Define error window and minimum duration
     error_window = 1000
@@ -196,7 +196,7 @@ def segmentPicking(labels, times):
     #     print(seg)
     return matching_segments
 
-def segmentAnalysis(y, sr):
+def segment_analysis(y, sr):
     BINS_PER_OCTAVE = 12 * 3
     N_OCTAVES = 7
     C = librosa.amplitude_to_db(np.abs(librosa.cqt(y=y, sr=sr, bins_per_octave=BINS_PER_OCTAVE, n_bins=N_OCTAVES * BINS_PER_OCTAVE)), ref=np.max)
@@ -277,7 +277,7 @@ def segmentAnalysis(y, sr):
                                     fmin=librosa.note_to_hz('C1'),
                                     bins_per_octave=BINS_PER_OCTAVE)
     
-    return segmentPicking(bound_segs, bound_times)
+    return segment_picking(bound_segs, bound_times)
 
 def tempo_frequencies(
     n_bins: int, *, hop_length: int = 512, sr: float = 22050
