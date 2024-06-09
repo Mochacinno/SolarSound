@@ -10,6 +10,7 @@ class Note():
         self.y = 0
         self.rect = pygame.Rect(self.x, self.y, 90, 20)
         self.image = pygame.image.load(note_image_paths[key_index]).convert_alpha()  # Assign the image based on key index
+        #self.image = pygame.transform.scale(self.image, (80, 80))
         self.alpha = 255  # Initial alpha value
         self.dissolving = False
     
@@ -78,7 +79,6 @@ class Gameplay():
 
     # LOADING SONG Function
     def load(self, song_path):
-        print(song_path)
         """
         Charge la musique et la carte de rythme (beatmap) pour le jeu.
 
@@ -327,8 +327,8 @@ class EndScreen():
             pygame.display.update()
 
 keys = [
-    Key(100, 500, (255, 0, 0), (220, 0, 0), key_1_bind),
-    Key(200, 500, (0, 255, 0), (0, 220, 0), key_2_bind),
-    Key(300, 500, (0, 0, 255), (0, 0, 220), key_3_bind),
-    Key(400, 500, (255, 255, 0), (220, 220, 0), key_4_bind)
+    Key(200, 500, (255, 0, 0), (220, 0, 0), key_1_bind),
+    Key(300, 500, (0, 255, 0), (0, 220, 0), key_2_bind),
+    Key(400, 500, (0, 0, 255), (0, 0, 220), key_3_bind),
+    Key(500, 500, (255, 255, 0), (220, 220, 0), key_4_bind)
     ]
