@@ -2,6 +2,7 @@ import pygame
 import sys
 import multiprocessing
 from song_generation import extract_filename
+from tutorial_screen import TutorialWindow
 
 pygame.init()
 pygame.mixer.init()
@@ -137,6 +138,7 @@ def main():
                         if not os.path.exists(chart_path):
                             run_loading_screen(song_path)
                         else:
+                            TutorialWindow()
                             Gameplay(song_path)
                 elif dropdown_button_box.collidepoint(mouse_pos):
                     # Start the select file for editor function in a separate process

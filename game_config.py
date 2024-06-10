@@ -40,6 +40,11 @@ bg_images[2] = pygame.transform.scale(bg_images[2], (bg_images[2].get_width() * 
 fond_gameplay = pygame.image.load("assets/fond.jpg").convert()
 fond_gameplay = pygame.transform.scale(fond_gameplay, (screen_width, screen_height))
 
+# charger les images de tuto
+tutorial1 = pygame.image.load('assets/tutorial1.jpg')
+tutorial1 = pygame.transform.scale(tutorial1, (screen_width, screen_height))
+tutorial2 = pygame.image.load('assets/tutorial2.jpg')
+tutorial2 = pygame.transform.scale(tutorial2, (screen_width, screen_height))
 # Liste des images a charge pour les notes
 note_image_paths = [
     "assets/flèche_gauche.png",
