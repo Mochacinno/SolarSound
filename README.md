@@ -10,8 +10,8 @@ A python generative beatmap 4-key rhythm game
 - scikit-learn, en tapant sur le terminal `pip install scikit-learn`
 - tkinter, en tapant sur le terminal `pip install tk`
 puis, il faut ouvrir **le dossier** du jeu, en utilisant le ide de votre choix (VScode, ou spyder) contenant toutes les fichier .py, et le dossier `assets` également.
-ensuite, pour lancer le jeu, il faut run `main.py`
-
+ensuite, pour lancer le jeu, il faut run `main.py`, et le fenetre du jeu va s'ouvrir !
+Vous etes ainsi pretes pour jouer !
 ## Explication des règles du jeu de rythme : 
 ### Avant de Jouer
 1. Téléchargez un fichier mp3 **où** sinon nous vous fournissons des musiques mp3 *(pour utilkisation personnel seulement!)* pour pouvoir choisir dans cet étape pour votre convenience.
