@@ -18,6 +18,10 @@ def save_song_list(song_list):
     """
     existing_songs = load_song_list()
     combined_songs = list(set(existing_songs + song_list))
+    # Check if the combined list length exceeds 8
+    if len(combined_songs) > 7:
+        # If the length exceeds 8, pop the first item
+        combined_songs.pop(0)
     with open(song_list_file_name, 'w') as config_file:
         json.dump(combined_songs, config_file)
 
@@ -64,6 +68,38 @@ class MusicLibrary():
         Initialise la classe MusicLibrary et lance la sélection de musique.
         """
         self.music_chosen = self.run()
+       
+    def blur_surface(surface, amount):
+        """
+        Floute une surface donnée en réduisant et en agrandissant l'image.
+
+        Paramètres :
+        surface (pygame.Surface) : La surface à flouter.
+        amount (float) : La quantité de flou à appliquer. Plus la valeur est grande, moins l'image sera floutée.
+
+        Retourne :
+        pygame.Surface : La surface floutée.
+        """
+        scale = 1.0 / amount
+        surf_size = surface.get_size()
+        scaled_surf = pygame.transform.smoothscale(surface, (int(surf_size[0] * scale), int(surf_size[1] * scale)))
+        return pygame.transform.smoothscale(scaled_surf, surf_size)
+
+    def darken_surface(surface, darkness):
+        """
+        Assombrit une surface donnée en appliquant une superposition noire avec une certaine transparence.
+    
+        Paramètres :
+        surface (pygame.Surface) : La surface à assombrir.
+        darkness (int) : Le niveau d'assombrissement (opacité de la superposition noire), allant de 0 (transparent) à 255 (opaque).
+    
+        Retourne :
+        None
+        """
+        dark_overlay = pygame.Surface(surface.get_size())
+        dark_overlay.fill((0, 0, 0))
+        dark_overlay.set_alpha(darkness)
+        surface.blit(dark_overlay, (0, 0))
 
     def run(self):
         """
@@ -86,13 +122,17 @@ class MusicLibrary():
                             selected_file = file
                             break
                     if return_button.collidepoint(event.pos):
-                        selected_file = "Select a music file"
+                        selected_file = selectsong_button_text
 
-            screen.fill(BG_COLOR)
-            draw_text(screen, "Select a music file", pygame.Rect(0, 50, screen_width, 50), font, WHITE)
+            background = pygame.image.load("assets/background.jpg")
+            background = pygame.transform.scale(background, (800, 600))
+            blurred_background = MusicLibrary.blur_surface(background, 10)  # Adjust the blur amount
+            MusicLibrary.darken_surface(blurred_background, 150)
+            screen.blit(blurred_background, (0, 0))
+            draw_text(screen, selectsong_button_text, pygame.Rect(0, 50, screen_width, 50), font, WHITE)
             y_offset = 150
             return_button = pygame.Rect(50, 50, 200, 50)
-            draw_text(screen, "return", return_button, font, TEXT_COLOR)
+            draw_text(screen, "Retourne", return_button, font, TEXT_COLOR)
             for idx, file in enumerate(file_list):
                 file_rect = pygame.Rect(50, y_offset + idx * 50, screen_width - 100, 50)
                 pygame.draw.rect(screen, GRAY, file_rect)

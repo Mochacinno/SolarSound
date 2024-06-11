@@ -132,7 +132,7 @@ def main():
                 mouse_pos = event.pos
                 if button_box.collidepoint(mouse_pos):
                     song_path = menu['selectsong_button_text']
-                    if song_path != 'Select Song':
+                    if song_path != selectsong_button_text:
 
                         chart_path = f'charts/{extract_filename(song_path)}.txt'
                         if not os.path.exists(chart_path):
@@ -153,18 +153,21 @@ def main():
         
         main_menu_bg.parallax()
 
-        title_text = title_font.render("SolarSound", True, TEXT_COLOR)
+        title_text = title_font.render("SolarSound", True, WHITE)
         title_rect = title_text.get_rect(center=(screen_width // 2, title_y))
         screen.blit(title_text, title_rect)
 
-        pygame.draw.rect(screen, BUTTON_COLOR, button_box)
-        draw_text(screen, button_text, button_box, font, TEXT_COLOR)
+        pygame.draw.rect(screen, PURPLE, button_box)
+        pygame.draw.rect(screen, BLACK, button_box, 2)
+        draw_text(screen, button_text, button_box, font, WHITE)
 
-        pygame.draw.rect(screen, GRAY, dropdown_button_box)
-        draw_text(screen, dropdown_button_text, dropdown_button_box, font, TEXT_COLOR)
+        pygame.draw.rect(screen, WHITE, dropdown_button_box)
+        pygame.draw.rect(screen, BLACK, dropdown_button_box, 2)
+        draw_text(screen, dropdown_button_text, dropdown_button_box, font, BLACK)
 
-        pygame.draw.rect(screen, GRAY, selectsong_button_box)
-        draw_text(screen, menu['selectsong_button_text'], selectsong_button_box, font, TEXT_COLOR)
+        pygame.draw.rect(screen, WHITE, selectsong_button_box)
+        pygame.draw.rect(screen, BLACK, selectsong_button_box, 2)
+        draw_text(screen, menu['selectsong_button_text'], selectsong_button_box, font, BLACK)
 
         pygame.display.update()
 

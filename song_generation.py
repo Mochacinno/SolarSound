@@ -75,7 +75,7 @@ def generate_chart(song_path):
         bpm = utils.bpm_for_time(bpms, start_measure_time)
 
         measure_time = calculate_measure_time(bpm)
-    print(beatmap)
+    #print(beatmap)
     chart_file_creation(beatmap, bpms, start_time, song_name)
 
 def calculate_measure_time(bpm):
@@ -157,16 +157,17 @@ def generate_beats(subdivision_factor, onsets_in_measure, measure_time, start_me
     frame_index = librosa.time_to_frames(start_measure_time / 1000, sr=sr)
     
     onset_detection_mode = False
-    if smooth_rms[frame_index] > rms_threshold:
+    if smooth_rms[frame_index] > rms_threshold * 4 / 3:
+        ideal_subdivision = 8 // subdivision_factor
+    elif smooth_rms[frame_index] > rms_threshold:
         ideal_subdivision = 8 // subdivision_factor
     elif smooth_rms[frame_index] > 2 * rms_threshold / 3:
-        ideal_subdivision = 8 // subdivision_factor # switches to onset detection
-        onset_detection_mode = True
+        ideal_subdivision = 4 // subdivision_factor # switches to onset detection
     elif smooth_rms[frame_index] > rms_threshold / 8:
         ideal_subdivision = 8 // subdivision_factor # switches to onset detection
         onset_detection_mode = True
     else:
-        ideal_subdivision = 8 // subdivision_factor # switches to onset detection
+        ideal_subdivision = 4 // subdivision_factor # switches to onset detection
         onset_detection_mode = True
 
     if onset_detection_mode and len(onsets_in_measure) != 0:
@@ -260,7 +261,7 @@ def chart_file_creation(beatmap, bpms, start_time, song):
     with open(output_file, 'w') as file:
         file.write(text_content)
     
-    print(f"Text file '{output_file}' generated successfully.")
+    #print(f"Text file '{output_file}' generated successfully.")
 
 def init_generate_chart(y, sr):
     """

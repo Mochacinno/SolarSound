@@ -1,5 +1,3 @@
-#import sounddevice as sd
-import soundfile as sf
 import scipy
 import librosa
 import numpy as np
@@ -388,13 +386,6 @@ def bpm_for_time(bpms, current_time):
         if current_time < bpms[i][1]:
             return bpms[i - 1][0]
     return bpms[-1][0]  # Return the last BPM if current_time is beyond the last BPM change start time
-
-def createClickTrack(y, sr, clicks, name):
-    #print(clicks)
-    click_dynamic = librosa.clicks(times=clicks, sr=sr, click_freq=660,
-                               click_duration=0.25, length=len(y))
-    y_with_clicks = y + click_dynamic
-    sf.write("Music+Beatmaps/"+name+".mp3", y_with_clicks, sr)
 
 def audioFilter(y, sr):
     # And compute the spectrogram magnitude and phase

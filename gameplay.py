@@ -1,7 +1,29 @@
 import pygame
+import json
 from utils import bpm_for_time
 from game_config import *
 from song_generation import extract_filename
+
+# Dictionnaire pour stocker les meilleurs scores
+best_scores = {}
+
+def load_best_scores():
+    """
+    Charge les meilleurs scores depuis un fichier JSON.
+    """
+    global best_scores
+    try:
+        with open("best_scores.json", "r") as file:
+            best_scores = json.load(file)
+    except FileNotFoundError:
+        best_scores = {}
+
+def save_best_scores():
+    """
+    Sauvegarde les meilleurs scores dans un fichier JSON.
+    """
+    with open("best_scores.json", "w") as file:
+        json.dump(best_scores, file)
 
 class Note():
     def __init__(self, key_index):
@@ -81,6 +103,7 @@ class Gameplay():
         Initialise les paramètres du jeu
         """
         #self.map = selectsong_button_text[:-4]
+        self.song_name = extract_filename(song_path)
         self.beatmap = self.load(song_path)
         self.note_speed = 1
         self.BPM = 0
@@ -283,7 +306,18 @@ class Gameplay():
             if not running:
                 break
 
-        EndScreen(score)
+        # Mettre à jour le meilleur score
+        if self.song_name in best_scores:
+            if score > best_scores[self.song_name]:
+                best_scores[self.song_name] = score
+        else:
+            best_scores[self.song_name] = score
+
+        # Sauvegarder les meilleurs scores
+        save_best_scores()
+
+        EndScreen(self.song_name, score, best_scores[self.song_name])
+
 
 class EndScreen():
     """
@@ -293,12 +327,46 @@ class EndScreen():
     song_name (str): Le nom de la chanson.
     score (int): Le score final du joueur.
     """
-    def __init__(self, score) -> None:
+    def __init__(self, song_name, score, best_score) -> None:
         """
         initialise le variablescore pour l'affichage
         """
+        self.song_name = song_name
+        self.best_score = best_score
         self.score = score
         self.run()
+    
+    def blur_surface(surface, amount):
+        """
+        Floute une surface donnée en réduisant et en agrandissant l'image.
+
+        Paramètres :
+        surface (pygame.Surface) : La surface à flouter.
+        amount (float) : La quantité de flou à appliquer. Plus la valeur est grande, moins l'image sera floutée.
+
+        Retourne :
+        pygame.Surface : La surface floutée.
+        """
+        scale = 1.0 / amount
+        surf_size = surface.get_size()
+        scaled_surf = pygame.transform.smoothscale(surface, (int(surf_size[0] * scale), int(surf_size[1] * scale)))
+        return pygame.transform.smoothscale(scaled_surf, surf_size)
+
+    def darken_surface(surface, darkness):
+        """
+        Assombrit une surface donnée en appliquant une superposition noire avec une certaine transparence.
+    
+        Paramètres :
+        surface (pygame.Surface) : La surface à assombrir.
+        darkness (int) : Le niveau d'assombrissement (opacité de la superposition noire), allant de 0 (transparent) à 255 (opaque).
+    
+        Retourne :
+        None
+        """
+        dark_overlay = pygame.Surface(surface.get_size())
+        dark_overlay.fill((0, 0, 0))
+        dark_overlay.set_alpha(darkness)
+        surface.blit(dark_overlay, (0, 0))
 
     def run(self):
         """
@@ -317,13 +385,25 @@ class EndScreen():
                     running = False
         
             # Display the score on the screen
+            background = pygame.image.load("assets/background.jpg")
+            background = pygame.transform.scale(background, (800, 600))
+            blurred_background = EndScreen.blur_surface(background, 10)  # Adjust the blur amount
+            EndScreen.darken_surface(blurred_background, 150)
+            screen.blit(blurred_background, (0, 0))
             score_text = title_font.render(f"Score: {self.score}", True, (255, 255, 255))
+            best_score_text = font.render(f"Meilleur score : {self.best_score}", True, (255, 255, 255))
+            song_name_text = font2.render(f"{self.song_name}", True, (255, 255, 255))
             screen_width, screen_height = screen.get_size()
-            text_width = score_text.get_width()
-            text_height = score_text.get_height()
-            screen.blit(score_text, (screen_width // 2 - text_width // 2 , screen_height // 2 - text_height // 2))
+            score_text_width = score_text.get_width()
+            score_text_height = score_text.get_height()
+            best_score_text_width = best_score_text.get_width()
+            best_score_text_height = best_score_text.get_height()
+            screen.blit(score_text, (screen_width // 2 - score_text_width // 2 , screen_height // 2 - score_text_height // 2))
+            screen.blit(best_score_text, (screen_width // 2 - best_score_text_width // 2 , screen_height // 2 - best_score_text_height // 2 + 100))
+            screen.blit(song_name_text, (screen_width // 2 - best_score_text_width // 2 , screen_height // 2 - best_score_text_height // 2 + 300))
             help_text = font2.render("appuyez sur n'importe quelle touche pour continuer", True, (255, 255, 255))
             screen.blit(help_text, (screen_width // 2 - help_text.get_width() // 2, screen_height // 2 - help_text.get_height() // 2 + 150))
+
     
             # Update the display
             pygame.display.update()

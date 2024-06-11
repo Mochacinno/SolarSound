@@ -42,12 +42,13 @@ def run_loading_screen(song_path2):
 
     # Step texts
     step_texts = [
-        "Loading audio file...",
-        "Filtering audio...",
-        "Detecting onsets...",
-        "Finding tempo...",
-        "Calculating RMS...",
-        "Analyzing musical segments..."
+        "Chargement du fichier audio...",
+        "Filtrage de l'audio...",
+        "Détectection des changements de note...",
+        "Recherche du tempo...",
+        "Calcul de la moyenne quadratique...",
+        "Analyse des segments musicaux...",
+        "Derniers ajustements..."
     ]
 
     # Start the process
@@ -79,7 +80,10 @@ def run_loading_screen(song_path2):
         # Display loading screen
         screen.blit(background_image, (0, 0))
         pygame.draw.rect(screen, WHITE, (x_bar, y_bar, bar_width, bar_height))
-        pygame.draw.rect(screen, GRAY, (x_bar, y_bar, fill_width, bar_height))
+        pygame.draw.rect(screen, BLACK, (x_bar, y_bar, bar_width, bar_height),2)
+        pygame.draw.rect(screen, PURPLE, (x_bar, y_bar, fill_width, bar_height))
+        pygame.draw.rect(screen, BLACK, (x_bar, y_bar, fill_width, bar_height),2)
+
         # Display current step text
         if current_step < len(step_texts):
             current_step_text = step_texts[current_step]

@@ -19,12 +19,17 @@ key_4_bind = pygame.K_COMMA
 WHITE = (255, 255, 255)
 BLACK = (0, 0, 0)
 GRAY = (200, 200, 200)
+PURPLE = (70, 50, 200)
 BUTTON_COLOR = (100, 200, 100)
 TEXT_COLOR = (255, 255, 255)
 BG_COLOR = (30, 30, 30)
 
 # Police d'écriture
-title_font = pygame.font.Font(None, 100)
+# Define your custom font file path
+custom_title_font_path = "assets/Limelight-Regular.ttf"
+# Load the custom font
+title_font = pygame.font.Font(custom_title_font_path, 100)
+#print(pygame.font.get_fonts())
 font = pygame.font.Font(None, 30)
 font2 = pygame.font.SysFont(None, 40)
 
@@ -73,7 +78,7 @@ selectsong_button_width = 400
 selectsong_button_height = 40
 
 # Calcul des positions centrées
-title_y = 20
+title_y = 100
 
 button_x = (screen_width - button_width) // 2
 button_y = 350

@@ -1,6 +1,14 @@
 # Solar Sound
 ### A python generative beatmap 4-key rhythm game
 
+## Après avoir téléchargé le code source, que faut-il faire ?
+il faut installer les bibliothéques nécessaires, si ils ne sont pas déjà présentes:
+- librosa, en tapant sur le terminal `pip install librosa`
+- pygame, en tapant sur le terminal `pip install pygame`
+- numpy, en tapant sur le terminal `pip install numpy`
+- scipy, en tapant sur le terminal `pip install scipy`
+- scikit-learn, en tapant sur le terminal `pip install scikit-learn`
+- tkinter, en tapant sur le terminal `pip install tk`
 ## Explication des règles du jeu de rythme : 
 ### Avant de Jouer
 1. Téléchargez un fichier mp3
