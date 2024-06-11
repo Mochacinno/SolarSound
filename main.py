@@ -10,7 +10,6 @@ pygame.mixer.init()
 clock = pygame.time.Clock()
 
 from game_config import *
-from song_library import *
 from loading_screen import *
 from gameplay import Gameplay
 
@@ -19,6 +18,8 @@ def draw_text(surface, text, rect, font, color=BLACK):
     text_surface = font.render(text, True, color)
     text_rect = text_surface.get_rect(center=rect.center)
     surface.blit(text_surface, text_rect)
+
+from song_library import *
 
 class ParallaxBg:
     """

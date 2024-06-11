@@ -102,7 +102,7 @@ class Gameplay():
         """
         Initialise les paramètres du jeu
         """
-        #self.map = selectsong_button_text[:-4]
+        self.song_path = song_path
         self.song_name = extract_filename(song_path)
         self.beatmap = self.load(song_path)
         self.note_speed = 1
@@ -307,16 +307,16 @@ class Gameplay():
                 break
 
         # Mettre à jour le meilleur score
-        if self.song_name in best_scores:
-            if score > best_scores[self.song_name]:
-                best_scores[self.song_name] = score
+        if self.song_path in best_scores:
+            if score > best_scores[self.song_path]:
+                best_scores[self.song_path] = score
         else:
-            best_scores[self.song_name] = score
+            best_scores[self.song_path] = score
 
         # Sauvegarder les meilleurs scores
         save_best_scores()
 
-        EndScreen(self.song_name, score, best_scores[self.song_name])
+        EndScreen(self.song_path, score, best_scores[self.song_path])
 
 
 class EndScreen():

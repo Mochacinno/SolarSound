@@ -6,8 +6,10 @@ import tkinter as tk
 from tkinter import filedialog
 from game_config import *
 from main import draw_text
+from song_generation import extract_filename
 
 song_list_file_name = 'config.json'
+best_score_file_name = 'best_scores.json'
 
 def save_song_list(song_list):
     """
@@ -34,8 +36,26 @@ def load_song_list():
     """
     if os.path.exists(song_list_file_name):
         with open(song_list_file_name, 'r') as song_list_file:
-            return json.load(song_list_file)
+            song_list = json.load(song_list_file)
+            best_scores = load_best_scores()
+            combined_list = []
+            for song in song_list:
+                best_score = best_scores.get(song, 0)  # 0 if no best score found
+                combined_list.append((song, best_score))
+            return combined_list
     return []
+
+def load_best_scores():
+    """
+    Charge les meilleurs scores à partir d'un fichier JSON.
+
+    Returns:
+        dict: Un dictionnaire contenant les meilleurs scores pour chaque chanson.
+    """
+    if os.path.exists(best_score_file_name):
+        with open(best_score_file_name, 'r') as best_score_file:
+            return json.load(best_score_file)
+    return {}
 
 def select_file_for_editor(song_list):
     """
@@ -133,10 +153,10 @@ class MusicLibrary():
             y_offset = 150
             return_button = pygame.Rect(50, 50, 200, 50)
             draw_text(screen, "Retourne", return_button, font, TEXT_COLOR)
-            for idx, file in enumerate(file_list):
+            for idx, (file, best_score) in enumerate(file_list):
                 file_rect = pygame.Rect(50, y_offset + idx * 50, screen_width - 100, 50)
                 pygame.draw.rect(screen, GRAY, file_rect)
-                draw_text(screen, file, file_rect, font, BLACK)
+                draw_text(screen, f"{extract_filename(file)} - Best Score: {best_score}", file_rect, font, BLACK)
                 file_rects.append((file_rect, file))
 
             pygame.display.flip()

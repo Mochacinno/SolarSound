@@ -4,6 +4,15 @@ import utils
 import os
 
 def extract_filename(filepath):
+    """
+    Extraire le nom de la musique à partir d'un chemin
+
+    Args:
+        str: le chemin de la musique
+
+    Returns:
+        str: le nom de la musique
+    """
     # Extract the base name (filename with extension)
     base_name = os.path.basename(filepath)
     # Remove the extension
