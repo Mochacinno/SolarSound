@@ -19,13 +19,12 @@ def save_song_list(song_list):
         song_list (list): La liste des chansons à enregistrer.
     """
     existing_songs = load_song_list()
-    combined_songs = list(set(existing_songs + song_list))
     # Check if the combined list length exceeds 8
-    if len(combined_songs) > 7:
+    if len(existing_songs) > 7:
         # If the length exceeds 8, pop the first item
-        combined_songs.pop(0)
+        existing_songs.pop(0)
     with open(song_list_file_name, 'w') as config_file:
-        json.dump(combined_songs, config_file)
+        json.dump(existing_songs, config_file)
 
 def load_song_list():
     """
