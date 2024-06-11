@@ -52,7 +52,7 @@ Après avoir téléchargé le code source, suivez ces étapes :
 - La flèche orientée vers le sud correspond à la touche "L".
 - La flèche orientée vers l'ouest correspond à la touche "M".
 - Voici une image d'un clavier pour référence :
-  ![Disposition du clavier](assets/clavier.png))
+  ![Disposition du clavier](assets/clavier.png)
   
-- Lorsque vous appuyez sur la touche au bon moment, la flèche disparaît et vous gagnez 1 point.
+- Lorsque vous appuyez sur la touche au bon moment, la flèche disparaît et vous gagnez des points !
 - Visez à toucher chaque note sans en manquer aucune pendant leur défilement sur l'écran. Rappelez-vous, une musique plus rapide signifie un défilement de notes plus rapide !
