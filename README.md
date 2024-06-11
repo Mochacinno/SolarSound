@@ -1,44 +1,58 @@
 # Solar Sound
-A python generative beatmap 4-key rhythm game
 
-## Après avoir téléchargé le code source, que faut-il faire ?
-**il faut installer les bibliothéques nécessaires, si ils ne sont pas déjà présentes:**
-- librosa, en tapant sur le terminal `pip install librosa`
-- pygame, en tapant sur le terminal `pip install pygame`
-- numpy, en tapant sur le terminal `pip install numpy`
-- scipy, en tapant sur le terminal `pip install scipy`
-- scikit-learn, en tapant sur le terminal `pip install scikit-learn`
-- tkinter, en tapant sur le terminal `pip install tk`
-puis, il faut ouvrir **le dossier** du jeu, en utilisant le ide de votre choix (VScode, ou spyder) contenant toutes les fichier .py, et le dossier `assets` également.
-ensuite, pour lancer le jeu, il faut run `main.py`, et le fenetre du jeu va s'ouvrir !
-Vous etes ainsi pretes pour jouer !
-## Explication des règles du jeu de rythme : 
-### Avant de Jouer
-1. Téléchargez un fichier mp3 **où** sinon nous vous fournissons des musiques mp3 *(pour utilkisation personnel seulement!)* pour pouvoir choisir dans cet étape pour votre convenience.
-2. Cliquez sur le bouton “Ajouter une musique au jeu” : 
-[image du menu principale avec le bouton “ajouter un musique au jeu” entouré en rouge]
-3. Sélectionner le fichier téléchargé 
-4. Cliquez sur le bouton “Bibliothèque de la musique” et choisissez le fichier téléchargé :
-Still in development, with plans to release for testing in the following weeks
-[image du menu principale avec le bouton “Bibliothèque de la musique” entouré en rouge]
-[image de l’interface dans “bibliothèque de la musique” avec le fichier telechargé sur lequel on doit cliquer]
-5. De retour sur le menu principal, vous pouvez jouer en cliquant sur le bouton “valider et jouer” 
-[image du menu principale avec le bouton “Valider et jouer” entouré en rouge]
-### Comment jouer ?
-Votre musique va apparaître sous la forme de flèches qui apparaîtront en haut de votre écran et qui vont descendre.
-[image de l’interface de jeu avec les flèches qui descendent ]
-[mettre un trait en pointillé pour indiquer le mouvement des flèches qui descendent]
-Votre but est de cliquer sur la touche de votre clavier correspondant à la barre coloré en bas de l’écran en même temps que la flèche se trouve dans l’espace de cette barre coloré. 
-La flèche orientée à l’Est correspond à la touche “Q” de votre clavier. 
-La flèche orientée au Nord correspond à la touche “S” de votre clavier. 
-La flèche orientée au Sud correspond à la touche “L” de votre clavier. 
-La flèche orientée à l’Ouest correspond à la touche “M” de votre clavier. 
-[image de la barre de jeu avec les différentes touches du clavier auxquelles elles correspondent]
-Ci-joint l’image d’un clavier :
+Solar Sound est un jeu de rythme génératif à 4 touches, développé en Python.
 
-Lorsque vous touchez la touche en même temps que la flèche est présente sur la barre d’écran, la flèche disparaît. Vous gagnez alors 1 point. 
-[image d’interface du jeu avec les flèches qui disparaissent]
-Le but est de pouvoir jouer votre musique en ne loupant aucune note qui défile sur votre écran. Faites appel à vos réflexes et entraînez-vous ! Plus le tempo de la musique que vous avez sélectionné est rapide, plus les notes défilent vite ! 
+## Instructions d'installation :
 
+Après avoir téléchargé le code source, suivez ces étapes :
 
+1. **Installer les bibliothèques nécessaires :**
+   - Si ce n'est pas déjà fait, utilisez les commandes suivantes dans votre terminal :
+     - `pip install librosa`
+     - `pip install pygame`
+     - `pip install numpy`
+     - `pip install scipy`
+     - `pip install scikit-learn`
+     - `pip install tk`
 
+2. **Ouvrir le dossier du jeu :**
+   - Utilisez votre IDE préféré (tel que VSCode ou Spyder) pour ouvrir le dossier contenant tous les fichiers `.py` et le dossier `assets`.
+
+3. **Lancer le jeu :**
+   - Lancez le jeu en exécutant `main.py`.
+   - La fenêtre du jeu s'ouvrira, indiquant que vous êtes prêt à jouer !
+
+## Règles du jeu de rythme :
+
+### Avant de jouer :
+1. **Télécharger ou choisir un fichier musical :**
+   - Téléchargez un fichier MP3 *ou utilisez les MP3 fournis (pour un usage personnel uniquement) pour votre commodité.*
+
+2. **Ajouter de la musique au jeu :**
+   - Cliquez sur le bouton "Ajouter une musique au jeu" :
+   ![Menu principal avec le bouton "Ajouter une musique au jeu" en surbrillance](image1.png)
+   
+3. **Sélectionner le fichier téléchargé :**
+   - Choisissez le fichier téléchargé.
+
+4. **Ajouter à la bibliothèque musicale :**
+   - Cliquez sur le bouton "Bibliothèque musicale" et sélectionnez le fichier téléchargé :
+   ![Menu principal avec le bouton "Bibliothèque musicale" en surbrillance](image2.png)
+   ![Interface de la bibliothèque musicale avec le fichier téléchargé en surbrillance](image3.png)
+
+5. **Commencer à jouer :**
+   - De retour sur le menu principal, cliquez sur le bouton "Valider et jouer" :
+   ![Menu principal avec le bouton "Valider et jouer" en surbrillance](image4.png)
+
+### Comment jouer :
+- Votre musique sera représentée par des flèches descendant du haut de l'écran.
+- Votre but est d'appuyer sur la touche correspondante de votre clavier lorsque la flèche est alignée avec la barre colorée en bas de l'écran.
+- La flèche orientée vers l'est correspond à la touche "Q".
+- La flèche orientée vers le nord correspond à la touche "S".
+- La flèche orientée vers le sud correspond à la touche "L".
+- La flèche orientée vers l'ouest correspond à la touche "M".
+- Voici une image d'un clavier pour référence :
+  ![Disposition du clavier](keyboard_image.png)
+  
+- Lorsque vous appuyez sur la touche au bon moment, la flèche disparaît et vous gagnez 1 point.
+- Visez à toucher chaque note sans en manquer aucune pendant leur défilement sur l'écran. Rappelez-vous, une musique plus rapide signifie un défilement de notes plus rapide !
