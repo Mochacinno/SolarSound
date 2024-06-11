@@ -30,19 +30,19 @@ Après avoir téléchargé le code source, suivez ces étapes :
 
 2. **Ajouter de la musique au jeu :**
    - Cliquez sur le bouton "Ajouter une musique au jeu" :
-   ![Menu principal avec le bouton "Ajouter une musique au jeu" en surbrillance](image1.png)
+   ![Menu principal avec le bouton "Ajouter une musique au jeu" en surbrillance](assets/button_add.jpg)
    
 3. **Sélectionner le fichier téléchargé :**
    - Choisissez le fichier téléchargé.
 
 4. **Ajouter à la bibliothèque musicale :**
    - Cliquez sur le bouton "Bibliothèque musicale" et sélectionnez le fichier téléchargé :
-   ![Menu principal avec le bouton "Bibliothèque musicale" en surbrillance](image2.png)
-   ![Interface de la bibliothèque musicale avec le fichier téléchargé en surbrillance](image3.png)
+   ![Menu principal avec le bouton "Bibliothèque musicale" en surbrillance](assets/button_library.jpg)
 
 5. **Commencer à jouer :**
    - De retour sur le menu principal, cliquez sur le bouton "Valider et jouer" :
-   ![Menu principal avec le bouton "Valider et jouer" en surbrillance](image4.png)
+   ![Menu principal avec le bouton "Valider et jouer" en surbrillance](assets/button_play.jpg)
+   - Dans le cas où vous avez choisi un nouveau fichier musical, une fois le chargement terminé, vous serez renvoyé au menu principal, et vous devrez donc cliquer à nouveau sur le bouton "Valider et jouer".
 
 ### Comment jouer :
 - Votre musique sera représentée par des flèches descendant du haut de l'écran.
@@ -52,7 +52,7 @@ Après avoir téléchargé le code source, suivez ces étapes :
 - La flèche orientée vers le sud correspond à la touche "L".
 - La flèche orientée vers l'ouest correspond à la touche "M".
 - Voici une image d'un clavier pour référence :
-  ![Disposition du clavier](keyboard_image.png)
+  ![Disposition du clavier](assets/clavier.png))
   
 - Lorsque vous appuyez sur la touche au bon moment, la flèche disparaît et vous gagnez 1 point.
 - Visez à toucher chaque note sans en manquer aucune pendant leur défilement sur l'écran. Rappelez-vous, une musique plus rapide signifie un défilement de notes plus rapide !
