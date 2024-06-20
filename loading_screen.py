@@ -44,7 +44,7 @@ def run_loading_screen(song_path2):
     step_texts = [
         "Chargement du fichier audio...",
         "Filtrage de l'audio...",
-        "Détectection des changements de note...",
+        "Détection des changements de note...",
         "Recherche du tempo...",
         "Calcul de la moyenne quadratique...",
         "Analyse des segments musicaux...",
