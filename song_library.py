@@ -11,7 +11,7 @@ from song_generation import extract_filename
 song_list_file_name = 'config.json'
 best_score_file_name = 'best_scores.json'
 
-def save_song_list(song_list):
+def save_song_list(song):
     """
     Enregistre la liste des chansons dans un fichier JSON.
 
@@ -19,6 +19,7 @@ def save_song_list(song_list):
         song_list (list): La liste des chansons à enregistrer.
     """
     existing_songs = load_song_list()
+    existing_songs.append([song, 0])
     # Check if the combined list length exceeds 8
     if len(existing_songs) > 7:
         # If the length exceeds 8, pop the first item
@@ -37,8 +38,9 @@ def load_song_list():
         with open(song_list_file_name, 'r') as song_list_file:
             song_list = json.load(song_list_file)
             best_scores = load_best_scores()
+            print(best_scores)
             combined_list = []
-            for song in song_list:
+            for song, score in song_list:
                 best_score = best_scores.get(song, 0)  # 0 if no best score found
                 combined_list.append((song, best_score))
             return combined_list
@@ -70,10 +72,10 @@ def select_file_for_editor(song_list):
     root.withdraw()
     file_path = filedialog.askopenfilename(filetypes=[("MP3 files", "*.mp3")])
     if file_path and file_path not in song_list:
-        song_list.append(file_path)
-        save_song_list(song_list)
-        return file_path
-    return None
+        #song_list.append(file_path)
+        save_song_list(file_path)
+        #return file_path
+    #return None
 
 class MusicLibrary():
     """
