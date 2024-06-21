@@ -38,7 +38,6 @@ def load_song_list():
         with open(song_list_file_name, 'r') as song_list_file:
             song_list = json.load(song_list_file)
             best_scores = load_best_scores()
-            print(best_scores)
             combined_list = []
             for song, score in song_list:
                 best_score = best_scores.get(song, 0)  # 0 if no best score found
